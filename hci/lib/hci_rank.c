@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
+#include <inttypes.h>
 #include "hci.h"
 
 // Command to run to generate this library: gcc -shared -o libhci_rank.so -fPIC hci_rank.c -Wall -g
@@ -168,6 +170,27 @@ uint64_t rank(int *occ_list, uint64_t *rank_table, int norb, int nocc) {
     return sum;
 }
 
-int unrank(int rank, int norb, int nocc) {
-    return 0;
+int find_row_index(uint64_t rank, uint64_t *row, int norb, int nocc) {
+    int low = 0;
+    int high = norb-nocc;
+    while (low < high) {
+        int mid = low+(high-low+1)/2;
+        if (row[mid]>rank) {
+            high = mid-1;
+        } else {
+            low = mid;
+        }
+    }
+    return low;
+}
+
+void unrank(uint64_t rank, int *occ_list, uint64_t *rank_table, int norb, int nocc) {
+    int i;
+    int ncols = norb-nocc+1;
+    for (i=nocc-1; i>=0; i--) {
+        uint64_t *row = rank_table+i*ncols;
+        int row_index = find_row_index(rank, row, norb, nocc);
+        rank -= row[row_index];
+        occ_list[i] = row_index+i;
+    }
 }
