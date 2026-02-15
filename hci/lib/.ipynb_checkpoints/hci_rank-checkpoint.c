@@ -3,7 +3,9 @@
 #include <stdbool.h>
 #include <math.h>
 #include <string.h>
-#include "hci.h"
+#include <stdio.h>
+#include <inttypes.h>
+#include "hci_rank.h"
 
 // Command to run to generate this library: gcc -shared -o libhci_rank.so -fPIC hci_rank.c -Wall -g
 
@@ -134,17 +136,11 @@ bool get_consecutive_combs(uint64_t *comb_list, int n, int kmax) {
     return invert;
 }
 
-bool get_conversion_table(uint64_t *table, int norb, int nocc) {
-    bool invert = false;
+void get_rank_table(uint64_t *table, int norb, int nocc) {
     int ncols, i, j;
-    // Ranking by virtual orbitals rather than occupied orbitals
-    if (nocc > norb - nocc) {
-        nocc = norb - nocc;
-        invert = true;
-    }
     // Edge case: no electrons
     if (nocc == 0) {
-        return invert;
+        return;
     }
     ncols = norb-nocc+1;
     // Initialize first row of ranking table
@@ -160,13 +156,41 @@ bool get_conversion_table(uint64_t *table, int norb, int nocc) {
             curr_row[j] = curr_row[j-1]+prev_row[j];
         }
     }
-    return invert;
 }
 
-int rank(uint64_t *occ_list, int norb, int nocc) {
-    return 0;
+uint64_t rank(int *occ_list, uint64_t *rank_table, int norb, int nocc) {
+    uint64_t sum = 0;
+    int i;
+    int occ_orbital;
+    int ncols = norb-nocc+1;
+    for (i=0; i<nocc; i++) {
+        occ_orbital = occ_list[i];
+        sum += rank_table[i*ncols+(occ_orbital-i)];
+    }
+    return sum;
 }
 
-int unrank(int rank, int norb, int nocc) {
-    return 0;
+int find_row_index(uint64_t rank, uint64_t *row, int norb, int nocc) {
+    int low = 0;
+    int high = norb-nocc;
+    while (low < high) {
+        int mid = low+(high-low+1)/2;
+        if (row[mid]>rank) {
+            high = mid-1;
+        } else {
+            low = mid;
+        }
+    }
+    return low;
+}
+
+void unrank(uint64_t rank, int *occ_list, uint64_t *rank_table, int norb, int nocc) {
+    int i;
+    int ncols = norb-nocc+1;
+    for (i=nocc-1; i>=0; i--) {
+        uint64_t *row = rank_table+i*ncols;
+        int row_index = find_row_index(rank, row, norb, nocc);
+        rank -= row[row_index];
+        occ_list[i] = row_index+i;
+    }
 }

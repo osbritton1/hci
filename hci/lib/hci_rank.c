@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "hci.h"
+#include "hci_rank.h"
 
 // Command to run to generate this library: gcc -shared -o libhci_rank.so -fPIC hci_rank.c -Wall -g
 
@@ -84,18 +84,18 @@ static uint64_t binomial_cache[] = {
 };
 
 // Get start index of nCr(n, k) values
-static int get_start_index(int n) {
+static size_t get_start_index(size_t n) {
     if (n % 2 == 0) {
-        int x = (n/2);
+        size_t x = (n/2);
         return x*(x+1);
     } else {
-        int x = (n+1)/2;
+        size_t x = (n+1)/2;
         return x*x;
     }
 }
 
 // Get nCr(n, k) for k in 0..min(kmax, n/2)
-bool get_consecutive_combs(uint64_t *comb_list, int n, int kmax) {
+bool get_consecutive_combs(uint64_t *comb_list, size_t n, size_t kmax) {
     bool invert = false;
     if (kmax > n - kmax) {
         kmax = n - kmax;
@@ -105,16 +105,16 @@ bool get_consecutive_combs(uint64_t *comb_list, int n, int kmax) {
         uint64_t *row = binomial_cache+get_start_index(n);
         memcpy(comb_list, row, (kmax+1)*sizeof(uint64_t));
     } else {
-        int niter_max = n-MAX_PRECOMP+1;
+        size_t niter_max = n-MAX_PRECOMP+1;
         uint64_t *last_row = binomial_cache+get_start_index(MAX_PRECOMP);
-        int niter;
-        int i;
-        int num_to_copy;
+        size_t niter;
+        size_t i;
+        size_t num_to_copy;
         if (kmax > MAX_PRECOMP/2) {
             num_to_copy = MAX_PRECOMP/2+1;
             memcpy(comb_list, last_row, num_to_copy*sizeof(uint64_t));
             for (niter = 1; niter < niter_max; niter++) {
-                int istart = MAX_PRECOMP/2+niter/2;
+                size_t istart = MAX_PRECOMP/2+niter/2;
                 if (niter % 2 == 0) {
                     comb_list[istart] = 2*comb_list[istart-1];
                     istart--;
@@ -136,8 +136,8 @@ bool get_consecutive_combs(uint64_t *comb_list, int n, int kmax) {
     return invert;
 }
 
-void get_rank_table(uint64_t *table, int norb, int nocc) {
-    int ncols, i, j;
+void get_rank_table(uint64_t *table, size_t norb, size_t nocc) {
+    size_t ncols, i, j;
     // Edge case: no electrons
     if (nocc == 0) {
         return;
@@ -158,11 +158,11 @@ void get_rank_table(uint64_t *table, int norb, int nocc) {
     }
 }
 
-uint64_t rank(int *occ_list, uint64_t *rank_table, int norb, int nocc) {
+uint64_t rank(size_t *occ_list, uint64_t *rank_table, size_t norb, size_t nocc) {
     uint64_t sum = 0;
-    int i;
-    int occ_orbital;
-    int ncols = norb-nocc+1;
+    size_t i;
+    size_t occ_orbital;
+    size_t ncols = norb-nocc+1;
     for (i=0; i<nocc; i++) {
         occ_orbital = occ_list[i];
         sum += rank_table[i*ncols+(occ_orbital-i)];
@@ -170,11 +170,11 @@ uint64_t rank(int *occ_list, uint64_t *rank_table, int norb, int nocc) {
     return sum;
 }
 
-int find_row_index(uint64_t rank, uint64_t *row, int norb, int nocc) {
-    int low = 0;
-    int high = norb-nocc;
+size_t find_row_index(uint64_t rank, uint64_t *row, size_t norb, size_t nocc) {
+    size_t low = 0;
+    size_t high = norb-nocc;
     while (low < high) {
-        int mid = low+(high-low+1)/2;
+        size_t mid = low+(high-low+1)/2;
         if (row[mid]>rank) {
             high = mid-1;
         } else {
@@ -184,12 +184,13 @@ int find_row_index(uint64_t rank, uint64_t *row, int norb, int nocc) {
     return low;
 }
 
-void unrank(uint64_t rank, int *occ_list, uint64_t *rank_table, int norb, int nocc) {
-    int i;
-    int ncols = norb-nocc+1;
-    for (i=nocc-1; i>=0; i--) {
+void unrank(uint64_t rank, size_t *occ_list, uint64_t *rank_table, size_t norb, size_t nocc) {
+    size_t i;
+    size_t ncols = norb-nocc+1;
+    // Reverse iteration with unsigned types is a bit funky
+    for (i=nocc; i-->0;) {
         uint64_t *row = rank_table+i*ncols;
-        int row_index = find_row_index(rank, row, norb, nocc);
+        size_t row_index = find_row_index(rank, row, norb, nocc);
         rank -= row[row_index];
         occ_list[i] = row_index+i;
     }
