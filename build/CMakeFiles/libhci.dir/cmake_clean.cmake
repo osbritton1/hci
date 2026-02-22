@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/libhci.dir/hci_rank.c.o"
   "CMakeFiles/libhci.dir/hci_rank.c.o.d"
+  "CMakeFiles/libhci.dir/hci_store.c.o"
+  "CMakeFiles/libhci.dir/hci_store.c.o.d"
   "CMakeFiles/libhci.dir/test.c.o"
   "CMakeFiles/libhci.dir/test.c.o.d"
   "libhci"

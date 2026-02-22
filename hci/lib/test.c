@@ -2,9 +2,11 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>
+#include <time.h>
 #include "hci_rank.h"
+#include "hci_store.h"
 
-int main() {
+int test_rank_unrank() {
     size_t i, j;
     size_t norb = 8;
     size_t nocc = 4;
@@ -32,3 +34,28 @@ int main() {
 
     return 0;
 }
+
+int test_mixed_storage() {
+    size_t norb = 4;
+    size_t nocc = 2;
+    size_t npairs = nC2(norb+1);
+    size_t ncombs = nC2(norb);
+    double eri_s4[npairs*npairs];
+    size_t i;
+    uint64_t exc_table_2o[2*(norb-2+1)];
+    MixedExcitationEntry mixed[ncombs*ncombs];
+
+    get_rank_table(exc_table_2o, norb, 2);
+    srand(time(NULL));
+    for (i=0; i<npairs*npairs; i++) {
+        eri_s4[i] = (double)rand() / (double)RAND_MAX;
+    }
+
+    load_mixed_from_eri(mixed, eri_s4, exc_table_2o, norb);
+    return 0;
+}
+
+int main() {
+    return test_mixed_storage();
+}
+

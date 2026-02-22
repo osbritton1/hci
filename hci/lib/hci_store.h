@@ -12,4 +12,13 @@ typedef struct {
     double iljk;
 } DoubleExcitationEntry;
 
+typedef struct {
+    uint64_t rank;
+    double ijkl;
+} MixedExcitationEntry;
+
+void get_max_magnitudes(DoubleExcitationEntry *doubles, double *magnitudes, size_t ndoubles);
+void load_doubles_from_eri(DoubleExcitationEntry *doubles, double *eri_s8, uint64_t *index_table, size_t norb);
+void load_mixed_from_eri(MixedExcitationEntry *mixed, double *eri_s4, uint64_t *index_table, size_t norb);
+
 #endif

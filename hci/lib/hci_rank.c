@@ -7,7 +7,7 @@
 #include <inttypes.h>
 #include "hci_rank.h"
 
-// Command to run to generate this library: gcc -shared -o libhci_rank.so -fPIC hci_rank.c -Wall -g
+// Command to run to generate this library: gcc -shared -o libhci.so -fPIC hci_rank.c hci_store.c -Wall -g
 
 // Cached binomial coefficients generated using the following Python code:
 // import math
@@ -194,4 +194,25 @@ void unrank(uint64_t rank, size_t *occ_list, uint64_t *rank_table, size_t norb, 
         rank -= row[row_index];
         occ_list[i] = row_index+i;
     }
+}
+
+uint64_t nC2(size_t n) {
+    return (n % 2 == 0) ? n/2*(n-1) : (n-1)/2*n;
+}
+
+uint64_t rank_mixed(size_t *occ_list, uint64_t *rank_table, size_t norb) {
+    size_t ij[2] = {occ_list[0], occ_list[1]};
+    size_t kl[2] = {occ_list[2], occ_list[3]};
+    uint64_t ij_rank = rank(ij, rank_table, norb, 2);
+    uint64_t kl_rank = rank(kl, rank_table, norb, 2);
+    uint64_t ncols = nC2(norb);
+    return ncols*ij_rank + kl_rank;
+}
+
+void unrank_mixed(uint64_t rank, size_t *occ_list, uint64_t *rank_table, size_t norb) {
+    uint64_t ncols = nC2(norb);
+    uint64_t ij_rank = rank/ncols;
+    uint64_t kl_rank = rank%ncols;
+    unrank(ij_rank, occ_list, rank_table, norb, 2);
+    unrank(kl_rank, occ_list+2, rank_table, norb, 2);
 }

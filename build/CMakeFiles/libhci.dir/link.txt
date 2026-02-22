@@ -1,1 +1,1 @@
-/usr/bin/gcc -g CMakeFiles/libhci.dir/test.c.o CMakeFiles/libhci.dir/hci_rank.c.o -o libhci 
+/usr/bin/gcc -g CMakeFiles/libhci.dir/test.c.o CMakeFiles/libhci.dir/hci_rank.c.o CMakeFiles/libhci.dir/hci_store.c.o -o libhci 

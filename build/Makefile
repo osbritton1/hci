@@ -153,6 +153,30 @@ hci_rank.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_rank.c.s
 .PHONY : hci_rank.c.s
 
+hci_store.o: hci_store.c.o
+.PHONY : hci_store.o
+
+# target to build an object file
+hci_store.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_store.c.o
+.PHONY : hci_store.c.o
+
+hci_store.i: hci_store.c.i
+.PHONY : hci_store.i
+
+# target to preprocess a source file
+hci_store.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_store.c.i
+.PHONY : hci_store.c.i
+
+hci_store.s: hci_store.c.s
+.PHONY : hci_store.s
+
+# target to generate assembly for a file
+hci_store.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_store.c.s
+.PHONY : hci_store.c.s
+
 test.o: test.c.o
 .PHONY : test.o
 
@@ -189,6 +213,9 @@ help:
 	@echo "... hci_rank.o"
 	@echo "... hci_rank.i"
 	@echo "... hci_rank.s"
+	@echo "... hci_store.o"
+	@echo "... hci_store.i"
+	@echo "... hci_store.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"
