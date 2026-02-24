@@ -5,6 +5,8 @@
 #include <time.h>
 #include "hci_rank.h"
 #include "hci_store.h"
+#include "hci_enlarge.h"
+#include "hci_contract.h"
 
 int test_rank_unrank() {
     size_t i, j;
@@ -55,7 +57,37 @@ int test_mixed_storage() {
     return 0;
 }
 
+//bool get_changing_orbitals(size_t *exc, size_t *occ, 
+    //size_t *exc_min_occ, size_t *exc_int_occ, size_t *new_occ,
+    //size_t exact_diffs, size_t nocc)
+
+int test_get_changing_orbitals() {
+    size_t exc[8] = {0,5,6,10,12,14,17,21};
+    size_t occ[11] = {1,2,6,7,10,11,13,15,17,21,28};
+    size_t exc_min_occ[4];
+    size_t exc_int_occ[4];
+    size_t new_occ[11];
+    size_t exact_diffs = 4;
+    size_t nocc = 11;
+    bool condition = get_changing_orbitals(exc, occ, exc_min_occ, exc_int_occ, new_occ, exact_diffs, nocc);
+    printf("%u\n", condition);
+    size_t i;
+    for (i=0; i<exact_diffs; i++) {
+        printf("%zu ", exc_min_occ[i]);
+    }
+    printf("\n");
+    for (i=0; i<exact_diffs; i++) {
+        printf("%zu ", exc_int_occ[i]);
+    }
+    printf("\n");
+    for (i=0; i<nocc; i++) {
+        printf("%zu ", new_occ[i]);
+    }
+    printf("\n");
+    return 0;
+}
+
 int main() {
-    return test_mixed_storage();
+    return test_get_changing_orbitals();
 }
 

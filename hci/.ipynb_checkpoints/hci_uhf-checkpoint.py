@@ -20,17 +20,19 @@ def kernel(hcore, eri_ao, mo, norb, nelec, ci0=None, tol=None, lindep=None, max_
     # Build and sort double excitation storage lists
     doubles_aa = lib.get_stored_double_exc(eri_mo_aaaa, exc_table_4o, norb)
     max_mag_aa = lib.get_max_magnitudes(doubles_aa, norb)
-    doubles_aa = doubles_aa[np.argsort(max_mag_aa)]
+    doubles_aa = doubles_aa[np.argsort(max_mag_aa)[::-1]]
     
     doubles_bb = lib.get_stored_double_exc(eri_mo_bbbb, exc_table_4o, norb)
     max_mag_bb = lib.get_max_magnitudes(doubles_bb, norb)
-    doubles_bb = doubles_bb[np.argsort(max_mag_bb)]
+    doubles_bb = doubles_bb[np.argsort(max_mag_bb)[::-1]]
     
     mixed_ab = lib.get_stored_mixed_exc(eri_mo_aabb, exc_table_2o, norb)
     max_mag_ab = np.abs(mixed_ab['ijkl'])
-    mixed_ab = mixed_ab[np.argsort(max_mag_ab)]
+    mixed_ab = mixed_ab[np.argsort(max_mag_ab)[::-1]]
 
     #Initialize HCI vector if initial guess not provided
     if ci0 is None:
         ci0 = np.empty(1, dtype=lib.hci_entry)
         ci0[0] = (0, 0, 1.0)
+        
+    return ci0

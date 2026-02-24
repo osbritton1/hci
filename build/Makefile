@@ -129,6 +129,54 @@ libhci/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/build
 .PHONY : libhci/fast
 
+hci_contract.o: hci_contract.c.o
+.PHONY : hci_contract.o
+
+# target to build an object file
+hci_contract.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_contract.c.o
+.PHONY : hci_contract.c.o
+
+hci_contract.i: hci_contract.c.i
+.PHONY : hci_contract.i
+
+# target to preprocess a source file
+hci_contract.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_contract.c.i
+.PHONY : hci_contract.c.i
+
+hci_contract.s: hci_contract.c.s
+.PHONY : hci_contract.s
+
+# target to generate assembly for a file
+hci_contract.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_contract.c.s
+.PHONY : hci_contract.c.s
+
+hci_enlarge.o: hci_enlarge.c.o
+.PHONY : hci_enlarge.o
+
+# target to build an object file
+hci_enlarge.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_enlarge.c.o
+.PHONY : hci_enlarge.c.o
+
+hci_enlarge.i: hci_enlarge.c.i
+.PHONY : hci_enlarge.i
+
+# target to preprocess a source file
+hci_enlarge.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_enlarge.c.i
+.PHONY : hci_enlarge.c.i
+
+hci_enlarge.s: hci_enlarge.c.s
+.PHONY : hci_enlarge.s
+
+# target to generate assembly for a file
+hci_enlarge.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libhci.dir/build.make CMakeFiles/libhci.dir/hci_enlarge.c.s
+.PHONY : hci_enlarge.c.s
+
 hci_rank.o: hci_rank.c.o
 .PHONY : hci_rank.o
 
@@ -210,6 +258,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... libhci"
+	@echo "... hci_contract.o"
+	@echo "... hci_contract.i"
+	@echo "... hci_contract.s"
+	@echo "... hci_enlarge.o"
+	@echo "... hci_enlarge.i"
+	@echo "... hci_enlarge.s"
 	@echo "... hci_rank.o"
 	@echo "... hci_rank.i"
 	@echo "... hci_rank.s"

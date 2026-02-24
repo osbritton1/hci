@@ -1,4 +1,8 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/libhci.dir/hci_contract.c.o"
+  "CMakeFiles/libhci.dir/hci_contract.c.o.d"
+  "CMakeFiles/libhci.dir/hci_enlarge.c.o"
+  "CMakeFiles/libhci.dir/hci_enlarge.c.o.d"
   "CMakeFiles/libhci.dir/hci_rank.c.o"
   "CMakeFiles/libhci.dir/hci_rank.c.o.d"
   "CMakeFiles/libhci.dir/hci_store.c.o"

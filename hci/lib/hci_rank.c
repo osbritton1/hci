@@ -7,7 +7,7 @@
 #include <inttypes.h>
 #include "hci_rank.h"
 
-// Command to run to generate this library: gcc -shared -o libhci.so -fPIC hci_rank.c hci_store.c -Wall -g
+// Command to run to generate this library: gcc -shared -o libhci.so -fPIC hci_rank.c hci_store.c hci_enlarge.c hci_contract.c -Wall -g
 
 // Cached binomial coefficients generated using the following Python code:
 // import math
