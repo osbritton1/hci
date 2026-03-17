@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <math.h>
 #include <string.h>
 #include <stdio.h>
 #include <inttypes.h>

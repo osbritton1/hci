@@ -5,7 +5,7 @@ import math
 
 double_excitation_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double), ('iljk', np.double)])
 mixed_excitation_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double)])
-hci_entry = np.dtype([('arank', np.uint64), ('brank', np.uint64), ('val', np.double)])
+hci_entry = np.dtype([('arank', np.uint64), ('brank', np.uint64), ('coeff', np.double)])
 
 libhci = load_library("libhci")
 
@@ -55,4 +55,24 @@ def get_max_magnitudes(doubles, norb):
                               magnitudes.ctypes.data_as(ctypes.c_void_p),
                               ctypes.c_size_t(math.comb(norb, 4)))
     return magnitudes
+
+# Expand search space using HCI selection algorithm for double excitations
+def enlarge_space_doubles(hcivec, norb, nelec_a, nelec_b, thresh, 
+                         config_table_a, config_table_b, exc_table_4o, exc_table_2o, 
+                         doubles_aa, doubles_bb, mixed_ab,
+                         max_mag_aa, max_mag_bb, max_mag_ab):
+    nexc_aa = math.comb(nelec_a, 2)*math.comb(norb-nelec_a, 2)
+    nexc_bb = math.comb(nelec_b, 2)*math.comb(norb-nelec_b, 2)
+    nexc_ab = nelec_a*(norb-nelec_a)*nelec_b*(norb-nelec_b)
+    add_list = np.zeros((len(hcivec)*(nexc_aa+nexc_bb+nexc_ab), 2), dtype=np.uint64)
+    nadd = libhci.enlarge_space_doubles(hcivec.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(hcivec)), add_list.ctypes.data_as(ctypes.c_void_p),
+                                        ctypes.c_size_t(norb), ctypes.c_size_t(nelec_a), ctypes.c_size_t(nelec_b), ctypes.c_double(thresh),
+                                        config_table_a.ctypes.data_as(ctypes.c_void_p), config_table_b.ctypes.data_as(ctypes.c_void_p),
+                                        exc_table_4o.ctypes.data_as(ctypes.c_void_p), exc_table_2o.ctypes.data_as(ctypes.c_void_p),
+                                        doubles_aa.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(doubles_aa)),
+                                        doubles_bb.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(doubles_bb)),
+                                        mixed_ab.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(mixed_ab)),
+                                        max_mag_aa.ctypes.data_as(ctypes.c_void_p), max_mag_bb.ctypes.data_as(ctypes.c_void_p), 
+                                        max_mag_ab.ctypes.data_as(ctypes.c_void_p))
+    return add_list, nadd
                                      

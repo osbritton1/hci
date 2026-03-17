@@ -2,6 +2,7 @@
 #define HCI_STORE_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MAX3(a, b, c) ((a) > (b) ? ((a) > (c) ? (a) : (c)) : ((b) > (c) ? (b) : (c)))
