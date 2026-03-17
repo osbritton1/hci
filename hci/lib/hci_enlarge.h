@@ -16,5 +16,10 @@ size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_dou
     DoubleExcitationEntry *doubles_bb, size_t ndoubles_bb,
     MixedExcitationEntry *mixed_ab, size_t ndoubles_ab,
     double *max_mag_aa, double *max_mag_bb, double *max_mag_ab);
+size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_singles,
+    size_t norb, size_t nelec_a, size_t nelec_b, uint64_t combmax_a, uint64_t combmax_b, double thresh,
+    uint64_t *config_table_a, uint64_t *config_table_a_complement,
+    uint64_t *config_table_b, uint64_t *config_table_b_complement,
+    double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4);
 
 #endif

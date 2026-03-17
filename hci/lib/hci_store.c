@@ -14,11 +14,11 @@ void get_max_magnitudes(DoubleExcitationEntry *doubles, double *magnitudes, size
     }
 }
 
-static size_t index_2d(size_t i, size_t j) {
+size_t index_2d(size_t i, size_t j) {
     return (i > j) ? nC2(i+1)+j : nC2(j+1)+i;
 }
 
-static size_t index_4d(size_t i, size_t j, size_t k, size_t l) {
+size_t index_4d(size_t i, size_t j, size_t k, size_t l) {
     return index_2d(index_2d(i, j), index_2d(k, l));
 }
 

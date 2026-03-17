@@ -33,7 +33,7 @@ def kernel(hcore, eri_ao, mo, norb, nelec, add_thresh, ci0=None, tol=None, linde
     eri_mo_aabb = ao2mo.restore('s4', ao2mo.general(eri_ao, [mo_a, mo_a, mo_b, mo_b]), norb)
 
     # Compute ranking and unranking tables for configurations and double excitations
-    config_table_a, config_table_b, exc_table_4o, exc_table_2o = lib.get_ranking_tables(norb, nelec)
+    config_table_a, config_table_a_complement, config_table_b, config_table_b_complement, exc_table_4o, exc_table_2o = lib.get_ranking_tables(norb, nelec)
 
     # Build and sort double excitation storage lists
     doubles_aa = lib.get_stored_double_exc(eri_mo_aaaa, exc_table_4o, norb)
