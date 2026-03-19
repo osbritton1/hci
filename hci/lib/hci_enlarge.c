@@ -110,34 +110,6 @@ bool get_changing_orbitals(size_t *exc, size_t *occ,
         return true;
 }
 
-double get_double_excitation_value(DoubleExcitationEntry exc_entry, size_t *exc_min_occ, size_t *exc_int_occ, size_t *old_indices, size_t *new_indices) {
-    size_t orb_list[4];
-    double sign;
-    if (exc_int_occ[0] <= exc_min_occ[0]) {
-        orb_list[0] = exc_int_occ[0];
-        orb_list[1] = exc_min_occ[0];
-        orb_list[2] = exc_int_occ[1];
-        orb_list[3] = exc_min_occ[1];
-    } else {
-        orb_list[0] = exc_min_occ[0];
-        orb_list[1] = exc_int_occ[0];
-        orb_list[2] = exc_min_occ[1];
-        orb_list[3] = exc_int_occ[1];
-    }
-    if ((old_indices[0]+(old_indices[1]-1)+new_indices[0]+(new_indices[1]-1)) % 2 == 0) {
-        sign = 1.0;
-    } else {
-        sign = -1.0;
-    }
-    if ((orb_list[1] < orb_list[2]) && (orb_list[2] < orb_list[3])) {
-        return exc_entry.ijkl*sign;
-    } else if ((orb_list[2] < orb_list[3]) && (orb_list[3] < orb_list[1])) {
-        return exc_entry.iljk*sign;
-    } else {
-        return -(exc_entry.ijkl+exc_entry.iljk)*sign;
-    }
-}
-
 size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_doubles,
     size_t norb, size_t nelec_a, size_t nelec_b, double thresh,
     uint64_t *config_table_a, uint64_t *config_table_b, uint64_t *exc_table_4o, uint64_t *exc_table_2o,
@@ -161,8 +133,8 @@ size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_dou
                     break;
                 }
                 if (get_changing_orbitals(exc_aa, occ_a, exc_min_occ, exc_int_occ, new_occ, old_indices, new_indices, 2, nelec_a)) {
-                     double excitation_value = get_double_excitation_value(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
-                     if (fabs(excitation_value) >= entry_thresh) {
+                     double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
+                     if (excitation_mag >= entry_thresh) {
                         add_doubles[iadd] = rank(new_occ, config_table_a, norb, nelec_a);
                         add_doubles[iadd+1] = hci_entry.rankb;
                         iadd += 2;
@@ -179,8 +151,8 @@ size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_dou
                     break;
                 }
                 if (get_changing_orbitals(exc_bb, occ_b, exc_min_occ, exc_int_occ, new_occ, old_indices, new_indices, 2, nelec_b)) {
-                     double excitation_value = get_double_excitation_value(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
-                     if (fabs(excitation_value) >= entry_thresh) {
+                     double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
+                     if (excitation_mag >= entry_thresh) {
                         add_doubles[iadd] = hci_entry.ranka;
                         add_doubles[iadd+1] = rank(new_occ, config_table_b, norb, nelec_b);
                         iadd += 2;
@@ -211,9 +183,8 @@ size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_sin
     uint64_t *config_table_a, uint64_t *config_table_a_complement,
     uint64_t *config_table_b, uint64_t *config_table_b_complement,
     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4) {
-        size_t iconfig, iocc, ivirt, iocc_2, iadd;
+        size_t iconfig, iocc, ivirt, iadd;
         size_t occ_a[nelec_a], virt_a[norb-nelec_a], occ_b[nelec_b], virt_b[norb-nelec_b];
-        size_t ncols = nC2(norb+1);
         iadd = 0;
         for (iconfig=0; iconfig<hci_len; iconfig++) {
             HCIEntry hci_entry = hcivec[iconfig];
@@ -226,23 +197,11 @@ size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_sin
             // a excitations
             for (iocc=0; iocc<nelec_a; iocc++) {
                 size_t occ_orb = occ_a[iocc];
-                double sum = 0.0;
                 for (ivirt=0; ivirt<norb-nelec_a; ivirt++) {
                     size_t virt_orb = virt_a[ivirt];
-                    double *row = eri_aabb_s4+index_2d(occ_orb, virt_orb)*ncols;
-                    // Contribution from aaaa block
-                    for (iocc_2=0; iocc_2<nelec_a; iocc_2++) {
-                        size_t occ_orb_2 = occ_a[iocc_2];
-                        sum += eri_aaaa_s8[index_4d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_aaaa_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
-                    }
-                    // Contribution from aabb block
-                    for (iocc_2=0; iocc_2<nelec_b; iocc_2++) {
-                        size_t occ_orb_2 = occ_b[iocc_2];
-                        sum += row[index_2d(occ_orb_2, occ_orb_2)];
-                    }
-                    // Contribution from 1e Hamiltonian
-                    sum += h1e_aa[occ_orb*norb+virt_orb];
-                    if (fabs(sum) >= entry_thresh) {
+                    double excitation_mag = get_single_excitation_mag_a(occ_orb, virt_orb, norb, nelec_a, nelec_b, occ_a, occ_b, 
+                        h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    if (excitation_mag >= entry_thresh) {
                         size_t exc_a[2];
                         if (occ_orb < virt_orb) {
                             exc_a[0] = occ_orb;
@@ -263,23 +222,11 @@ size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_sin
             // b excitations
             for (iocc=0; iocc<nelec_b; iocc++) {
                 size_t occ_orb = occ_b[iocc];
-                double sum = 0.0;
                 for (ivirt=0; ivirt<norb-nelec_b; ivirt++) {
                     size_t virt_orb = virt_b[ivirt];
-                    size_t col = index_2d(occ_orb, virt_orb);
-                    // Contribution from bbbb block
-                    for (iocc_2=0; iocc_2<nelec_b; iocc_2++) {
-                        size_t occ_orb_2 = occ_b[iocc_2];
-                        sum += eri_bbbb_s8[index_4d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_bbbb_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
-                    }
-                    // Contribution from aabb block
-                    for (iocc_2=0; iocc_2<nelec_a; iocc_2++) {
-                        size_t occ_orb_2 = occ_a[iocc_2];
-                        sum += eri_aabb_s4[index_2d(occ_orb_2, occ_orb_2)*ncols+col];
-                    }
-                    // Contribution from 1e Hamiltonian
-                    sum += h1e_bb[occ_orb*norb+virt_orb];
-                    if (fabs(sum) >= entry_thresh) {
+                    double excitation_mag = get_single_excitation_mag_b(occ_orb, virt_orb, norb, nelec_a, nelec_b, occ_a, occ_b, 
+                        h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    if (excitation_mag >= entry_thresh) {
                         size_t exc_b[2];
                         if (occ_orb < virt_orb) {
                             exc_b[0] = occ_orb;

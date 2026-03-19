@@ -149,12 +149,6 @@ int test_enlarge_doubles_1() {
     return 0;
 }
 
-// size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_singles,
-//     size_t norb, size_t nelec_a, size_t nelec_b, uint64_t combmax_a, uint64_t combmax_b, double thresh,
-//     uint64_t *config_table_a, uint64_t *config_table_a_complement,
-//     uint64_t *config_table_b, uint64_t *config_table_b_complement,
-//     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4)
-
 int test_enlarge_singles() {
     HCIEntry hcivec[1] = {{0, 0, 1.0}};
     size_t hci_len = 1;
@@ -182,7 +176,116 @@ int test_enlarge_singles() {
     return 0;
 }
 
+int test_rank() {
+    size_t i, j;
+    size_t norb = 7;
+    size_t nocc = 5;
+    size_t nrows = nocc;
+    size_t ncols = norb-nocc+1;
+    uint64_t rank_table[nrows*ncols];
+    size_t occ_list[5] = {0, 1, 2, 3, 4};
+
+    get_rank_table(rank_table, norb, nocc);
+
+    uint64_t test_rank = rank(occ_list, rank_table, norb, nocc);
+
+    printf("%"PRIu64" ", test_rank);
+
+    return 0;
+}
+
+// DiffType get_exc_type(size_t *occ_1, size_t *occ_2, size_t *one_min_two, size_t *two_min_one, size_t nocc)
+
+int test_get_diff_type() {
+    size_t occ_1[5] = {2, 6, 8, 12, 15};
+    size_t occ_2[5] = {3, 6, 8, 12, 16};
+    size_t one_min_two[2], one_min_two_indices[2], two_min_one[2], two_min_one_indices[2];
+    size_t nocc = 5, i;
+    DiffType result = get_diff_type(occ_1, occ_2, one_min_two, one_min_two_indices, two_min_one, two_min_one_indices, nocc);
+    printf("%u\n\n", result);
+    if (result < 3) {
+        for (i=0; i<result; i++) {
+        printf("%zu ", one_min_two[i]);
+    }
+        printf("\n");
+        for (i=0; i<result; i++) {
+            printf("%zu ", two_min_one[i]);
+        }
+        printf("\n");
+    } else {
+        printf("Three or more differences\n");
+    }
+    return 0;
+}
+
+
+
+int test_get_matrix_element_by_rank() {
+    size_t norb = 7;
+    size_t nelec_a = 5;
+    size_t nelec_b = 4;
+    size_t i, j, ranka_1, rankb_1, ranka_2, rankb_2;
+    size_t config_table_a[21], config_table_b[35], exc_table_4o[35], exc_table_2o[21];
+    DoubleExcitationEntry ordered_doubles_aa[35], ordered_doubles_bb[35];
+    MixedExcitationEntry ordered_mixed_ab[441];
+
+    get_rank_table(config_table_a, norb, nelec_a);
+    get_rank_table(config_table_b, norb, nelec_b);
+    get_rank_table(exc_table_4o, norb, 4);
+    get_rank_table(exc_table_2o, norb, 2);
+
+    srand(time(NULL));
+    double h1e_aa[norb*norb], h1e_bb[norb*norb], eri_aaaa_s8[406], eri_aabb_s4[784], eri_bbbb_s8[406];
+    for (i=0; i<norb; i++) {
+        for (j=i; j<norb; j++) {
+            double rand_entry = (double)rand() / (double)RAND_MAX;
+            h1e_aa[i*norb+j] = rand_entry;
+            h1e_aa[j*norb+i] = rand_entry;
+        }
+    }
+    for (i=0; i<norb; i++) {
+        for (j=i; j<norb; j++) {
+            double rand_entry = (double)rand() / (double)RAND_MAX;
+            h1e_bb[i*norb+j] = rand_entry;
+            h1e_bb[j*norb+i] = rand_entry;
+        }
+    }
+    for (i=0; i<406; i++) {
+        eri_aaaa_s8[i] = (double)rand() / (double)RAND_MAX;
+        eri_bbbb_s8[i] = (double)rand() / (double)RAND_MAX;
+    }
+    for (i=0; i<784; i++) {
+        eri_aabb_s4[i] = (double)rand() / (double)RAND_MAX;
+    }
+
+    load_doubles_from_eri(ordered_doubles_aa, eri_aaaa_s8, exc_table_4o, norb);
+    load_doubles_from_eri(ordered_doubles_bb, eri_aaaa_s8, exc_table_4o, norb);
+    load_mixed_from_eri(ordered_mixed_ab, eri_aabb_s4, exc_table_2o, norb);
+
+    get_matrix_element_by_rank(0, 0, 18, 0,
+        config_table_a, config_table_b, exc_table_4o, exc_table_2o,
+        norb, nelec_a, nelec_b,
+        ordered_doubles_aa, ordered_doubles_bb, ordered_mixed_ab,
+        h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+
+    // for (ranka_1=0; ranka_1<21; ranka_1++) {
+    //     for (rankb_1=0; rankb_1<35; rankb_1++) {
+    //         for (ranka_2=0; ranka_2<21; ranka_2++) {
+    //             for (rankb_2=0; rankb_2<35; rankb_2++) {
+    //                 get_matrix_element_by_rank(ranka_1, rankb_1, ranka_2, rankb_2,
+    //                     config_table_a, config_table_b, exc_table_4o, exc_table_2o,
+    //                     norb, nelec_a, nelec_b,
+    //                     ordered_doubles_aa, ordered_doubles_bb, ordered_mixed_ab,
+    //                     h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+    //             }
+    //         }
+    //     }
+    // }
+
+    return 0;
+}
+
 int main() {
-    return test_enlarge_singles();
+    return test_get_matrix_element_by_rank();
 }
 
