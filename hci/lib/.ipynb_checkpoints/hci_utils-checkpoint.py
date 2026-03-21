@@ -8,6 +8,8 @@ mixed_excitation_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double)])
 hci_entry = np.dtype([('arank', np.uint64), ('brank', np.uint64), ('coeff', np.double)])
 
 libhci = load_library("libhci")
+libhci.get_matrix_element_by_rank.restype = ctypes.c_double
+libhci.get_matrix_element_by_rank_test_storage.restype = ctypes.c_double
 
 # Compute ranking and unranking tables for configurations and double excitations
 def get_ranking_tables(norb, nelec):
@@ -127,18 +129,30 @@ def enlarge_space_singles(hcivec, norb, nelec_a, nelec_b, thresh,
                                         eri_aaaa_s8.ctypes.data_as(ctypes.c_void_p), eri_bbbb_s8.ctypes.data_as(ctypes.c_void_p),
                                         eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))
     return add_list, nadd
-    
+
+# double get_matrix_element_by_rank(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2,
+#     uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
+#     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4)
 def get_matrix_element_by_rank(ranka_1, rankb_1, ranka_2, rankb_2,
-                               config_table_a, config_table_b, exc_table_4o, exc_table_2o,
-                               norb, nelec_a, nelec_b,
-                               ordered_doubles_aa, ordered_doubles_bb, ordered_mixed_ab,
+                               config_table_a, config_table_b, norb, nelec_a, nelec_b,
                                h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4):
-    libhci.get_matrix_element_by_rank.restype = ctypes.c_double
     return libhci.get_matrix_element_by_rank(ctypes.c_uint64(ranka_1), ctypes.c_uint64(rankb_1), ctypes.c_uint64(ranka_2), ctypes.c_uint64(rankb_2),
                                              config_table_a.ctypes.data_as(ctypes.c_void_p), config_table_b.ctypes.data_as(ctypes.c_void_p),
-                                             exc_table_4o.ctypes.data_as(ctypes.c_void_p), exc_table_2o.ctypes.data_as(ctypes.c_void_p),
                                              ctypes.c_size_t(norb), ctypes.c_size_t(nelec_a), ctypes.c_size_t(nelec_b),
-                                             ordered_doubles_aa.ctypes.data_as(ctypes.c_void_p), ordered_doubles_bb.ctypes.data_as(ctypes.c_void_p),
-                                             ordered_mixed_ab.ctypes.data_as(ctypes.c_void_p), h1e_aa.ctypes.data_as(ctypes.c_void_p), 
-                                             h1e_bb.ctypes.data_as(ctypes.c_void_p), eri_aaaa_s8.ctypes.data_as(ctypes.c_void_p),
-                                             eri_bbbb_s8.ctypes.data_as(ctypes.c_void_p), eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))
+                                             h1e_aa.ctypes.data_as(ctypes.c_void_p), h1e_bb.ctypes.data_as(ctypes.c_void_p),
+                                             eri_aaaa_s8.ctypes.data_as(ctypes.c_void_p), eri_bbbb_s8.ctypes.data_as(ctypes.c_void_p), 
+                                             eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))
+    
+def get_matrix_element_by_rank_test_storage(ranka_1, rankb_1, ranka_2, rankb_2,
+                                            config_table_a, config_table_b, exc_table_4o, exc_table_2o,
+                                            norb, nelec_a, nelec_b,
+                                            ordered_doubles_aa, ordered_doubles_bb, ordered_mixed_ab,
+                                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4):
+    return libhci.get_matrix_element_by_rank_test_storage(ctypes.c_uint64(ranka_1), ctypes.c_uint64(rankb_1), ctypes.c_uint64(ranka_2), ctypes.c_uint64(rankb_2),
+                                                          config_table_a.ctypes.data_as(ctypes.c_void_p), config_table_b.ctypes.data_as(ctypes.c_void_p),
+                                                          exc_table_4o.ctypes.data_as(ctypes.c_void_p), exc_table_2o.ctypes.data_as(ctypes.c_void_p),
+                                                          ctypes.c_size_t(norb), ctypes.c_size_t(nelec_a), ctypes.c_size_t(nelec_b),
+                                                          ordered_doubles_aa.ctypes.data_as(ctypes.c_void_p), ordered_doubles_bb.ctypes.data_as(ctypes.c_void_p),
+                                                          ordered_mixed_ab.ctypes.data_as(ctypes.c_void_p), h1e_aa.ctypes.data_as(ctypes.c_void_p), 
+                                                          h1e_bb.ctypes.data_as(ctypes.c_void_p), eri_aaaa_s8.ctypes.data_as(ctypes.c_void_p),
+                                                          eri_bbbb_s8.ctypes.data_as(ctypes.c_void_p), eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))

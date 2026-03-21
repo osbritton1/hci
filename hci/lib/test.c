@@ -262,7 +262,7 @@ int test_get_matrix_element_by_rank() {
     load_doubles_from_eri(ordered_doubles_bb, eri_aaaa_s8, exc_table_4o, norb);
     load_mixed_from_eri(ordered_mixed_ab, eri_aabb_s4, exc_table_2o, norb);
 
-    get_matrix_element_by_rank(0, 0, 18, 0,
+    get_matrix_element_by_rank_test_storage(0, 0, 18, 0,
         config_table_a, config_table_b, exc_table_4o, exc_table_2o,
         norb, nelec_a, nelec_b,
         ordered_doubles_aa, ordered_doubles_bb, ordered_mixed_ab,

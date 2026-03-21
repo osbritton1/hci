@@ -2,6 +2,7 @@ from hci import lib
 from pyscf import ao2mo
 from functools import reduce
 import numpy as np
+from numpy.lib.recfunctions import structured_to_unstructured, unstructured_to_structured
 
 def c_print_doubles(doubles):
     print('{')
@@ -59,22 +60,45 @@ def kernel(hcore, eri_ao, mo, norb, nelec, add_thresh, ci0=None, tol=None, linde
         ci0 = np.empty(1, dtype=lib.hci_entry)
         ci0[0] = (0, 0, 1.0)
 
-    add_list, nadd = lib.enlarge_space_doubles(ci0, norb, nelec_a, nelec_b, add_thresh, 
-                                               config_table_a, config_table_b, exc_table_4o, exc_table_2o, 
-                                               doubles_aa, doubles_bb, mixed_ab,
-                                               max_mag_aa, max_mag_bb, max_mag_ab)
-    # c_print_doubles(doubles_aa)
-    # c_print_doubles(doubles_bb)
-    # c_print_mixed(mixed_ab)
-    # c_print_array(max_mag_aa)
-    # c_print_array(max_mag_bb)
-    # c_print_array(max_mag_ab)
-    print(f'aa: {doubles_aa[max_mag_aa>add_thresh]}')
-    print(f'bb: {doubles_bb[max_mag_bb>add_thresh]}')
-    print(f'ab: {mixed_ab[max_mag_ab>add_thresh]}')
-    print()
+    ci0_new = enlarge_space(hcivec, norb, nelec_a, nelec_b, thresh,
+                            config_table_a, config_table_a_complement, config_table_b, config_table_b_complement, exc_table_4o, exc_table_2o,
+                            doubles_aa, doubles_bb, mixed_ab, max_mag_aa, max_mag_bb, max_mag_ab,
+                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4)
+
     print(ci0)
-    print()
-    print(len(add_list), add_list[:nadd])
+    print(ci0_new)
         
     return ci0
+
+def enlarge_space(hcivec, norb, nelec_a, nelec_b, thresh,
+                  config_table_a, config_table_a_complement, config_table_b, config_table_b_complement, exc_table_4o, exc_table_2o,
+                  doubles_aa, doubles_bb, mixed_ab, max_mag_aa, max_mag_bb, max_mag_ab,
+                  h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4):
+    
+    add_list_doubles, nadd_doubles = lib.enlarge_space_doubles(hcivec, norb, nelec_a, nelec_b, thresh, 
+                                                               config_table_a, config_table_b, exc_table_4o, exc_table_2o, 
+                                                               doubles_aa, doubles_bb, mixed_ab,
+                                                               max_mag_aa, max_mag_bb, max_mag_ab)
+    print(add_list_doubles[:nadd_doubles])
+    add_list_singles, nadd_singles = lib.enlarge_space_singles(hcivec, norb, nelec_a, nelec_b, thresh,
+                                                               config_table_a, config_table_a_complement,
+                                                               config_table_b, config_table_b_complement,
+                                                               h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4)
+    print(add_list_singles[:nadd_singles])
+    print()
+    
+    ndets_old = len(hcivec)
+    already_included = structured_to_unstructured(hcivec[['arank', 'brank']])
+    total_list = np.concatenate([already_included, add_list_doubles[:nadd_doubles], add_list_singles[:nadd_singles]])
+    new_list, unique_rows = np.unique(total_list, return_index=True, axis=0)
+    ndets_new = len(new_list)
+    hcivec_new = np.zeros(ndets_new, dtype=lib.hci_entry)
+    hcivec_new[['arank', 'brank']] = unstructured_to_structured(new_list)
+    
+    filter_from_old = unique_rows<ndets_old
+    old_indices_to_copy = unique_rows[filter_from_old]
+    new_locations = np.nonzero(filter_from_old)[0]
+    for (old_index, new_index) in zip(old_indices_to_copy, new_locations):
+        hcivec_new[new_index]['coeff'] = hcivec[old_index]['coeff']
+        
+    return hcivec_new
