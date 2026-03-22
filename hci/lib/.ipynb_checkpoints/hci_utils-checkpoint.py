@@ -5,7 +5,7 @@ import math
 
 double_excitation_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double), ('iljk', np.double)])
 mixed_excitation_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double)])
-hci_entry = np.dtype([('arank', np.uint64), ('brank', np.uint64), ('coeff', np.double)])
+# hci_entry = np.dtype([('arank', np.uint64), ('brank', np.uint64), ('coeff', np.double)])
 
 libhci = load_library("libhci")
 libhci.get_matrix_element_by_rank.restype = ctypes.c_double
@@ -91,15 +91,16 @@ def get_max_magnitudes(doubles, norb):
     return magnitudes
 
 # Expand search space using HCI selection algorithm for double excitations
-def enlarge_space_doubles(hcivec, norb, nelec_a, nelec_b, thresh, 
+def enlarge_space_doubles(ranks, coeffs, norb, nelec_a, nelec_b, thresh, 
                          config_table_a, config_table_b, exc_table_4o, exc_table_2o, 
                          doubles_aa, doubles_bb, mixed_ab,
                          max_mag_aa, max_mag_bb, max_mag_ab):
     nexc_aa = math.comb(nelec_a, 2)*math.comb(norb-nelec_a, 2)
     nexc_bb = math.comb(nelec_b, 2)*math.comb(norb-nelec_b, 2)
     nexc_ab = nelec_a*(norb-nelec_a)*nelec_b*(norb-nelec_b)
-    add_list = np.empty((len(hcivec)*(nexc_aa+nexc_bb+nexc_ab), 2), dtype=np.uint64)
-    nadd = libhci.enlarge_space_doubles(hcivec.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(hcivec)), add_list.ctypes.data_as(ctypes.c_void_p),
+    add_list = np.empty((len(ranks)*(nexc_aa+nexc_bb+nexc_ab), 2), dtype=np.uint64)
+    nadd = libhci.enlarge_space_doubles(ranks.ctypes.data_as(ctypes.c_void_p), coeffs.ctypes.data_as(ctypes.c_void_p), 
+                                        ctypes.c_size_t(len(ranks)), add_list.ctypes.data_as(ctypes.c_void_p),
                                         ctypes.c_size_t(norb), ctypes.c_size_t(nelec_a), ctypes.c_size_t(nelec_b), ctypes.c_double(thresh),
                                         config_table_a.ctypes.data_as(ctypes.c_void_p), config_table_b.ctypes.data_as(ctypes.c_void_p),
                                         exc_table_4o.ctypes.data_as(ctypes.c_void_p), exc_table_2o.ctypes.data_as(ctypes.c_void_p),
@@ -111,7 +112,7 @@ def enlarge_space_doubles(hcivec, norb, nelec_a, nelec_b, thresh,
     return add_list, nadd
     
 # Expand search space using HCI selection algorithm for single excitations
-def enlarge_space_singles(hcivec, norb, nelec_a, nelec_b, thresh,
+def enlarge_space_singles(ranks, coeffs, norb, nelec_a, nelec_b, thresh,
                           config_table_a, config_table_a_complement,
                           config_table_b, config_table_b_complement,
                           h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4):
@@ -119,8 +120,9 @@ def enlarge_space_singles(hcivec, norb, nelec_a, nelec_b, thresh,
     nexc_b = nelec_b*(norb-nelec_b)
     combmax_a = math.comb(norb, nelec_a)
     combmax_b = math.comb(norb, nelec_b)
-    add_list = np.zeros((len(hcivec)*(nexc_a+nexc_b), 2), dtype=np.uint64)
-    nadd = libhci.enlarge_space_singles(hcivec.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(hcivec)), add_list.ctypes.data_as(ctypes.c_void_p),
+    add_list = np.zeros((len(ranks)*(nexc_a+nexc_b), 2), dtype=np.uint64)
+    nadd = libhci.enlarge_space_singles(ranks.ctypes.data_as(ctypes.c_void_p), coeffs.ctypes.data_as(ctypes.c_void_p), 
+                                        ctypes.c_size_t(len(ranks)), add_list.ctypes.data_as(ctypes.c_void_p),
                                         ctypes.c_size_t(norb), ctypes.c_size_t(nelec_a), ctypes.c_size_t(nelec_b),
                                         ctypes.c_uint64(combmax_a), ctypes.c_uint64(combmax_b), ctypes.c_double(thresh),
                                         config_table_a.ctypes.data_as(ctypes.c_void_p), config_table_a_complement.ctypes.data_as(ctypes.c_void_p),
@@ -130,9 +132,6 @@ def enlarge_space_singles(hcivec, norb, nelec_a, nelec_b, thresh,
                                         eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))
     return add_list, nadd
 
-# double get_matrix_element_by_rank(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2,
-#     uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
-#     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4)
 def get_matrix_element_by_rank(ranka_1, rankb_1, ranka_2, rankb_2,
                                config_table_a, config_table_b, norb, nelec_a, nelec_b,
                                h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4):
@@ -156,3 +155,28 @@ def get_matrix_element_by_rank_test_storage(ranka_1, rankb_1, ranka_2, rankb_2,
                                                           ordered_mixed_ab.ctypes.data_as(ctypes.c_void_p), h1e_aa.ctypes.data_as(ctypes.c_void_p), 
                                                           h1e_bb.ctypes.data_as(ctypes.c_void_p), eri_aaaa_s8.ctypes.data_as(ctypes.c_void_p),
                                                           eri_bbbb_s8.ctypes.data_as(ctypes.c_void_p), eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))
+
+def make_hdiag_slow(ranks, 
+                    config_table_a, config_table_b, norb, nelec_a, nelec_b, 
+                    h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4):
+    hdiag = np.empty(len(ranks), dtype=np.double)
+    libhci.make_hdiag_slow(ranks.ctypes.data_as(ctypes.c_void_p), hdiag.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(ranks)),
+                           config_table_a.ctypes.data_as(ctypes.c_void_p), config_table_b.ctypes.data_as(ctypes.c_void_p),
+                           ctypes.c_size_t(norb), ctypes.c_size_t(nelec_a), ctypes.c_size_t(nelec_b),
+                           h1e_aa.ctypes.data_as(ctypes.c_void_p), h1e_bb.ctypes.data_as(ctypes.c_void_p),
+                           eri_aaaa_s8.ctypes.data_as(ctypes.c_void_p), eri_bbbb_s8.ctypes.data_as(ctypes.c_void_p),
+                           eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))
+    return hdiag
+
+def contract_hamiltonian_hcivec_slow(ranks, coeffs, hdiag,
+                                     config_table_a, config_table_b, norb, nelec_a, nelec_b,
+                                     h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4):
+    coeffs_new = np.empty_like(coeffs)
+    libhci.contract_hamiltonian_hcivec_slow(ranks.ctypes.data_as(ctypes.c_void_p), coeffs.ctypes.data_as(ctypes.c_void_p), 
+                                            coeffs_new.ctypes.data_as(ctypes.c_void_p), ctypes.c_size_t(len(ranks)), hdiag.ctypes.data_as(ctypes.c_void_p),
+                                            config_table_a.ctypes.data_as(ctypes.c_void_p), config_table_b.ctypes.data_as(ctypes.c_void_p),
+                                            ctypes.c_size_t(norb), ctypes.c_size_t(nelec_a), ctypes.c_size_t(nelec_b),
+                                            h1e_aa.ctypes.data_as(ctypes.c_void_p), h1e_bb.ctypes.data_as(ctypes.c_void_p),
+                                            eri_aaaa_s8.ctypes.data_as(ctypes.c_void_p), eri_bbbb_s8.ctypes.data_as(ctypes.c_void_p),
+                                            eri_aabb_s4.ctypes.data_as(ctypes.c_void_p))
+    return coeffs_new

@@ -374,6 +374,154 @@ static void sort_changing_orbs(size_t *orb_list, size_t *one_min_two, size_t *tw
     }
 }
 
+double get_matrix_element_by_rank(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2,
+    uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
+    double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4) {
+        size_t occ_a_1[nelec_a], occ_b_1[nelec_b], occ_a_2[nelec_a], occ_b_2[nelec_b];
+        size_t occ_a_1_min_2[2], occ_a_1_min_2_indices[2], occ_a_2_min_1[2], occ_a_2_min_1_indices[2];
+        size_t occ_b_1_min_2[2], occ_b_1_min_2_indices[2], occ_b_2_min_1[2], occ_b_2_min_1_indices[2];
+        unrank(ranka_1, occ_a_1, config_table_a, norb, nelec_a);
+        unrank(ranka_2, occ_a_2, config_table_a, norb, nelec_a);
+        DiffType res_a = get_diff_type(occ_a_1, occ_a_2, occ_a_1_min_2, occ_a_1_min_2_indices,
+             occ_a_2_min_1, occ_a_2_min_1_indices, nelec_a);
+        switch (res_a) {
+            case ZERO: {
+                unrank(rankb_1, occ_b_1, config_table_b, norb, nelec_b);
+                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
+                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
+                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Diagonal
+                        return get_diag_value(occ_a_1, occ_b_1, norb, nelec_a, nelec_b,
+                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    case SINGLE:
+                    // Single b
+                        return get_single_excitation_value_b(occ_b_1_min_2[0], occ_b_2_min_1[0], norb, nelec_a, nelec_b, occ_a_1, occ_b_1,
+                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    case DOUBLE: 
+                    // Double bb
+                        return get_double_excitation_value_bb(occ_b_1_min_2, occ_b_2_min_1, 
+                            occ_b_1_min_2_indices, occ_b_2_min_1_indices, eri_bbbb_s8);
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case SINGLE: {
+                unrank(rankb_1, occ_b_1, config_table_b, norb, nelec_b);
+                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
+                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
+                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Single a
+                        return get_single_excitation_value_a(occ_a_1_min_2[0], occ_a_2_min_1[0], norb, nelec_a, nelec_b, occ_a_1, occ_b_1,
+                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    case SINGLE: 
+                    // Mixed ab
+                        return get_mixed_excitation_value(occ_a_1_min_2, occ_a_2_min_1, occ_a_1_min_2_indices, occ_a_2_min_1_indices,
+                            occ_b_1_min_2, occ_b_2_min_1, occ_b_1_min_2_indices, occ_b_2_min_1_indices, norb, eri_aabb_s4);
+                    case DOUBLE:
+                        return 0.0;
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case DOUBLE: {
+                unrank(rankb_1, occ_b_1, config_table_b, norb, nelec_b);
+                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
+                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
+                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
+                switch (res_b) {
+                    case ZERO: 
+                        return get_double_excitation_value_aa(occ_a_1_min_2, occ_a_2_min_1, 
+                            occ_a_1_min_2_indices, occ_a_2_min_1_indices, eri_aaaa_s8);
+                    case SINGLE:
+                        return 0.0;
+                    case DOUBLE:
+                        return 0.0;
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case THREE_PLUS:
+                return 0.0;
+        }
+        return 0.0;
+}
+
+double get_matrix_element_by_partial_rank(uint64_t *occ_a_1, uint64_t *occ_b_1, uint64_t ranka_2, uint64_t rankb_2,
+    uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
+    double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4) {
+        size_t occ_a_2[nelec_a], occ_b_2[nelec_b];
+        size_t occ_a_1_min_2[2], occ_a_1_min_2_indices[2], occ_a_2_min_1[2], occ_a_2_min_1_indices[2];
+        size_t occ_b_1_min_2[2], occ_b_1_min_2_indices[2], occ_b_2_min_1[2], occ_b_2_min_1_indices[2];
+        unrank(ranka_2, occ_a_2, config_table_a, norb, nelec_a);
+        DiffType res_a = get_diff_type(occ_a_1, occ_a_2, occ_a_1_min_2, occ_a_1_min_2_indices,
+             occ_a_2_min_1, occ_a_2_min_1_indices, nelec_a);
+        switch (res_a) {
+            case ZERO: {
+                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
+                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
+                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Diagonal
+                        return get_diag_value(occ_a_1, occ_b_1, norb, nelec_a, nelec_b,
+                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    case SINGLE:
+                    // Single b
+                        return get_single_excitation_value_b(occ_b_1_min_2[0], occ_b_2_min_1[0], norb, nelec_a, nelec_b, occ_a_1, occ_b_1,
+                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    case DOUBLE: 
+                    // Double bb
+                        return get_double_excitation_value_bb(occ_b_1_min_2, occ_b_2_min_1, 
+                            occ_b_1_min_2_indices, occ_b_2_min_1_indices, eri_bbbb_s8);
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case SINGLE: {
+                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
+                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
+                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Single a
+                        return get_single_excitation_value_a(occ_a_1_min_2[0], occ_a_2_min_1[0], norb, nelec_a, nelec_b, occ_a_1, occ_b_1,
+                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
+                    case SINGLE: 
+                    // Mixed ab
+                        return get_mixed_excitation_value(occ_a_1_min_2, occ_a_2_min_1, occ_a_1_min_2_indices, occ_a_2_min_1_indices,
+                            occ_b_1_min_2, occ_b_2_min_1, occ_b_1_min_2_indices, occ_b_2_min_1_indices, norb, eri_aabb_s4);
+                    case DOUBLE:
+                        return 0.0;
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case DOUBLE: {
+                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
+                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
+                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
+                switch (res_b) {
+                    case ZERO: 
+                        return get_double_excitation_value_aa(occ_a_1_min_2, occ_a_2_min_1, 
+                            occ_a_1_min_2_indices, occ_a_2_min_1_indices, eri_aaaa_s8);
+                    case SINGLE:
+                        return 0.0;
+                    case DOUBLE:
+                        return 0.0;
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case THREE_PLUS:
+                return 0.0;
+        }
+        return 0.0;
+}
+
 double get_matrix_element_by_rank_test_storage(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2, 
     uint64_t *config_table_a, uint64_t *config_table_b, uint64_t *exc_table_4o, uint64_t *exc_table_2o,
     size_t norb, size_t nelec_a, size_t nelec_b,
@@ -480,78 +628,52 @@ double get_matrix_element_by_rank_test_storage(uint64_t ranka_1, uint64_t rankb_
         return 0.0;
 }
 
-double get_matrix_element_by_rank(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2,
+void make_hdiag_slow(uint64_t *ranks, double *hdiag, size_t hci_len,
     uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4) {
-        size_t occ_a_1[nelec_a], occ_b_1[nelec_b], occ_a_2[nelec_a], occ_b_2[nelec_b];
-        size_t occ_a_1_min_2[2], occ_a_1_min_2_indices[2], occ_a_2_min_1[2], occ_a_2_min_1_indices[2];
-        size_t occ_b_1_min_2[2], occ_b_1_min_2_indices[2], occ_b_2_min_1[2], occ_b_2_min_1_indices[2];
-        unrank(ranka_1, occ_a_1, config_table_a, norb, nelec_a);
-        unrank(ranka_2, occ_a_2, config_table_a, norb, nelec_a);
-        DiffType res_a = get_diff_type(occ_a_1, occ_a_2, occ_a_1_min_2, occ_a_1_min_2_indices,
-             occ_a_2_min_1, occ_a_2_min_1_indices, nelec_a);
-        switch (res_a) {
-            case ZERO: {
-                unrank(rankb_1, occ_b_1, config_table_b, norb, nelec_b);
-                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
-                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
-                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
-                switch (res_b) {
-                    case ZERO:
-                    // Diagonal
-                        return get_diag_value(occ_a_1, occ_b_1, norb, nelec_a, nelec_b,
-                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
-                    case SINGLE:
-                    // Single b
-                        return get_single_excitation_value_b(occ_b_1_min_2[0], occ_b_2_min_1[0], norb, nelec_a, nelec_b, occ_a_1, occ_b_1,
-                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
-                    case DOUBLE: 
-                    // Double bb
-                        return get_double_excitation_value_bb(occ_b_1_min_2, occ_b_2_min_1, 
-                            occ_b_1_min_2_indices, occ_b_2_min_1_indices, eri_bbbb_s8);
-                    case THREE_PLUS:
-                        return 0.0;
-                }
-            }
-            case SINGLE: {
-                unrank(rankb_1, occ_b_1, config_table_b, norb, nelec_b);
-                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
-                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
-                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
-                switch (res_b) {
-                    case ZERO:
-                    // Single a
-                        return get_single_excitation_value_a(occ_a_1_min_2[0], occ_a_2_min_1[0], norb, nelec_a, nelec_b, occ_a_1, occ_b_1,
-                            h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
-                    case SINGLE: 
-                    // Mixed ab
-                        return get_mixed_excitation_value(occ_a_1_min_2, occ_a_2_min_1, occ_a_1_min_2_indices, occ_a_2_min_1_indices,
-                            occ_b_1_min_2, occ_b_2_min_1, occ_b_1_min_2_indices, occ_b_2_min_1_indices, norb, eri_aabb_s4);
-                    case DOUBLE:
-                        return 0.0;
-                    case THREE_PLUS:
-                        return 0.0;
-                }
-            }
-            case DOUBLE: {
-                unrank(rankb_1, occ_b_1, config_table_b, norb, nelec_b);
-                unrank(rankb_2, occ_b_2, config_table_b, norb, nelec_b);
-                DiffType res_b = get_diff_type(occ_b_1, occ_b_2, occ_b_1_min_2, occ_b_1_min_2_indices,
-                    occ_b_2_min_1, occ_b_2_min_1_indices, nelec_b);
-                switch (res_b) {
-                    case ZERO: 
-                        return get_double_excitation_value_aa(occ_a_1_min_2, occ_a_2_min_1, 
-                            occ_a_1_min_2_indices, occ_a_2_min_1_indices, eri_aaaa_s8);
-                    case SINGLE:
-                        return 0.0;
-                    case DOUBLE:
-                        return 0.0;
-                    case THREE_PLUS:
-                        return 0.0;
-                }
-            }
-            case THREE_PLUS:
-                return 0.0;
+        size_t i, occ_a[nelec_a], occ_b[nelec_b];
+        for (i=0; i<hci_len; i++) {
+            uint64_t arank = ranks[2*i];
+            uint64_t brank = ranks[2*i+1];
+            unrank(arank, occ_a, config_table_a, norb, nelec_a);
+            unrank(brank, occ_b, config_table_b, norb, nelec_b);
+            hdiag[i] = get_diag_value(occ_a, occ_b, norb, nelec_a, nelec_b,
+                h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4);
         }
-        return 0.0;
+}
+
+void contract_hamiltonian_hcivec_slow(uint64_t *ranks, double *coeffs, double *coeffs_new, size_t hci_len, double *hdiag,
+    uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
+    double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4) {
+        size_t i, j;
+        for (i=0; i<hci_len; i++) {
+            double sum = 0.0;
+            uint64_t bra_arank = ranks[2*i];
+            uint64_t bra_brank = ranks[2*i+1];
+            uint64_t bra_occ_a[nelec_a], bra_occ_b[nelec_b];
+            unrank(bra_arank, bra_occ_a, config_table_a, norb, nelec_a);
+            unrank(bra_brank, bra_occ_b, config_table_b, norb, nelec_b);
+            for (j=0; j<i; j++) {
+                if (coeffs[j] == 0.0) {
+                    continue;
+                }
+                uint64_t ket_arank = ranks[2*j];
+                uint64_t ket_brank = ranks[2*j+1];
+                sum += get_matrix_element_by_partial_rank(bra_occ_a, bra_occ_b, ket_arank, ket_brank,
+                    config_table_a, config_table_b, norb, nelec_a, nelec_b,
+                    h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4)*coeffs[j];
+            }
+            sum += hdiag[i];
+            for (j=i+1; j<hci_len; j++) {
+                if (coeffs[j] == 0.0) {
+                    continue;
+                }
+                uint64_t ket_arank = ranks[2*j];
+                uint64_t ket_brank = ranks[2*j+1];
+                sum += get_matrix_element_by_partial_rank(bra_occ_a, bra_occ_b, ket_arank, ket_brank,
+                    config_table_a, config_table_b, norb, nelec_a, nelec_b,
+                    h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4)*coeffs[j];
+            }
+            coeffs_new[i] = sum;
+        }
 }

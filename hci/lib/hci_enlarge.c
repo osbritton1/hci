@@ -110,7 +110,7 @@ bool get_changing_orbitals(size_t *exc, size_t *occ,
         return true;
 }
 
-size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_doubles,
+size_t enlarge_space_doubles(uint64_t *ranks, double *coeffs, size_t hci_len, uint64_t *add_doubles,
     size_t norb, size_t nelec_a, size_t nelec_b, double thresh,
     uint64_t *config_table_a, uint64_t *config_table_b, uint64_t *exc_table_4o, uint64_t *exc_table_2o,
     DoubleExcitationEntry *doubles_aa, size_t ndoubles_aa, 
@@ -121,10 +121,11 @@ size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_dou
         size_t occ_a[nelec_a], occ_b[nelec_b], exc_aa[4], exc_bb[4], exc_ab[4];
         iadd = 0;
         for (iconfig=0; iconfig<hci_len; iconfig++) {
-            HCIEntry hci_entry = hcivec[iconfig];
-            double entry_thresh = fabs(hci_entry.coeff*thresh);
+            double coeff = coeffs[iconfig];
+            uint64_t arank = ranks[2*iconfig], brank = ranks[2*iconfig+1];
+            double entry_thresh = fabs(coeff*thresh);
             // aa excitations
-            unrank(hci_entry.ranka, occ_a, config_table_a, norb, nelec_a);
+            unrank(arank, occ_a, config_table_a, norb, nelec_a);
             for (iexc=0; iexc<ndoubles_aa; iexc++) {
                 DoubleExcitationEntry exc_entry = doubles_aa[iexc];
                 size_t exc_min_occ[2], exc_int_occ[2], old_indices[2], new_occ[nelec_a], new_indices[2];
@@ -136,13 +137,13 @@ size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_dou
                      double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
                      if (excitation_mag >= entry_thresh) {
                         add_doubles[iadd] = rank(new_occ, config_table_a, norb, nelec_a);
-                        add_doubles[iadd+1] = hci_entry.rankb;
+                        add_doubles[iadd+1] = brank;
                         iadd += 2;
                      }
                 }
             }
             // bb excitations
-            unrank(hci_entry.rankb, occ_b, config_table_b, norb, nelec_b);
+            unrank(brank, occ_b, config_table_b, norb, nelec_b);
             for (iexc=0; iexc<ndoubles_bb; iexc++) {
                 DoubleExcitationEntry exc_entry = doubles_bb[iexc];
                 size_t exc_min_occ[2], exc_int_occ[2], old_indices[2], new_occ[nelec_b], new_indices[2];
@@ -153,7 +154,7 @@ size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_dou
                 if (get_changing_orbitals(exc_bb, occ_b, exc_min_occ, exc_int_occ, new_occ, old_indices, new_indices, 2, nelec_b)) {
                      double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
                      if (excitation_mag >= entry_thresh) {
-                        add_doubles[iadd] = hci_entry.ranka;
+                        add_doubles[iadd] = arank;
                         add_doubles[iadd+1] = rank(new_occ, config_table_b, norb, nelec_b);
                         iadd += 2;
                      }
@@ -178,7 +179,7 @@ size_t enlarge_space_doubles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_dou
         return iadd/2;
 }
 
-size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_singles,
+size_t enlarge_space_singles(uint64_t *ranks, double *coeffs, size_t hci_len, uint64_t *add_singles,
     size_t norb, size_t nelec_a, size_t nelec_b, uint64_t combmax_a, uint64_t combmax_b, double thresh,
     uint64_t *config_table_a, uint64_t *config_table_a_complement,
     uint64_t *config_table_b, uint64_t *config_table_b_complement,
@@ -187,12 +188,13 @@ size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_sin
         size_t occ_a[nelec_a], virt_a[norb-nelec_a], occ_b[nelec_b], virt_b[norb-nelec_b];
         iadd = 0;
         for (iconfig=0; iconfig<hci_len; iconfig++) {
-            HCIEntry hci_entry = hcivec[iconfig];
-            double entry_thresh = fabs(hci_entry.coeff*thresh);
-            unrank(hci_entry.ranka, occ_a, config_table_a, norb, nelec_a);
-            unrank(combmax_a-hci_entry.ranka-1, virt_a, config_table_a_complement, norb, norb-nelec_a);
-            unrank(hci_entry.rankb, occ_b, config_table_b, norb, nelec_b);
-            unrank(combmax_b-hci_entry.rankb-1, virt_b, config_table_b_complement, norb, norb-nelec_b);
+            double coeff = coeffs[iconfig];
+            uint64_t arank = ranks[2*iconfig], brank = ranks[2*iconfig+1];
+            double entry_thresh = fabs(coeff*thresh);
+            unrank(arank, occ_a, config_table_a, norb, nelec_a);
+            unrank(combmax_a-arank-1, virt_a, config_table_a_complement, norb, norb-nelec_a);
+            unrank(brank, occ_b, config_table_b, norb, nelec_b);
+            unrank(combmax_b-brank-1, virt_b, config_table_b_complement, norb, norb-nelec_b);
 
             // a excitations
             for (iocc=0; iocc<nelec_a; iocc++) {
@@ -213,7 +215,7 @@ size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_sin
                         size_t exc_min_occ[1], exc_int_occ[1], new_occ[nelec_a], old_indices[1], new_indices[1];
                         get_changing_orbitals(exc_a, occ_a, exc_min_occ, exc_int_occ, new_occ, old_indices, new_indices, 1, nelec_a);
                         add_singles[iadd] = rank(new_occ, config_table_a, norb, nelec_a);
-                        add_singles[iadd+1] = hci_entry.rankb;
+                        add_singles[iadd+1] = brank;
                         iadd += 2;
                     }
                 }
@@ -237,7 +239,7 @@ size_t enlarge_space_singles(HCIEntry *hcivec, size_t hci_len, uint64_t *add_sin
                         }
                         size_t exc_min_occ[1], exc_int_occ[1], new_occ[nelec_b], old_indices[1], new_indices[1];
                         get_changing_orbitals(exc_b, occ_b, exc_min_occ, exc_int_occ, new_occ, old_indices, new_indices, 1, nelec_b);
-                        add_singles[iadd] = hci_entry.ranka;
+                        add_singles[iadd] = arank;
                         add_singles[iadd+1] = rank(new_occ, config_table_b, norb, nelec_b);
                         iadd += 2;
                     }

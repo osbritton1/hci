@@ -98,7 +98,8 @@ int test_get_changing_orbitals() {
 }
 
 int test_enlarge_doubles_1() {
-    HCIEntry hcivec[1] = {{0, 0, 1.0}};
+    uint64_t ranks[2] = {0, 0};
+    double coeff[1] = {1.0};
     size_t hci_len = 1;
     uint64_t add_doubles[18];
     size_t norb = 4;
@@ -139,7 +140,7 @@ int test_enlarge_doubles_1() {
     1.82390092e-16, 1.82390092e-16, 1.47787966e-16, 1.47787966e-16,
     1.46391649e-16, 8.97736184e-17, 8.97736184e-17, 8.14127263e-17,
     8.14127263e-17, 5.20950292e-17, 2.22462662e-17, 2.22462662e-17};
-    size_t nadd = enlarge_space_doubles(hcivec, hci_len, add_doubles,
+    size_t nadd = enlarge_space_doubles(ranks, coeff, hci_len, add_doubles,
         norb, nelec_a, nelec_b, thresh,
         config_table_a, config_table_b, exc_table_4o, exc_table_2o,
         doubles_aa, ndoubles_aa, 
@@ -150,7 +151,8 @@ int test_enlarge_doubles_1() {
 }
 
 int test_enlarge_singles() {
-    HCIEntry hcivec[1] = {{0, 0, 1.0}};
+    uint64_t ranks[2] = {0, 0};
+    double coeff[1] = {1.0};
     size_t hci_len = 1;
     uint64_t add_singles[44];
     size_t norb = 7;
@@ -168,7 +170,7 @@ int test_enlarge_singles() {
     double eri_aaaa_s8[406] = {0};
     double eri_bbbb_s8[406] = {0};
     double eri_aabb_s4[784] = {0};
-    enlarge_space_singles(hcivec, hci_len, add_singles,
+    enlarge_space_singles(ranks, coeff, hci_len, add_singles,
         norb, nelec_a, nelec_b, combmax_a, combmax_b, thresh,
         config_table_a, config_table_a_complement,
         config_table_b, config_table_b_complement,

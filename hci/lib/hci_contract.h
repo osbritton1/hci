@@ -5,11 +5,11 @@
 #include <stdbool.h>
 #include "hci_store.h"
 
-typedef struct {
-    uint64_t ranka;
-    uint64_t rankb;
-    double coeff;
-} HCIEntry;
+// typedef struct {
+//     uint64_t ranka;
+//     uint64_t rankb;
+//     double coeff;
+// } HCIEntry;
 
 typedef enum {
     ZERO,
@@ -43,17 +43,25 @@ double get_diag_value(size_t *occ_a, size_t *occ_b, size_t norb, size_t nelec_a,
 
 DiffType get_diff_type(size_t *occ_1, size_t *occ_2, size_t *one_min_two, size_t *one_min_two_indices, size_t *two_min_one,size_t *two_min_one_indices, size_t nocc);
 
+double get_matrix_element_by_rank(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2,
+    uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
+    double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4);
+
+double get_matrix_element_by_partial_rank(uint64_t *occ_a_1, uint64_t *occ_b_1, uint64_t ranka_2, uint64_t rankb_2,
+    uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
+    double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4);
+
 double get_matrix_element_by_rank_test_storage(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2, 
     uint64_t *config_table_a, uint64_t *config_table_b, uint64_t *exc_table_4o, uint64_t *exc_table_2o,
     size_t norb, size_t nelec_a, size_t nelec_b,
     DoubleExcitationEntry *ordered_doubles_aa, DoubleExcitationEntry *ordered_doubles_bb, MixedExcitationEntry *ordered_mixed_ab,
     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4);
 
-double get_matrix_element_by_rank(uint64_t ranka_1, uint64_t rankb_1, uint64_t ranka_2, uint64_t rankb_2,
+void make_hdiag_slow(uint64_t *ranks, double *hdiag, size_t hci_len,
     uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4);
 
-void contract_hamiltonian_hcivec_slow(HCIEntry *hcivec, HCIEntry *hcivec_new, size_t hci_len,
+void contract_hamiltonian_hcivec_slow(uint64_t *ranks, double *coeffs, double *coeffs_new, size_t hci_len, double *hdiag,
     uint64_t *config_table_a, uint64_t *config_table_b, size_t norb, size_t nelec_a, size_t nelec_b,
     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4);
 
