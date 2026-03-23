@@ -663,7 +663,7 @@ void contract_hamiltonian_hcivec_slow(uint64_t *ranks, double *coeffs, double *c
                     config_table_a, config_table_b, norb, nelec_a, nelec_b,
                     h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4)*coeffs[j];
             }
-            sum += hdiag[i];
+            sum += hdiag[i]*coeffs[i];
             for (j=i+1; j<hci_len; j++) {
                 if (coeffs[j] == 0.0) {
                     continue;

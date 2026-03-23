@@ -93,8 +93,8 @@ def kernel(myhci, hcore, eri_ao, mo, norb, nelec, add_thresh, ci0=None, tol=None
             log.info('cycle %d  E = %s  dE = %.8g', icycle, e+ecore, de)
         else:
             de, e_last = e-e_last, e
-            print(ranks)
-            print(coeffs)
+            # print(ranks)
+            # print(coeffs)
             print(f'cycle {icycle}  E = {e+ecore:.15g}  dE = {de:.8g}')
             log.info('cycle %d  E = %.15g  dE = %.8g', icycle, e+ecore, de)
 
