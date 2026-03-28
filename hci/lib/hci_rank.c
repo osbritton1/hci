@@ -40,7 +40,8 @@ void get_rank_table(uint64_t *table, size_t norb, size_t nocc) {
 
 /**
  * Get the combinatorial rank corresponding to the provided list of occupied orbitals
- * Formula: 
+ *
+ * Formula: \f$\sum\f$
  * @param[in] occ_list Pointer to an array of length nocc specifying the zero-indexed occupied orbitals in increasing order
  * @param[in] rank_table Pointer to ranking table initialized by get_rank_table()
  * @param[in] norb Number of orbitals/positions
