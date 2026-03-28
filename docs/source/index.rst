@@ -10,6 +10,7 @@ Welcome to HCI for PySCF's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   doxygen_files
 
 
 Indices and tables

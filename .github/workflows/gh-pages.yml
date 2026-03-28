@@ -23,14 +23,17 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install -r ./requirements.txt
 
-      - name: Build Doxygen
+      - name: Build Sphinx
         run: |
-             mkdir -p docs
-             doxygen Doxyfile
+             cd docs
+             make html
+             cd ..
+             mkdir -p out
+             mv docs/build/html/* out/
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          publish_dir: ./out
           keep_files: true
