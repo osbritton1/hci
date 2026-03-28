@@ -1,4 +1,4 @@
-Doxygen Files
+C/C++ Library Files
 =============
 
 .. doxygenindex::
