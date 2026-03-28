@@ -12,7 +12,7 @@
  * Initializes the nocc by (norb-nocc+1) table needed to rank and unrank combinations using the combinatorial number system
  * The binomial coefficients needed for the encoding the position of the ith electron are stored in row i-1
  * The entry in position (i, j) is nCr(i+j, i+1); when i+j < i+1 (first column), this is defined to be 0
- * @param[in] table Pointer to the uninitialized ranking table; must be able to accommodate at least nocc rows by norb-nocc+1 columns
+ * @param[out] table Pointer to the uninitialized ranking table; must be able to accommodate at least nocc rows by norb-nocc+1 columns
  * @param[in] norb Number of orbitals/positions
  * @param[in] nocc Number of occupancies; generally equal to the number of alpha or beta electrons in the system
  */
@@ -45,6 +45,7 @@ void get_rank_table(uint64_t *table, size_t norb, size_t nocc) {
  * @param[in] rank_table Pointer to ranking table initialized by get_rank_table()
  * @param[in] norb Number of orbitals/positions
  * @param[in] nocc Number of occupancies; generally equal to the number of alpha or beta electrons in the system
+ * @return The rank of the specified occupancy list
  */
 uint64_t rank(size_t *occ_list, uint64_t *rank_table, size_t norb, size_t nocc) {
     uint64_t sum = 0;
