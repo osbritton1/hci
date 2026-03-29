@@ -19,7 +19,7 @@ double get_single_excitation_value_a(size_t occ_orb, size_t virt_orb, size_t nor
         // Contribution from aaaa block
         for (iocc=0; iocc<nelec_a; iocc++) {
             size_t occ_orb_2 = occ_a[iocc];
-            sum += eri_aaaa_s8[index_4d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_aaaa_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
+            sum += eri_aaaa_s8[index_8d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_aaaa_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
         }
         // Contribution from aabb block
         for (iocc=0; iocc<nelec_b; iocc++) {
@@ -54,7 +54,7 @@ double get_single_excitation_mag_a(size_t occ_orb, size_t virt_orb, size_t norb,
         // Contribution from aaaa block
         for (iocc=0; iocc<nelec_a; iocc++) {
             size_t occ_orb_2 = occ_a[iocc];
-            sum += eri_aaaa_s8[index_4d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_aaaa_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
+            sum += eri_aaaa_s8[index_8d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_aaaa_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
         }
         // Contribution from aabb block
         for (iocc=0; iocc<nelec_b; iocc++) {
@@ -77,7 +77,7 @@ double get_single_excitation_value_b(size_t occ_orb, size_t virt_orb, size_t nor
         // Contribution from bbbb block
         for (iocc=0; iocc<nelec_b; iocc++) {
             size_t occ_orb_2 = occ_b[iocc];
-            sum += eri_bbbb_s8[index_4d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_bbbb_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
+            sum += eri_bbbb_s8[index_8d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_bbbb_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
         }
         // Contribution from aabb block
         for (iocc=0; iocc<nelec_a; iocc++) {
@@ -112,7 +112,7 @@ double get_single_excitation_mag_b(size_t occ_orb, size_t virt_orb, size_t norb,
         // Contribution from bbbb block
         for (iocc=0; iocc<nelec_b; iocc++) {
             size_t occ_orb_2 = occ_b[iocc];
-            sum += eri_bbbb_s8[index_4d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_bbbb_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
+            sum += eri_bbbb_s8[index_8d(occ_orb, virt_orb, occ_orb_2, occ_orb_2)]-eri_bbbb_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, virt_orb)];
         }
         // Contribution from aabb block
         for (iocc=0; iocc<nelec_a; iocc++) {
@@ -131,8 +131,8 @@ double get_double_excitation_value_aa(size_t *one_min_two, size_t *two_min_one, 
     } else {
         sign = -1.0;
     }
-    return sign*(eri_aaaa_s8[index_4d(one_min_two[0], two_min_one[0], one_min_two[1], two_min_one[1])]
-        -eri_aaaa_s8[index_4d(one_min_two[0], two_min_one[1], one_min_two[1], two_min_one[0])]);
+    return sign*(eri_aaaa_s8[index_8d(one_min_two[0], two_min_one[0], one_min_two[1], two_min_one[1])]
+        -eri_aaaa_s8[index_8d(one_min_two[0], two_min_one[1], one_min_two[1], two_min_one[0])]);
 }
 
 double get_double_excitation_value_bb(size_t *one_min_two, size_t *two_min_one, size_t *one_min_two_indices, size_t *two_min_one_indices, double *eri_bbbb_s8) {
@@ -142,8 +142,8 @@ double get_double_excitation_value_bb(size_t *one_min_two, size_t *two_min_one, 
     } else {
         sign = -1.0;
     }
-    return sign*(eri_bbbb_s8[index_4d(one_min_two[0], two_min_one[0], one_min_two[1], two_min_one[1])]
-        -eri_bbbb_s8[index_4d(one_min_two[0], two_min_one[1], one_min_two[1], two_min_one[0])]);
+    return sign*(eri_bbbb_s8[index_8d(one_min_two[0], two_min_one[0], one_min_two[1], two_min_one[1])]
+        -eri_bbbb_s8[index_8d(one_min_two[0], two_min_one[1], one_min_two[1], two_min_one[0])]);
 }
 
 double get_double_excitation_value_from_store(DoubleExcitationEntry exc_entry, size_t *exc_min_occ, size_t *exc_int_occ, size_t *old_indices, size_t *new_indices) {
@@ -252,7 +252,7 @@ double get_diag_value(size_t *occ_a, size_t *occ_b, size_t norb, size_t nelec_a,
             occ_orb = occ_a[iocc];
             for (jocc=iocc+1; jocc<nelec_a; jocc++) {
                 occ_orb_2 = occ_a[jocc];
-                sum += eri_aaaa_s8[index_4d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]-eri_aaaa_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
+                sum += eri_aaaa_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]-eri_aaaa_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
             }
         }
         // Contribution from eri_bbbb_s8
@@ -260,7 +260,7 @@ double get_diag_value(size_t *occ_a, size_t *occ_b, size_t norb, size_t nelec_a,
             occ_orb = occ_b[iocc];
             for (jocc=iocc+1; jocc<nelec_b; jocc++) {
                 occ_orb_2 = occ_b[jocc];
-                sum += eri_bbbb_s8[index_4d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]-eri_bbbb_s8[index_4d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
+                sum += eri_bbbb_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]-eri_bbbb_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
             }
         }
         // Contribution from eri_aabb_s4
