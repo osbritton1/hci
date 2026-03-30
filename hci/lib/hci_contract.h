@@ -27,17 +27,15 @@ double get_double_exc_value_from_store_new(const DoubleExcitationEntry *exc_entr
 
 double get_mixed_exc_value_new(const ExcResult *single_exc_a, const ExcResult *single_exc_b, 
     const ConfigInfo *config_info, const ERI_MO *eri_mo);
-double get_mixed_exc_value_from_store(const MixedExcitationEntry *exc_entry, 
+double get_mixed_exc_value_from_store_new(const MixedExcitationEntry *exc_entry, 
     const ExcResult *single_exc_a, const ExcResult *single_exc_b);
 
-DiffType get_diff_type_new(size_t *occ_1, size_t *occ_2, ExcResult *exc_result);
+DiffType get_diff_type_new(const size_t *occ_1, const size_t *occ_2, size_t nocc, ExcResult *exc_result);
 
 double get_matrix_element_by_rank_new(Rank rank1, Rank rank2, 
     const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo);
-
 double get_matrix_element_by_partial_rank_new(uint64_t *occ_a_1, uint64_t *occ_b_1, Rank rank2,
     const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo);
-
 double get_matrix_element_by_rank_test_storage_new(Rank rank1, Rank rank2, 
     const ConfigInfo *config_info, const ExcitationEntries *excitation_entries,
     const H1E *h1e, const ERI_MO *eri_mo);
@@ -45,9 +43,11 @@ double get_matrix_element_by_rank_test_storage_new(Rank rank1, Rank rank2,
 void make_hdiag_slow_new(HCIVector *hcivec, double *hdiag,
     const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo);
 
-void contract_hamiltonian_hcivec_slow_new(HCIVector *hcivec_old, double *coeffs_new, double *hdiag,
+void contract_hamiltonian_hcivec_slow_new(HCIVector *hcivec_old, double *coeffs_new, const double *hdiag,
     const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo);
 
+// Old spaghetti
+// Old spaghetti
 // Old spaghetti
 
 double get_single_excitation_value_a(size_t occ_orb, size_t virt_orb, size_t norb, size_t nelec_a, size_t nelec_b, size_t *occ_a, size_t *occ_b,

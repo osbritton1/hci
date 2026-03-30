@@ -137,3 +137,47 @@ void unrank_mixed(uint64_t rank, size_t *occ_list, const uint64_t *exc_table_2o,
     unrank(ij_rank, occ_list, exc_table_2o, norb, 2);
     unrank(kl_rank, occ_list+2, exc_table_2o, norb, 2);
 }
+
+// New shorthands
+
+uint64_t rank_occ_a(const size_t *occ_list, const ConfigInfo *config_info) {
+    return rank(occ_list, config_info->config_table_a, config_info->norb, config_info->nelec_a);
+}
+
+void unrank_occ_a(uint64_t arank, size_t *occ_list, const ConfigInfo *config_info) {
+    unrank(arank, occ_list, config_info->config_table_a, config_info->norb, config_info->nelec_a);
+}
+
+void unrank_virt_a(uint64_t arank, size_t *virt_list, const ConfigInfo *config_info) {
+    unrank(config_info->combmax_a-arank-1, virt_list, 
+        config_info->config_table_a_complement, config_info->norb, config_info->norb-config_info->nelec_a);
+}
+
+uint64_t rank_occ_b(const size_t *occ_list, const ConfigInfo *config_info) {
+    return rank(occ_list, config_info->config_table_b, config_info->norb, config_info->nelec_b);
+}
+
+void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_info) {
+    unrank(brank, occ_list, config_info->config_table_b, config_info->norb, config_info->nelec_b);
+}
+
+void unrank_virt_b(uint64_t brank, size_t *virt_list, const ConfigInfo *config_info) {
+    unrank(config_info->combmax_b-brank-1, virt_list, 
+        config_info->config_table_b_complement, config_info->norb, config_info->norb-config_info->nelec_b);
+}
+
+void unrank_exc_aa(uint64_t exc_rank_aa, size_t *exc_list, const ConfigInfo *config_info) {
+    unrank(exc_rank_aa, exc_list, config_info->exc_table_4o, config_info->norb, 4);
+}
+
+void unrank_exc_bb(uint64_t exc_rank_bb, size_t *exc_list, const ConfigInfo *config_info) {
+    unrank(exc_rank_bb, exc_list, config_info->exc_table_4o, config_info->norb, 4);
+}
+
+void unrank_exc_ab(uint64_t exc_rank_ab, size_t *exc_list, const ConfigInfo *config_info) {
+    uint64_t ncols = config_info->mixed_ncols;
+    uint64_t ij_rank = exc_rank_ab/ncols;
+    uint64_t kl_rank = exc_rank_ab%ncols;
+    unrank(ij_rank, exc_list, config_info->exc_table_2o, config_info->norb, 2);
+    unrank(kl_rank, exc_list+2, config_info->exc_table_2o, config_info->norb, 2);
+}

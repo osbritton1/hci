@@ -97,46 +97,46 @@ int test_get_changing_orbitals() {
     return 0;
 }
 
-int test_get_changing_orbitals_new() {
-    size_t exc_order = 4;
-    size_t nocc = 11;
-    size_t exc_list[8] = {0,5,6,10,12,14,17,21};
-    size_t occ_list[11] = {1,2,6,7,10,11,13,15,17,21,28};
-    size_t old_orbs[exc_order];
-    size_t old_indices[exc_order];
-    size_t new_orbs[exc_order];
-    size_t new_indices[exc_order];
-    size_t new_occ[nocc];
-    ExcitationResult res = {old_orbs, old_indices, new_orbs, new_indices, new_occ};
-    bool condition = get_changing_orbitals_new(exc_list, exc_order, occ_list, nocc, &res);
-    printf("%u\n", condition);
-    size_t i;
-    for (i=0; i<exc_order; i++) {
-        printf("%zu ", new_orbs[i]);
-    }
-    printf("\n");
-    for (i=0; i<exc_order; i++) {
-        printf("%zu ", old_orbs[i]);
-    }
-    printf("\n\n");
-    for (i=0; i<nocc; i++) {
-        printf("%zu ", occ_list[i]);
-    }
-    printf("\n");
-    for (i=0; i<exc_order; i++) {
-        printf("%zu ", old_indices[i]);
-    }
-    printf("\n\n");
-    for (i=0; i<nocc; i++) {
-        printf("%zu ", new_occ[i]);
-    }
-    printf("\n");
-    for (i=0; i<exc_order; i++) {
-        printf("%zu ", new_indices[i]);
-    }
-    printf("\n");
-    return 0;
-}
+// int test_get_changing_orbitals_new() {
+//     size_t exc_order = 4;
+//     size_t nocc = 11;
+//     size_t exc_list[8] = {0,5,6,10,12,14,17,21};
+//     size_t occ_list[11] = {1,2,6,7,10,11,13,15,17,21,28};
+//     size_t old_orbs[exc_order];
+//     size_t old_indices[exc_order];
+//     size_t new_orbs[exc_order];
+//     size_t new_indices[exc_order];
+//     size_t new_occ[nocc];
+//     ExcitationResult res = {old_orbs, old_indices, new_orbs, new_indices, new_occ};
+//     bool condition = get_changing_orbitals_new(exc_list, exc_order, occ_list, nocc, &res);
+//     printf("%u\n", condition);
+//     size_t i;
+//     for (i=0; i<exc_order; i++) {
+//         printf("%zu ", new_orbs[i]);
+//     }
+//     printf("\n");
+//     for (i=0; i<exc_order; i++) {
+//         printf("%zu ", old_orbs[i]);
+//     }
+//     printf("\n\n");
+//     for (i=0; i<nocc; i++) {
+//         printf("%zu ", occ_list[i]);
+//     }
+//     printf("\n");
+//     for (i=0; i<exc_order; i++) {
+//         printf("%zu ", old_indices[i]);
+//     }
+//     printf("\n\n");
+//     for (i=0; i<nocc; i++) {
+//         printf("%zu ", new_occ[i]);
+//     }
+//     printf("\n");
+//     for (i=0; i<exc_order; i++) {
+//         printf("%zu ", new_indices[i]);
+//     }
+//     printf("\n");
+//     return 0;
+// }
 
 int test_enlarge_doubles_1() {
     uint64_t ranks[2] = {0, 0};
@@ -329,6 +329,7 @@ int test_get_matrix_element_by_rank() {
 }
 
 int main() {
-    return test_get_changing_orbitals_new();
+    // return test_get_changing_orbitals_new();
+    return 1;
 }
 

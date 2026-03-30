@@ -8,6 +8,42 @@
 #include "hci_store.h"
 #include "hci_enlarge.h"
 
+static void sort_changing_orbs(size_t *orb_list, size_t *one_min_two, size_t *two_min_one) {
+    if (one_min_two[0] < two_min_one[0]) {
+        orb_list[0] = one_min_two[0];
+        if (two_min_one[0] < one_min_two[1]) {
+            orb_list[1] = two_min_one[0];
+            if (one_min_two[1] < two_min_one[1]) {
+                orb_list[2] = one_min_two[1];
+                orb_list[3] = two_min_one[1];
+            } else {
+                orb_list[2] = two_min_one[1];
+                orb_list[3] = one_min_two[1];
+            }
+        } else {
+            orb_list[1] = one_min_two[1];
+            orb_list[2] = two_min_one[0];
+            orb_list[3] = two_min_one[1];
+        }
+    } else {
+        orb_list[0] = two_min_one[0];
+        if (one_min_two[0] < two_min_one[1]) {
+            orb_list[1] = one_min_two[0];
+            if (two_min_one[1] < one_min_two[1]) {
+                orb_list[2] = two_min_one[1];
+                orb_list[3] = one_min_two[1];
+            } else {
+                orb_list[2] = one_min_two[1];
+                orb_list[3] = two_min_one[1];
+            }
+        } else {
+            orb_list[1] = two_min_one[1];
+            orb_list[2] = one_min_two[0];
+            orb_list[3] = one_min_two[1];
+        }
+    }
+}
+
 double get_diag_value_new(const size_t *occ_a, const size_t *occ_b, const ConfigInfo *config_info,
     const H1E *h1e, const ERI_MO *eri_mo) {
         size_t norb = config_info->norb;
@@ -162,6 +198,395 @@ double get_double_exc_value_from_store_new(const DoubleExcitationEntry *exc_entr
     }
 }
 
+double get_mixed_exc_value_new(const ExcResult *single_exc_a, const ExcResult *single_exc_b, 
+    const ConfigInfo *config_info, const ERI_MO *eri_mo) {
+        double sign = single_exc_a->sign * single_exc_b->sign;
+        size_t row = index_2d(single_exc_a->old_orbs[0], single_exc_a->new_orbs[0]);
+        size_t col = index_2d(single_exc_b->old_orbs[0], single_exc_b->new_orbs[0]);
+        return sign*eri_mo->eri_mo_aabb_s4[(row*config_info->mixed_ncols)+col];
+}
+
+double get_mixed_exc_value_from_store_new(const MixedExcitationEntry *exc_entry, 
+    const ExcResult *single_exc_a, const ExcResult *single_exc_b) {
+        double sign = single_exc_a->sign * single_exc_b->sign;
+        return sign*exc_entry->ijkl;
+}
+
+DiffType get_diff_type_new(const size_t *occ_1, const size_t *occ_2, size_t nocc, ExcResult *exc_result) {
+    size_t iold = 0;
+    size_t inew = 0;
+    size_t iocc_1 = 0;
+    size_t iocc_2 = 0;
+    double sign = 1.0;
+    while ((iocc_1 < nocc) && (iocc_2 < nocc)) {
+        size_t occ_orb_1 = occ_1[iocc_1];
+        size_t occ_orb_2 = occ_2[iocc_2];
+        if (occ_orb_1 < occ_orb_2) {
+            if (iold == 2) {
+                return THREE_PLUS;
+            }
+            exc_result->old_orbs[iold] = occ_orb_1;
+            sign *= ((iocc_1 - iold) % 2 == 0) ? 1.0 : -1.0;
+            // one_min_two_indices[iold] = iocc_1;
+            iocc_1++;
+            iold++;
+        } else if (occ_orb_2 < occ_orb_1) {
+            if (inew == 2) {
+                return THREE_PLUS;
+            }
+            exc_result->new_orbs[inew] = occ_orb_2;
+            sign *= ((iocc_2 - inew) % 2 == 0) ? 1.0 : -1.0;
+            // two_min_one_indices[inew] = iocc_2;
+            iocc_2++;
+            inew++;
+        } else {
+            iocc_1++;
+            iocc_2++;
+        }
+    }
+    if ((iocc_1 == nocc) && (iocc_2 < nocc)) {
+        size_t nrem = nocc-iocc_2;
+        if ((inew + nrem) > 2) {
+            return THREE_PLUS;
+        } else {
+            sign *= (((iocc_2 - inew) % 2 == 0) || (nrem % 2 == 0)) ? 1.0 : -1.0;
+            while (iocc_2 < nocc) {
+                exc_result->new_orbs[inew] = occ_2[iocc_2];
+                // two_min_one_indices[inew] = iocc_2;
+                iocc_2++;
+                inew++;
+            }
+        }
+    } else if ((iocc_1 < nocc) && (iocc_2 == nocc)) {
+        size_t nrem = nocc-iocc_1;
+        if ((iold + nrem) > 2) {
+            return THREE_PLUS;
+        } else {
+            sign *= (((iocc_1 - iold) % 2 == 0) || (nrem % 2 == 0)) ? 1.0 : -1.0;
+            while (iocc_1 < nocc) {
+                exc_result->old_orbs[iold] = occ_1[iocc_1];
+                // one_min_two_indices[iold] = iocc_1;
+                iocc_1++;
+                iold++;
+            }
+        }
+    }
+    assert(iold == inew);
+    exc_result->sign = sign;
+    switch (iold) {
+        case 0:
+            return ZERO;
+        case 1:
+            return SINGLE;
+        case 2:
+            return DOUBLE;
+        default:
+            return THREE_PLUS;
+    }
+}
+
+double get_matrix_element_by_rank_new(Rank rank1, Rank rank2, 
+    const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+
+        size_t occ_a_1[nelec_a];
+        size_t occ_a_2[nelec_a];
+        unrank_occ_a(rank1.arank, occ_a_1, config_info);
+        unrank_occ_a(rank2.arank, occ_a_2, config_info);
+        ExcResult exc_a = NEW_DOUBLE_EXC_RESULT();
+        DiffType res_a = get_diff_type_new(occ_a_1, occ_a_2, nelec_a, &exc_a);
+        switch (res_a) {
+            case ZERO: {
+                size_t occ_b_1[nelec_b];
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank1.brank, occ_b_1, config_info);
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Diagonal
+                        return get_diag_value_new(occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case SINGLE:
+                    // Single b
+                        return get_single_exc_value_b_new(&exc_b, occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case DOUBLE: 
+                    // Double bb
+                        return get_double_exc_value_bb_new(&exc_b, eri_mo);
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case SINGLE: {
+                size_t occ_b_1[nelec_b];
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank1.brank, occ_b_1, config_info);
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Single a
+                        return get_single_exc_value_a_new(&exc_a, occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case SINGLE: 
+                    // Mixed ab
+                        return get_mixed_exc_value_new(&exc_a, &exc_b, config_info, eri_mo);
+                    case DOUBLE:
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case DOUBLE: {
+                size_t occ_b_1[nelec_b];
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank1.brank, occ_b_1, config_info);
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO: 
+                        return get_double_exc_value_aa_new(&exc_a, eri_mo);
+                    case SINGLE:
+                    case DOUBLE:
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case THREE_PLUS:
+                return 0.0;
+        }
+        return 0.0;
+}
+
+double get_matrix_element_by_partial_rank_new(uint64_t *occ_a_1, uint64_t *occ_b_1, Rank rank2,
+    const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+
+        size_t occ_a_2[nelec_a];
+        unrank_occ_a(rank2.arank, occ_a_2, config_info);
+        ExcResult exc_a = NEW_DOUBLE_EXC_RESULT();
+        DiffType res_a = get_diff_type_new(occ_a_1, occ_a_2, nelec_a, &exc_a);
+        switch (res_a) {
+            case ZERO: {
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Diagonal
+                        return get_diag_value_new(occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case SINGLE:
+                    // Single b
+                        return get_single_exc_value_b_new(&exc_b, occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case DOUBLE: 
+                    // Double bb
+                        return get_double_exc_value_bb_new(&exc_b, eri_mo);
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case SINGLE: {
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Single a
+                        return get_single_exc_value_a_new(&exc_a, occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case SINGLE: 
+                    // Mixed ab
+                        return get_mixed_exc_value_new(&exc_a, &exc_b, config_info, eri_mo);
+                    case DOUBLE:
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case DOUBLE: {
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO: 
+                        return get_double_exc_value_aa_new(&exc_a, eri_mo);
+                    case SINGLE:
+                    case DOUBLE:
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case THREE_PLUS:
+                return 0.0;
+        }
+        return 0.0;
+}
+
+double get_matrix_element_by_rank_test_storage_new(Rank rank1, Rank rank2, 
+    const ConfigInfo *config_info, const ExcitationEntries *excitation_entries,
+    const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+
+        size_t occ_a_1[nelec_a];
+        size_t occ_a_2[nelec_a];
+        unrank_occ_a(rank1.arank, occ_a_1, config_info);
+        unrank_occ_a(rank2.arank, occ_a_2, config_info);
+        ExcResult exc_a = NEW_DOUBLE_EXC_RESULT();
+        DiffType res_a = get_diff_type_new(occ_a_1, occ_a_2, nelec_a, &exc_a);
+        switch (res_a) {
+            case ZERO: {
+                size_t occ_b_1[nelec_b];
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank1.brank, occ_b_1, config_info);
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Diagonal
+                        return get_diag_value_new(occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case SINGLE:
+                    // Single b
+                        return get_single_exc_value_b_new(&exc_b, occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case DOUBLE: {
+                    // Double bb
+                        size_t exc_label[4];
+                        sort_changing_orbs(exc_label, exc_b.old_orbs, exc_b.new_orbs);
+                        size_t exc_rank = rank(exc_label, config_info->exc_table_4o, norb, 4);
+                        return get_double_exc_value_from_store_new(excitation_entries->doubles_bb+exc_rank, &exc_b);
+                    }
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case SINGLE: {
+                size_t occ_b_1[nelec_b];
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank1.brank, occ_b_1, config_info);
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO:
+                    // Single a
+                        return get_single_exc_value_a_new(&exc_a, occ_a_1, occ_b_1, 
+                            config_info, h1e, eri_mo);
+                    case SINGLE: {
+                    // Mixed ab
+                        size_t exc_label[4];
+                        if (exc_a.old_orbs[0] < exc_a.new_orbs[0]) {
+                            exc_label[0] = exc_a.old_orbs[0];
+                            exc_label[1] = exc_a.new_orbs[0];
+                        } else {
+                            exc_label[0] = exc_a.new_orbs[0];
+                            exc_label[1] = exc_a.old_orbs[0];
+                        }
+                        if (exc_b.old_orbs[0] < exc_b.new_orbs[0]) {
+                            exc_label[2] = exc_b.old_orbs[0];
+                            exc_label[3] = exc_b.new_orbs[0];
+                        } else {
+                            exc_label[2] = exc_b.new_orbs[0];
+                            exc_label[3] = exc_b.old_orbs[0];
+                        }
+                        size_t exc_rank = rank_mixed(exc_label, config_info->exc_table_2o, norb);
+                        return get_mixed_exc_value_from_store_new(excitation_entries->mixed_ab+exc_rank, &exc_a, &exc_b);
+                    }
+                    case DOUBLE:
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case DOUBLE: {
+                size_t occ_b_1[nelec_b];
+                size_t occ_b_2[nelec_b];
+                unrank_occ_b(rank1.brank, occ_b_1, config_info);
+                unrank_occ_b(rank2.brank, occ_b_2, config_info);
+                ExcResult exc_b = NEW_DOUBLE_EXC_RESULT();
+                DiffType res_b = get_diff_type_new(occ_b_1, occ_b_2, nelec_b, &exc_b);
+                switch (res_b) {
+                    case ZERO: {
+                        size_t exc_label[4];
+                        sort_changing_orbs(exc_label, exc_a.old_orbs, exc_a.new_orbs);
+                        size_t exc_rank = rank(exc_label, config_info->exc_table_4o, norb, 4);
+                        return get_double_exc_value_from_store_new(excitation_entries->doubles_aa+exc_rank, &exc_a);
+                    }
+                    case SINGLE:
+                    case DOUBLE:
+                    case THREE_PLUS:
+                        return 0.0;
+                }
+            }
+            case THREE_PLUS:
+                return 0.0;
+        }
+        return 0.0;
+}
+
+void make_hdiag_slow_new(HCIVector *hcivec, double *hdiag,
+    const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        for (size_t i=0; i<hcivec->len; i++) {
+            size_t occ_a[nelec_a];
+            size_t occ_b[nelec_b];
+            uint64_t arank = hcivec->ranks[i].arank;
+            uint64_t brank = hcivec->ranks[i].brank;
+            unrank_occ_a(arank, occ_a, config_info);
+            unrank_occ_b(brank, occ_b, config_info);
+            hdiag[i] = get_diag_value_new(occ_a, occ_b, config_info, h1e, eri_mo);
+        }
+}
+
+void contract_hamiltonian_hcivec_slow_new(HCIVector *hcivec_old, double *coeffs_new, const double *hdiag,
+    const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        Rank *ranks = hcivec_old->ranks;
+        double *coeffs = hcivec_old->coeffs;
+        for (size_t i=0; i<hcivec_old->len; i++) {
+            double sum = 0.0;
+            uint64_t bra_arank = ranks[i].arank;
+            uint64_t bra_brank = ranks[i].brank;
+            uint64_t bra_occ_a[nelec_a];
+            uint64_t bra_occ_b[nelec_b];
+            unrank_occ_a(bra_arank, bra_occ_a, config_info);
+            unrank_occ_b(bra_brank, bra_occ_b, config_info);
+            for (size_t j=0; j<i; j++) {
+                if (coeffs[j] == 0.0) {
+                    continue;
+                }
+                sum += get_matrix_element_by_partial_rank_new(bra_occ_a, bra_occ_b, ranks[j],
+                    config_info, h1e, eri_mo)*coeffs[j];
+            }
+            sum += hdiag[i]*coeffs[i];
+            for (size_t j=i+1; j<hcivec_old->len; j++) {
+                if (coeffs[j] == 0.0) {
+                    continue;
+                }
+                sum += get_matrix_element_by_partial_rank_new(bra_occ_a, bra_occ_b, ranks[j],
+                    config_info, h1e, eri_mo)*coeffs[j];
+            }
+            coeffs_new[i] = sum;
+        }
+}
+
+// Old spaghetti
+// Old spaghetti
 // Old spaghetti
 
 double get_single_excitation_value_a(size_t occ_orb, size_t virt_orb, size_t norb, size_t nelec_a, size_t nelec_b, size_t *occ_a, size_t *occ_b,
@@ -491,42 +916,6 @@ DiffType get_diff_type(size_t *occ_1, size_t *occ_2, size_t *one_min_two, size_t
             return DOUBLE;
         default:
             return THREE_PLUS;
-    }
-}
-
-static void sort_changing_orbs(size_t *orb_list, size_t *one_min_two, size_t *two_min_one) {
-    if (one_min_two[0] < two_min_one[0]) {
-        orb_list[0] = one_min_two[0];
-        if (two_min_one[0] < one_min_two[1]) {
-            orb_list[1] = two_min_one[0];
-            if (one_min_two[1] < two_min_one[1]) {
-                orb_list[2] = one_min_two[1];
-                orb_list[3] = two_min_one[1];
-            } else {
-                orb_list[2] = two_min_one[1];
-                orb_list[3] = one_min_two[1];
-            }
-        } else {
-            orb_list[1] = one_min_two[1];
-            orb_list[2] = two_min_one[0];
-            orb_list[3] = two_min_one[1];
-        }
-    } else {
-        orb_list[0] = two_min_one[0];
-        if (one_min_two[0] < two_min_one[1]) {
-            orb_list[1] = one_min_two[0];
-            if (two_min_one[1] < one_min_two[1]) {
-                orb_list[2] = two_min_one[1];
-                orb_list[3] = one_min_two[1];
-            } else {
-                orb_list[2] = one_min_two[1];
-                orb_list[3] = two_min_one[1];
-            }
-        } else {
-            orb_list[1] = two_min_one[1];
-            orb_list[2] = one_min_two[0];
-            orb_list[3] = one_min_two[1];
-        }
     }
 }
 
