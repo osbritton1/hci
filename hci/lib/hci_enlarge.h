@@ -3,7 +3,29 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "hci_rank.h"
 #include "hci_store.h"
+
+typedef struct {
+    size_t *old_orbs;
+    size_t *new_orbs;
+    double sign;
+} ExcResult;
+
+#define DOUBLE_EXC_RESULT() \
+    {(size_t[2]){}, (size_t[2]){}, 1.0}
+
+#define SINGLE_EXC_RESULT() \
+    {(size_t[1]){}, (size_t[1]){}, 1.0}
+
+bool get_changing_orbitals_new(const size_t *exc_list, size_t exc_order, const size_t *occ_list, size_t nocc,
+    ExcResult *res, size_t *new_occ_list);
+size_t enlarge_space_doubles_new(const HCIVector *hcivec, Rank *add_list, double thresh, 
+    const ConfigInfo *config_info, const ExcitationEntries *exc_entries);
+size_t enlarge_space_singles_new(const HCIVector *hcivec, Rank *add_list, double thresh,
+    const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo);
+
+// Old spaghetti
 
 bool get_changing_orbitals(size_t *exc, size_t *occ, 
     size_t *exc_min_occ, size_t *exc_int_occ, size_t *new_occ,

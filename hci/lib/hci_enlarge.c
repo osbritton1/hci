@@ -1,9 +1,163 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
-#include "hci_rank.h"
-#include "hci_store.h"
+#include "hci_enlarge.h"
 #include "hci_contract.h"
+#include "hci_rank.h"
+
+bool get_changing_orbitals_new(const size_t *exc_list, size_t exc_order, const size_t *occ_list, size_t nocc,
+    ExcResult *res, size_t *new_occ_list) {
+        size_t iexc = 0;
+        size_t iocc = 0;
+        size_t iold = 0;
+        size_t inew = 0;
+        size_t inew_occ = 0;
+        double sign = 1.0;
+        while ((iexc < 2*exc_order) && (iocc < nocc)) {
+            size_t exc_orb = exc_list[iexc];
+            size_t occ_orb = occ_list[iocc];
+            if (exc_orb < occ_orb) {
+                // Too many orbitals in excitation list are not in occupied list
+                // or new occupancy list overflows (intersection not big enough)
+                if ((inew == exc_order) || inew_occ == nocc) {
+                    return false;
+                }
+                (res->new_orbs)[inew] = exc_orb;
+                new_occ_list[inew_occ] = exc_orb;
+                sign *= ((inew_occ - inew) % 2 == 0) ? 1.0 : -1.0;
+                // (res->new_indices)[inew] = inew_occ;
+                iexc++;
+                inew++;
+                inew_occ++;
+            } else if (exc_orb == occ_orb) {
+                // Too many orbitals are in both lists (intersection too big)
+                if (iold == exc_order) {
+                    return false;
+                }
+                (res->old_orbs)[iold] = occ_orb;
+                sign *= ((iocc - iold) % 2 == 0) ? 1.0 : -1.0;
+                // (res->old_indices)[iold] = iocc;
+                iexc++;
+                iocc++;
+                iold++;
+            } else {
+                // Occupancy list overflows (intersection not big enough)
+                if (inew_occ == nocc) {
+                    return false;
+                }
+                new_occ_list[inew_occ] = occ_orb;
+                iocc++;
+                inew_occ++;
+            }
+        }
+        if (iexc == 2*exc_order) {
+            // Traversed to the end of the excitation list; both set difference and intersection should be constructed by now
+            if (!((inew == exc_order) && (iold == exc_order))) {
+                return false;
+            } else {
+                size_t rem_in_occ = nocc-iocc;
+                memcpy(new_occ_list+inew_occ, occ_list+iocc, rem_in_occ*sizeof(size_t));
+            }
+        } else {
+            size_t rem_in_exc = (2*exc_order)-iexc;
+            size_t rem_in_new = exc_order-inew;
+            // Traversed to the end of the occupancy list; intersection should be constructed and remaining part of set difference
+            // needs to be the right length
+            if (!((iold == exc_order) && rem_in_exc==rem_in_new)) {
+                return false;
+            } else {
+                sign *= (((inew_occ - inew) % 2 == 0) || (rem_in_new % 2 == 0)) ? 1.0 : -1.0;
+                while (inew < exc_order) {
+                    (res->new_orbs)[inew] = exc_list[iexc];
+                    new_occ_list[inew_occ] = exc_list[iexc];
+                    // sign *= ((inew_occ - inew) % 2 == 0) ? 1.0 : -1.0;
+                    // (res->new_indices)[inew] = inew_occ;
+                    iexc++;
+                    inew++;
+                    inew_occ++;
+                }
+            }
+        }
+        return true;
+}
+
+size_t enlarge_space_doubles_new(const HCIVector *hcivec, Rank *add_list, double thresh, 
+    const ConfigInfo *config_info, const ExcitationEntries *exc_entries) {
+        size_t iadd = 0;
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        size_t occ_a[nelec_a];
+        
+        size_t occ_b[nelec_b];
+        
+        size_t exc_ab[4];
+        for (size_t iconfig=0; iconfig<hcivec->len; iconfig++) {
+            double coeff = hcivec->coeffs[iconfig];
+            uint64_t arank = hcivec->ranks[iconfig].arank;
+            uint64_t brank = hcivec->ranks[iconfig].brank;
+            double entry_thresh = fabs(coeff*thresh);
+            // aa excitations
+            unrank(arank, occ_a, config_info->config_table_a, norb, nelec_a);
+            for (size_t iexc=0; iexc<exc_entries->ndoubles_aa; iexc++) {
+                DoubleExcitationEntry exc_entry_aa = exc_entries->doubles_aa[iexc];
+                size_t exc_aa[4];
+                size_t new_occ_a[nelec_a];
+                ExcResult exc_result_aa = DOUBLE_EXC_RESULT();
+
+                unrank(exc_entry_aa.rank, exc_aa, config_info->exc_table_4o, norb, 4);
+                if (exc_entries->max_mag_aa[iexc] < entry_thresh) {
+                    break;
+                }
+                if (get_changing_orbitals_new(exc_aa, 2, occ_a, nelec_a, &exc_result_aa, new_occ_a)) {
+                     double exc_val = get_double_exc_value_from_store_new(&exc_entry_aa, &exc_result_aa);
+                     if (fabs(exc_val) >= entry_thresh) {
+                        add_list[iadd].arank = rank(new_occ_a, config_info->config_table_a, norb, nelec_a);
+                        add_list[iadd].brank = brank;
+                        iadd++;
+                     }
+                }
+            }
+            // bb excitations
+            unrank(brank, occ_b, config_info->config_table_b, norb, nelec_b);
+            for (size_t iexc=0; iexc<exc_entries->ndoubles_bb; iexc++) {
+                DoubleExcitationEntry exc_entry_bb = exc_entries->doubles_bb[iexc];
+                size_t exc_bb[4];
+                size_t new_occ_b[nelec_b];
+                ExcResult exc_result_bb = DOUBLE_EXC_RESULT();
+                exc_entry_bb = exc_entries->doubles_bb[iexc];
+
+                unrank(exc_entry_bb.rank, exc_bb, config_info->exc_table_4o, norb, 4);
+                if (exc_entries->max_mag_bb[iexc] < entry_thresh) {
+                    break;
+                }
+                if (get_changing_orbitals_new(exc_bb, 2, occ_b, nelec_b, &exc_result_bb, new_occ_b)) {
+                     double exc_val = get_double_exc_value_from_store_new(&exc_entry_bb, &exc_result_bb);
+                     if (fabs(exc_val) >= entry_thresh) {
+                        add_list[iadd].arank = arank;
+                        add_list[iadd].brank = rank(new_occ_b, config_info->config_table_b, norb, nelec_b);
+                        iadd++;
+                     }
+                }
+            }
+            // Mixed excitations
+            for (size_t iexc=0; iexc<exc_entries->nmixed_ab; iexc++) {
+                MixedExcitationEntry exc_entry = mixed_ab[iexc];
+                size_t new_a_orb[1], new_a_index[1], old_a_orb[1], old_a_index[1], new_b_orb[1], new_b_index[1], old_b_orb[1], old_b_index[1], new_a_occ[nelec_a], new_b_occ[nelec_b];
+                unrank_mixed(exc_entry.rank, exc_ab, exc_table_2o, norb);
+                if (exc_entries->max_mag_ab[iexc] < entry_thresh) {
+                    break;
+                }
+                if (get_changing_orbitals(exc_ab, occ_a, new_a_orb, old_a_orb, new_a_occ, old_a_index, new_a_index, 1, nelec_a) &&
+                    get_changing_orbitals(exc_ab+2, occ_b, new_b_orb, old_b_orb, new_b_occ, old_b_index, new_b_index, 1, nelec_b)) {
+                        add_doubles[iadd] = rank(new_a_occ, rank_tables->config_table_a, norb, nelec_a);
+                        add_doubles[iadd+1] = rank(new_b_occ, rank_tables->config_table_b, norb, nelec_b);
+                        iadd += 2;
+                }
+            }
+        }
+        return iadd;
+}
 
 bool get_changing_orbitals(size_t *exc, size_t *occ, 
     size_t *exc_min_occ, size_t *exc_int_occ, size_t *new_occ,

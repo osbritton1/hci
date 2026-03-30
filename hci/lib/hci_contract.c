@@ -8,6 +8,162 @@
 #include "hci_store.h"
 #include "hci_enlarge.h"
 
+double get_diag_value_new(const size_t *occ_a, const size_t *occ_b, const ConfigInfo *config_info,
+    const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        size_t ncols = config_info->mixed_ncols;
+        double sum = 0.0;
+
+        // Contribution from h1e_aa
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb = occ_a[iocc];
+            sum += h1e->h1e_aa[(occ_orb*norb)+occ_orb];
+        }
+        // Contribution from h1e_bb
+        for (size_t iocc=0; iocc<nelec_b; iocc++) {
+            size_t occ_orb = occ_b[iocc];
+            sum += h1e->h1e_bb[(occ_orb*norb)+occ_orb];
+        }
+        // Contribution from eri_aaaa_s8
+        for (size_t iocc=0; iocc<nelec_a-1; iocc++) {
+            size_t occ_orb = occ_a[iocc];
+            for (size_t jocc=iocc+1; jocc<nelec_a; jocc++) {
+                size_t occ_orb_2 = occ_a[jocc];
+                sum += eri_mo->eri_mo_aaaa_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]
+                      -eri_mo->eri_mo_aaaa_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
+            }
+        }
+        // Contribution from eri_bbbb_s8
+        for (size_t iocc=0; iocc<nelec_b-1; iocc++) {
+            size_t occ_orb = occ_b[iocc];
+            for (size_t jocc=iocc+1; jocc<nelec_b; jocc++) {
+                size_t occ_orb_2 = occ_b[jocc];
+                sum += eri_mo->eri_mo_bbbb_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]
+                      -eri_mo->eri_mo_bbbb_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
+            }
+        }
+        // Contribution from eri_aabb_s4
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb = occ_a[iocc];
+            for (size_t jocc=0; jocc<nelec_b; jocc++) {
+                size_t occ_orb_2 = occ_b[jocc];
+                sum += eri_mo->eri_mo_aabb_s4[(index_2d(occ_orb, occ_orb)*ncols)+index_2d(occ_orb_2, occ_orb_2)];
+            }
+        }
+        return sum;
+}
+
+double get_single_exc_value_a_new(const ExcResult *single_exc, const size_t *occ_a, const size_t *occ_b,
+    const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        size_t ncols = config_info->mixed_ncols;
+        size_t old_orb = single_exc->old_orbs[0];
+        size_t new_orb = single_exc->new_orbs[0];
+        double sum = 0.0;
+        double *row = eri_mo->eri_mo_aabb_s4+(index_2d(old_orb, new_orb)*ncols);
+
+        // Contribution from aaaa block
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb_2 = occ_a[iocc];
+            sum += eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, new_orb, occ_orb_2, occ_orb_2)]
+                -eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
+        }
+        // Contribution from aabb block
+        for (size_t iocc=0; iocc<nelec_b; iocc++) {
+            size_t occ_orb_2 = occ_b[iocc];
+            sum += row[index_2d(occ_orb_2, occ_orb_2)];
+        }
+        // Contribution from 1e Hamiltonian
+        sum += h1e->h1e_aa[(old_orb*norb)+new_orb];
+
+        return single_exc->sign*sum;
+}
+
+double get_single_exc_value_b_new(const ExcResult *single_exc, const size_t *occ_a, const size_t *occ_b,
+    const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        size_t ncols = config_info->mixed_ncols;
+        size_t old_orb = single_exc->old_orbs[0];
+        size_t new_orb = single_exc->new_orbs[0];
+        double sum = 0.0;
+        size_t col = index_2d(old_orb, new_orb);
+
+        // Contribution from bbbb block
+        for (size_t iocc=0; iocc<nelec_b; iocc++) {
+            size_t occ_orb_2 = occ_b[iocc];
+            sum += eri_mo->eri_mo_bbbb_s8[index_8d(old_orb, new_orb, occ_orb_2, occ_orb_2)]
+                  -eri_mo->eri_mo_bbbb_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
+        }
+        // Contribution from aabb block
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb_2 = occ_a[iocc];
+            sum += eri_mo->eri_mo_aabb_s4[(index_2d(occ_orb_2, occ_orb_2)*ncols)+col];
+        }
+        // Contribution from 1e Hamiltonian
+        sum += h1e->h1e_bb[(old_orb*norb)+new_orb];
+
+        return single_exc->sign*sum;
+}
+
+double get_double_exc_value_aa_new(const ExcResult *double_exc, const ERI_MO *eri_mo) {
+    size_t *old_orbs = double_exc->old_orbs;
+    size_t *new_orbs = double_exc->new_orbs;
+    return double_exc->sign*(eri_mo->eri_mo_aaaa_s8[index_8d(old_orbs[0], new_orbs[0], old_orbs[1], new_orbs[1])]
+                            -eri_mo->eri_mo_aaaa_s8[index_8d(old_orbs[0], new_orbs[1], old_orbs[1], new_orbs[0])]);
+}
+
+double get_double_exc_value_bb_new(const ExcResult *double_exc, const ERI_MO *eri_mo) {
+    size_t *old_orbs = double_exc->old_orbs;
+    size_t *new_orbs = double_exc->new_orbs;
+    return double_exc->sign*(eri_mo->eri_mo_bbbb_s8[index_8d(old_orbs[0], new_orbs[0], old_orbs[1], new_orbs[1])]
+                            -eri_mo->eri_mo_bbbb_s8[index_8d(old_orbs[0], new_orbs[1], old_orbs[1], new_orbs[0])]);
+}
+
+double get_double_exc_value_from_store_new(const DoubleExcitationEntry *exc_entry, const ExcResult *double_exc) {
+    size_t *old_orbs = double_exc->old_orbs;
+    size_t *new_orbs = double_exc->new_orbs;
+    size_t orb_list[4];
+    uint8_t designator = 0;
+    if (old_orbs[0] <= new_orbs[0]) {
+        orb_list[0] = old_orbs[0];
+        orb_list[1] = new_orbs[0];
+        orb_list[2] = old_orbs[1];
+        orb_list[3] = new_orbs[1];
+    } else {
+        orb_list[0] = new_orbs[0];
+        orb_list[1] = old_orbs[0];
+        orb_list[2] = new_orbs[1];
+        orb_list[3] = old_orbs[1];
+    }
+    designator += (orb_list[1] < orb_list[2]) ? 4 : 0;
+    designator += (orb_list[2] < orb_list[3]) ? 2 : 0;
+    designator += (orb_list[3] < orb_list[1]) ? 1 : 0;
+    switch (designator) {
+        case 1:
+            return -exc_entry->ijkl*double_exc->sign;
+        case 2:
+            return -exc_entry->iljk*double_exc->sign;
+        case 3:
+            return exc_entry->iljk*double_exc->sign;
+        case 4:
+            return (exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
+        case 5:
+            return -(exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
+        case 6:
+            return exc_entry->ijkl*double_exc->sign;
+        default:
+            return nan("");
+    }
+}
+
+// Old spaghetti
+
 double get_single_excitation_value_a(size_t occ_orb, size_t virt_orb, size_t norb, size_t nelec_a, size_t nelec_b, size_t *occ_a, size_t *occ_b,
     double *h1e_aa, double *h1e_bb, double *eri_aaaa_s8, double *eri_bbbb_s8, double *eri_aabb_s4) {
         size_t iocc;
@@ -594,7 +750,6 @@ double get_matrix_element_by_rank_test_storage(uint64_t ranka_1, uint64_t rankb_
                             occ_b_1_min_2_indices[0], occ_b_2_min_1_indices[0]);
                     }
                     case DOUBLE:
-                        return 0.0;
                     case THREE_PLUS:
                         return 0.0;
                 }
@@ -615,9 +770,7 @@ double get_matrix_element_by_rank_test_storage(uint64_t ranka_1, uint64_t rankb_
                             occ_a_1_min_2_indices, occ_a_2_min_1_indices);
                     }
                     case SINGLE:
-                        return 0.0;
                     case DOUBLE:
-                        return 0.0;
                     case THREE_PLUS:
                         return 0.0;
                 }

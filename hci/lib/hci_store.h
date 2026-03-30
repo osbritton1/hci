@@ -44,6 +44,40 @@ typedef struct {
     double ijkl; /**< [ij|kl] in chemist's notation; i and j are alpha orbitals, while k and l are beta orbitals */
 } MixedExcitationEntry;
 
+typedef struct {
+    DoubleExcitationEntry *doubles_aa;
+    double *max_mag_aa;
+    size_t ndoubles_aa;
+    DoubleExcitationEntry *doubles_bb;
+    double *max_mag_bb;
+    size_t ndoubles_bb;
+    MixedExcitationEntry *mixed_ab;
+    double *max_mag_ab;
+    size_t nmixed_ab;
+} ExcitationEntries;
+
+typedef struct {
+    uint64_t arank;
+    uint64_t brank;
+} Rank;
+
+typedef struct {
+    Rank *ranks;
+    double *coeffs;
+    size_t len;
+} HCIVector;
+
+typedef struct {
+    double *h1e_aa;
+    double *h1e_bb;
+} H1E;
+
+typedef struct {
+    double *eri_mo_aaaa_s8;
+    double *eri_mo_bbbb_s8;
+    double *eri_mo_aabb_s4;
+} ERI_MO;
+
 void get_max_magnitudes(const DoubleExcitationEntry *doubles, double *magnitudes, size_t ndoubles);
 size_t index_2d(size_t i, size_t j);
 size_t index_4d(size_t i, size_t j, size_t k, size_t l, size_t ncols);

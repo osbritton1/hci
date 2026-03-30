@@ -58,7 +58,7 @@ CMakeFiles/libhci.dir/test.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /home/obrit/Research/Zhu/hci/hci/lib/hci_rank.h \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
  /home/obrit/Research/Zhu/hci/hci/lib/hci_store.h \
  /home/obrit/Research/Zhu/hci/hci/lib/hci_enlarge.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
  /home/obrit/Research/Zhu/hci/hci/lib/hci_contract.h
