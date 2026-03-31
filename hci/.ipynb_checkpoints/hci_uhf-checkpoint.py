@@ -39,26 +39,86 @@ def kernel_new(myhci, hcore, eri_ao, mo, norb, nelec, add_thresh, ci0=None, tol=
     # Build ranking tables and excitation lists
     config_info = ConfigInfo(norb, nelec)
     excitation_entries = ExcitationEntries(eri_mo, config_info)
+    excitation_entries.sort_desc_by_mag()
 
     #Initialize HCI vector if initial guess not provided
     if ci0 is None:
         ranks = np.zeros(1, dtype=hcilib.rank_entry)
         hf_gnd = HCIVector.as_HCIVector(np.array([1.0], dtype=np.float64), ranks)
         ci0 = [hf_gnd]
-        ranks, coeffs = myhci.enlarge_space_new(ci0, add_thresh, config_info, excitation_entries, h1e, eri_mo)
+        ci0 = myhci.enlarge_space_new(ci0, add_thresh, config_info, excitation_entries, h1e, eri_mo)
+        ranks = ci0[0].ranks
+
+    # Define Hamiltonian-vector contraction and preconditioner for use in Davidson algorithm
+    def hop(c):
+        hc = hcilib.contract_hamiltonian_hcivec_slow_new(HCIVector.as_HCIVector(c, ranks), hdiag, config_info, h1e, eri_mo) 
+        return hc
+    precond = lambda x, e, *args: x/(hdiag-e+myhci.level_shift)
+
+    # Set convergence parameters
+    max_len = config_info.combmax_a*config_info.combmax_b
+    e_last = 0
+    float_tol = myhci.start_tol
+    tol_decay_rate = myhci.tol_decay_rate
+
+    # Begin HCI loop
+    for icycle in range(norb):
+        float_tol = max(float_tol*tol_decay_rate, tol*1e2)
+        log.debug('cycle %d  ci.shape %s  float_tol %g',
+                  icycle, (len(ranks),), float_tol)
+        hdiag = myhci.make_hdiag_slow_new(ci0[0], config_info, h1e, eri_mo)
+        e, ci0 = pyscflib.davidson(hop, ci0, precond, tol=float_tol, lindep=lindep,
+                                   max_cycle=max_cycle, max_space=max_space, nroots=nroots,
+                                   max_memory=max_memory, verbose=log, **kwargs)
+        if nroots > 1:
+            ci0 = [HCIVector.as_HCIVector(c, ranks) for c in ci0]
+            de, e_last = min(e)-e_last, min(e)
+            print('cycle %d  E = %s  dE = %.8g' % (icycle, e+ecore, de))
+            log.info('cycle %d  E = %s  dE = %.8g', icycle, e+ecore, de)
+        else:
+            ci0 = [HCIVector.as_HCIVector(ci0, ranks)]
+            de, e_last = e-e_last, e
+            print('cycle %d  E = %s  dE = %.8g' % (icycle, e+ecore, de))
+            log.info('cycle %d  E = %.15g  dE = %.8g', icycle, e+ecore, de)
+        
+        if len(ranks) == max_len or abs(de) < tol*1e3:
+            break
+
+        old_length = float(len(ci0[0]))
+        ci0 = myhci.enlarge_space_new(ci0, add_thresh, config_info, excitation_entries, h1e, eri_mo)
+        ranks = ci0[0].ranks
+        
+        new_length = float(len(ci0[0]))
+        if new_length/old_length < 1.01:
+            break
+
+    log.debug('Extra CI in selected space %s', (len(ci0[0]),))
+    hdiag = myhci.make_hdiag_slow_new(ci0[0], config_info, h1e, eri_mo)
+    e, c = pyscflib.davidson(hop, ci0, precond, tol=float_tol, lindep=lindep,
+                             max_cycle=max_cycle, max_space=max_space, nroots=nroots,
+                             max_memory=max_memory, verbose=log, **kwargs)
+    if nroots > 1:
+        for i, ei in enumerate(e+ecore):
+            print('Selected CI state %d  E = %.15g' % (i, ei))
+            log.info('Selected CI state %d  E = %.15g', i, ei)
+        return e+ecore, [HCIVector.as_HCIVector(ci, ranks) for ci in c]
     else:
-        ranks, coeffs = ci0
+        print('Selected CI  E = %.15g' % (e+ecore))
+        log.info('Selected CI  E = %.15g', e+ecore)
+        return e+ecore, HCIVector.as_HCIVector(c, ranks)
 
 def enlarge_space_new(myhci, hcivecs, add_thresh, config_info, excitation_entries, h1e, eri_mo):
     add_list_doubles, nadd_doubles = hcilib.enlarge_space_doubles_new(hcivecs[0], add_thresh, config_info, excitation_entries)
+    print(add_list_doubles[:nadd_doubles])
     add_list_singles, nadd_singles = hcilib.enlarge_space_singles_new(hcivecs[0], add_thresh, config_info, h1e, eri_mo)
+    print(add_list_singles[:nadd_singles])
     add_list = np.unique(np.concatenate([add_list_doubles[:nadd_doubles], add_list_singles[:nadd_singles]]))
     for exc_vec in hcivecs[1:]:
         add_list_doubles_exc, nadd_doubles_exc = hcilib.enlarge_space_doubles_new(exc_vec, add_thresh, config_info, excitation_entries)
         add_list_singles_exc, nadd_singles_exc = hcilib.enlarge_space_singles_new(exc_vec, add_thresh, config_info, h1e, eri_mo)
         add_list = np.unique(np.concatenate([add_list, add_list_doubles_exc[:nadd_doubles_exc], add_list_singles_exc[:nadd_singles_exc]]))
     
-    ndets_old = len(ranks)
+    ndets_old = len(hcivecs[0].ranks)
     total_ranks = np.concatenate([hcivecs[0].ranks, add_list])
     ranks_new, unique_rows = np.unique(total_ranks, return_index=True)
     ndets_new = len(ranks_new)
@@ -200,10 +260,12 @@ def enlarge_space(myhci, ranks, coeffs, norb, nelec_a, nelec_b, add_thresh,
                                                                   config_table_a, config_table_b, exc_table_4o, exc_table_2o, 
                                                                   doubles_aa, doubles_bb, mixed_ab,
                                                                   max_mag_aa, max_mag_bb, max_mag_ab)
+    print(add_list_doubles[:nadd_doubles])
     add_list_singles, nadd_singles = hcilib.enlarge_space_singles(ranks, coeffs[0], norb, nelec_a, nelec_b, add_thresh,
                                                                   config_table_a, config_table_a_complement,
                                                                   config_table_b, config_table_b_complement,
                                                                   h1e_aa, h1e_bb, eri_aaaa_s8, eri_bbbb_s8, eri_aabb_s4)
+    print(add_list_singles[:nadd_singles])
     add_list = np.unique(np.concatenate([add_list_doubles[:nadd_doubles], add_list_singles[:nadd_singles]]), axis=0)
     
     for exc_coeff in coeffs[1:]:
@@ -253,7 +315,10 @@ This is an inefficient dialect of heat-bath CI written as a senior thesis projec
 For efficient heat-bath CI programs, it is recommended to use the Dice program (https://github.com/sanshar/Dice.git).''')
         
     make_hdiag_slow = staticmethod(hcilib.make_hdiag_slow)
+    make_hdiag_slow_new = staticmethod(hcilib.make_hdiag_slow_new)
     enlarge_space = enlarge_space
+    enlarge_space_new = enlarge_space_new
     kernel = kernel
+    kernel_new = kernel_new
 
 HCI = HeatBathCI

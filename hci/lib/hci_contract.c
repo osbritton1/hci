@@ -106,7 +106,7 @@ double get_single_exc_value_a_new(const ExcResult *single_exc, const size_t *occ
         for (size_t iocc=0; iocc<nelec_a; iocc++) {
             size_t occ_orb_2 = occ_a[iocc];
             sum += eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, new_orb, occ_orb_2, occ_orb_2)]
-                -eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
+                  -eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
         }
         // Contribution from aabb block
         for (size_t iocc=0; iocc<nelec_b; iocc++) {
@@ -766,8 +766,9 @@ double get_double_excitation_value_from_store(DoubleExcitationEntry exc_entry, s
     }
 }
 
-double get_double_excitation_mag_from_store(DoubleExcitationEntry exc_entry, size_t *exc_min_occ, size_t *exc_int_occ, size_t *old_indices, size_t *new_indices) {
+double get_double_excitation_mag_from_store(DoubleExcitationEntry exc_entry, size_t *exc_min_occ, size_t *exc_int_occ) {
     size_t orb_list[4];
+    uint8_t designator = 0;
     if (exc_int_occ[0] <= exc_min_occ[0]) {
         orb_list[0] = exc_int_occ[0];
         orb_list[1] = exc_min_occ[0];
@@ -779,12 +780,24 @@ double get_double_excitation_mag_from_store(DoubleExcitationEntry exc_entry, siz
         orb_list[2] = exc_min_occ[1];
         orb_list[3] = exc_int_occ[1];
     }
-    if ((orb_list[1] < orb_list[2]) && (orb_list[2] < orb_list[3])) {
-        return fabs(exc_entry.ijkl);
-    } else if ((orb_list[2] < orb_list[3]) && (orb_list[3] < orb_list[1])) {
-        return fabs(exc_entry.iljk);
-    } else {
-        return fabs(exc_entry.ijkl+exc_entry.iljk);
+    designator += (orb_list[1] < orb_list[2]) ? 4 : 0;
+    designator += (orb_list[2] < orb_list[3]) ? 2 : 0;
+    designator += (orb_list[3] < orb_list[1]) ? 1 : 0;
+    switch (designator) {
+        case 1:
+            return fabs(exc_entry.ijkl);
+        case 2:
+            return fabs(exc_entry.iljk);
+        case 3:
+            return fabs(exc_entry.iljk);
+        case 4:
+            return fabs(exc_entry.ijkl+exc_entry.iljk);
+        case 5:
+            return fabs(exc_entry.ijkl+exc_entry.iljk);
+        case 6:
+            return fabs(exc_entry.ijkl);
+        default:
+            return nan("");
     }
 }
 

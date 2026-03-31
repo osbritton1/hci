@@ -63,7 +63,7 @@ double get_single_excitation_mag_b(size_t occ_orb, size_t virt_orb, size_t norb,
 double get_double_excitation_value_aa(size_t *one_min_two, size_t *two_min_one, size_t *one_min_two_indices, size_t *two_min_one_indices, double *eri_aaaa_s8);
 double get_double_excitation_value_bb(size_t *one_min_two, size_t *two_min_one, size_t *one_min_two_indices, size_t *two_min_one_indices, double *eri_bbbb_s8);
 double get_double_excitation_value_from_store(DoubleExcitationEntry exc_entry, size_t *exc_min_occ, size_t *exc_int_occ, size_t *old_indices, size_t *new_indices);
-double get_double_excitation_mag_from_store(DoubleExcitationEntry exc_entry, size_t *exc_min_occ, size_t *exc_int_occ, size_t *old_indices, size_t *new_indices);
+double get_double_excitation_mag_from_store(DoubleExcitationEntry exc_entry, size_t *exc_min_occ, size_t *exc_int_occ);
 
 double get_mixed_excitation_value(size_t *occ_a_1_min_2, size_t *occ_a_2_min_1, size_t *occ_a_1_min_2_indices, size_t *occ_a_2_min_1_indices,
     size_t *occ_b_1_min_2, size_t *occ_b_2_min_1, size_t *occ_b_1_min_2_indices, size_t *occ_b_2_min_1_indices,

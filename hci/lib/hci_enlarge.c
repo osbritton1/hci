@@ -410,7 +410,7 @@ size_t enlarge_space_doubles(uint64_t *ranks, double *coeffs, size_t hci_len, ui
                     break;
                 }
                 if (get_changing_orbitals(exc_aa, occ_a, exc_min_occ, exc_int_occ, new_occ, old_indices, new_indices, 2, nelec_a)) {
-                     double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
+                     double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ);
                      if (excitation_mag >= entry_thresh) {
                         add_doubles[iadd] = rank(new_occ, config_table_a, norb, nelec_a);
                         add_doubles[iadd+1] = brank;
@@ -428,7 +428,7 @@ size_t enlarge_space_doubles(uint64_t *ranks, double *coeffs, size_t hci_len, ui
                     break;
                 }
                 if (get_changing_orbitals(exc_bb, occ_b, exc_min_occ, exc_int_occ, new_occ, old_indices, new_indices, 2, nelec_b)) {
-                     double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ, old_indices, new_indices);
+                     double excitation_mag = get_double_excitation_mag_from_store(exc_entry, exc_min_occ, exc_int_occ);
                      if (excitation_mag >= entry_thresh) {
                         add_doubles[iadd] = arank;
                         add_doubles[iadd+1] = rank(new_occ, config_table_b, norb, nelec_b);

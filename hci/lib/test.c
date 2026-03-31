@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 #include "hci_rank.h"
 #include "hci_store.h"
 #include "hci_enlarge.h"
@@ -261,8 +262,6 @@ int test_get_diff_type() {
     return 0;
 }
 
-
-
 int test_get_matrix_element_by_rank() {
     size_t norb = 7;
     size_t nelec_a = 5;
@@ -328,8 +327,140 @@ int test_get_matrix_element_by_rank() {
     return 0;
 }
 
+void init_random(double *array, size_t len) {
+    for (size_t i = 0; i<len; i++) {
+        array[i] = (double)rand() / (double)RAND_MAX;
+    }
+}
+
+uint64_t* get_config_table(size_t norb, size_t nocc) {
+    size_t nrows = nocc;
+    size_t ncols = norb-nocc+1;
+    uint64_t *config_table = (uint64_t *)malloc(sizeof(uint64_t) * (nrows*ncols));
+    get_rank_table(config_table, norb, nocc);
+    return config_table;
+}
+
+// typedef struct {
+//     uint64_t *config_table_a;
+//     uint64_t *config_table_a_complement;
+//     uint64_t combmax_a;
+//     uint64_t *config_table_b;
+//     uint64_t *config_table_b_complement;
+//     uint64_t combmax_b;
+//     uint64_t *exc_table_4o;
+//     uint64_t *exc_table_2o;
+//     size_t norb;
+//     size_t nelec_a;
+//     size_t nelec_b;
+//     uint64_t mixed_ncols;
+// } ConfigInfo;
+
+int test_get_matrix_element_by_rank_test_storage_new() {
+    srand(time(NULL));
+    size_t norb = 7;
+    size_t nelec_a = 5;
+    size_t nelec_b = 4;
+
+    uint64_t *config_table_a = get_config_table(norb, nelec_a);
+    uint64_t *config_table_a_complement = get_config_table(norb, norb-nelec_a);
+    uint64_t combmax_a = 21; /* nCr(norb, nelec_a) */
+    uint64_t *config_table_b = get_config_table(norb, nelec_a);
+    uint64_t *config_table_b_complement = get_config_table(norb, norb-nelec_a);
+    uint64_t combmax_b = 35;  /* nCr(norb, nelec_b) */
+    uint64_t *exc_table_4o = get_config_table(norb, 4);
+    uint64_t *exc_table_2o = get_config_table(norb, 2);
+    uint64_t mixed_ncols = nC2(norb+1);
+    ConfigInfo config_info = {config_table_a, config_table_a_complement, combmax_a,
+                              config_table_b, config_table_b_complement, combmax_b,
+                                exc_table_4o, exc_table_2o, 
+                                        norb, nelec_a, nelec_b, mixed_ncols};
+
+    double *h1e_mo_aa = (double *)malloc(sizeof(double) * (norb*norb));
+    init_random(h1e_mo_aa, norb*norb);
+    double *h1e_mo_bb = (double *)malloc(sizeof(double) * (norb*norb));
+    init_random(h1e_mo_aa, norb*norb);
+    H1E h1e = {h1e_mo_aa, h1e_mo_bb};
+
+    double *eri_mo_aaaa_s8 = (double *)malloc(sizeof(double) * 406);
+    init_random(eri_mo_aaaa_s8, 406);
+    double *eri_mo_bbbb_s8 = (double *)malloc(sizeof(double) * 406);
+    init_random(eri_mo_aaaa_s8, 406);
+    double *eri_mo_aabb_s4 = (double *)malloc(sizeof(double) * 784);
+    init_random(eri_mo_aabb_s4, 784);
+    ERI_MO eri_mo = {eri_mo_aaaa_s8, eri_mo_bbbb_s8, eri_mo_aabb_s4};
+
+    DoubleExcitationEntry *doubles_aa = (DoubleExcitationEntry *)malloc(sizeof(DoubleExcitationEntry) * 35);
+    load_doubles_from_eri(doubles_aa, eri_mo.eri_mo_aaaa_s8, config_info.exc_table_4o, norb);
+    double *max_mag_aa = (double *)malloc(sizeof(double) * 35);
+    get_max_magnitudes(doubles_aa, max_mag_aa, 35);
+    DoubleExcitationEntry *doubles_bb = (DoubleExcitationEntry *)malloc(sizeof(DoubleExcitationEntry) * 35);
+    load_doubles_from_eri(doubles_bb, eri_mo.eri_mo_bbbb_s8, config_info.exc_table_4o, norb);
+    double *max_mag_bb = (double *)malloc(sizeof(double) * 35);
+    get_max_magnitudes(doubles_bb, max_mag_bb, 35);
+    MixedExcitationEntry *mixed_ab = (MixedExcitationEntry *)malloc(sizeof(MixedExcitationEntry) * 21*21);
+    load_mixed_from_eri(mixed_ab, eri_mo.eri_mo_aabb_s4, config_info.exc_table_2o, norb);
+    double *max_mag_ab = (double *)malloc(sizeof(double) * 21*21);
+    for (size_t i=0; i<21*21; i++) {
+        max_mag_ab[i] = fabs(mixed_ab[i].ijkl);
+    }
+    ExcitationEntries excitation_entries = {doubles_aa, max_mag_aa, 21, 
+                                            doubles_bb, max_mag_bb, 35,
+                                              mixed_ab, max_mag_ab, 21*21};
+    for (uint64_t i=0; i<combmax_a; i++) {
+        for (uint64_t j=0; j<combmax_b; j++) {
+            Rank rank1 = {i, j};
+            for (uint64_t k=0; k<combmax_a; k++) {
+                for (uint64_t l=0; l<combmax_b; l++) {
+                    Rank rank2 = {k, l};
+                    get_matrix_element_by_rank_test_storage_new(rank1, rank2, 
+                        &config_info, &excitation_entries, &h1e, &eri_mo);
+                }
+            }
+        }
+    }
+
+    free(config_table_a);
+    config_table_a = NULL;
+    free(config_table_a_complement);
+    config_table_a_complement = NULL;
+    free(config_table_b);
+    config_table_b = NULL;
+    free(config_table_b_complement);
+    config_table_b_complement = NULL;
+    free(exc_table_2o);
+    exc_table_2o = NULL;
+    free(exc_table_4o);
+    exc_table_4o = NULL;
+
+    free(h1e_mo_aa);
+    h1e_mo_aa = NULL;
+    free(h1e_mo_bb);
+    h1e_mo_bb = NULL;
+    free(eri_mo_aaaa_s8);
+    eri_mo_aaaa_s8 = NULL;
+    free(eri_mo_bbbb_s8);
+    eri_mo_bbbb_s8 = NULL;
+    free(eri_mo_aabb_s4);
+    eri_mo_aabb_s4 = NULL;
+
+    free(doubles_aa);
+    doubles_aa = NULL;
+    free(max_mag_aa);
+    max_mag_aa = NULL;
+    free(doubles_bb);
+    doubles_bb = NULL;
+    free(max_mag_bb);
+    max_mag_bb = NULL;
+    free(mixed_ab);
+    mixed_ab = NULL;
+    free(max_mag_ab);
+    max_mag_ab = NULL;
+
+    return 0;
+}
+
 int main() {
-    // return test_get_changing_orbitals_new();
-    return 1;
+    return test_get_matrix_element_by_rank_test_storage_new();
 }
 

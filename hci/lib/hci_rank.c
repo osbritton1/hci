@@ -175,7 +175,7 @@ void unrank_exc_bb(uint64_t exc_rank_bb, size_t *exc_list, const ConfigInfo *con
 }
 
 void unrank_exc_ab(uint64_t exc_rank_ab, size_t *exc_list, const ConfigInfo *config_info) {
-    uint64_t ncols = config_info->mixed_ncols;
+    uint64_t ncols = nC2(config_info->norb);
     uint64_t ij_rank = exc_rank_ab/ncols;
     uint64_t kl_rank = exc_rank_ab%ncols;
     unrank(ij_rank, exc_list, config_info->exc_table_2o, config_info->norb, 2);

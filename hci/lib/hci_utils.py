@@ -6,11 +6,12 @@ import math
 rank_entry = np.dtype([('arank', np.uint64), ('brank', np.uint64)])
 double_excitation_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double), ('iljk', np.double)])
 mixed_excitation_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double)])
-# hci_entry = np.dtype([('arank', np.uint64), ('brank', np.uint64), ('coeff', np.double)])
 
 libhci = load_library("libhci")
 libhci.get_matrix_element_by_rank.restype = ct.c_double
 libhci.get_matrix_element_by_rank_test_storage.restype = ct.c_double
+libhci.get_matrix_element_by_rank_new.restype = ct.c_double
+libhci.get_matrix_element_by_rank_test_storage_new.restype = ct.c_double
 
 class CoreHamiltonian:
     def __init__(self, h1e_mo_aa, h1e_mo_bb):
@@ -58,19 +59,19 @@ class ConfigInfo:
         self.norb = norb
         self.nelec_a = nelec_a
         self.nelec_b = nelec_b
-        self.mixed_ncols = math.comb(nelec_a+1, 2)
+        self.mixed_ncols = math.comb(norb+1, 2)
         self.ptrs = self.ConfigInfoPtrs(self.config_table_a.ctypes.data_as(ct.c_void_p),
-                                          self.config_table_a_complement.ctypes.data_as(ct.c_void_p),
-                                          ct.c_uint64(self.combmax_a),
-                                          self.config_table_b.ctypes.data_as(ct.c_void_p),
-                                          self.config_table_b_complement.ctypes.data_as(ct.c_void_p),
-                                          ct.c_uint64(self.combmax_b),
-                                          self.exc_table_4o.ctypes.data_as(ct.c_void_p),
-                                          self.exc_table_2o.ctypes.data_as(ct.c_void_p),
-                                          ct.c_size_t(self.norb),
-                                          ct.c_size_t(self.nelec_a),
-                                          ct.c_size_t(self.nelec_b),
-                                          ct.c_uint64(self.mixed_ncols))
+                                        self.config_table_a_complement.ctypes.data_as(ct.c_void_p),
+                                        ct.c_uint64(self.combmax_a),
+                                        self.config_table_b.ctypes.data_as(ct.c_void_p),
+                                        self.config_table_b_complement.ctypes.data_as(ct.c_void_p),
+                                        ct.c_uint64(self.combmax_b),
+                                        self.exc_table_4o.ctypes.data_as(ct.c_void_p),
+                                        self.exc_table_2o.ctypes.data_as(ct.c_void_p),
+                                        ct.c_size_t(self.norb),
+                                        ct.c_size_t(self.nelec_a),
+                                        ct.c_size_t(self.nelec_b),
+                                        ct.c_uint64(self.mixed_ncols))
         self._as_parameter_ = ct.byref(self.ptrs)
 
     class ConfigInfoPtrs(ct.Structure):
@@ -88,14 +89,28 @@ class ConfigInfo:
                     ('mixed_ncols', ct.c_uint64)]
 
 # Create double excitation storage for aa and bb type excitations
-def get_stored_double_exc(eri_mo_xxxx_s8, config_info):
+def get_stored_double_exc(eri_mo_xxxx_s8, exc_table_4o, norb):
+    doubles = np.empty(math.comb(norb, 4), dtype=double_excitation_entry)
+    libhci.load_doubles_from_eri(doubles.ctypes, eri_mo_xxxx_s8.ctypes, 
+                                 exc_table_4o.ctypes, ct.c_size_t(norb))
+    return doubles
+
+# Create double excitation storage for aa and bb type excitations
+def get_stored_double_exc_new(eri_mo_xxxx_s8, config_info):
     doubles = np.empty(math.comb(config_info.norb, 4), dtype=double_excitation_entry)
     libhci.load_doubles_from_eri(doubles.ctypes, eri_mo_xxxx_s8.ctypes, 
                                  config_info.exc_table_4o.ctypes, ct.c_size_t(config_info.norb))
     return doubles
 
 # Create double excitation storage for ab type excitations
-def get_stored_mixed_exc(eri_mo_aabb_s4, config_info):
+def get_stored_mixed_exc(eri_mo_aabb_s4, exc_table_2o, norb):
+    mixed = np.empty(math.comb(norb, 2)**2, dtype=mixed_excitation_entry)
+    libhci.load_mixed_from_eri(mixed.ctypes, eri_mo_aabb_s4.ctypes,
+                               exc_table_2o.ctypes, ct.c_size_t(norb))
+    return mixed
+
+# Create double excitation storage for ab type excitations
+def get_stored_mixed_exc_new(eri_mo_aabb_s4, config_info):
     mixed = np.empty(math.comb(config_info.norb, 2)**2, dtype=mixed_excitation_entry)
     libhci.load_mixed_from_eri(mixed.ctypes, eri_mo_aabb_s4.ctypes,
                                config_info.exc_table_2o.ctypes, ct.c_size_t(config_info.norb))
@@ -109,13 +124,13 @@ def get_max_magnitudes(doubles):
 
 class ExcitationEntries:
     def __init__(self, eri_mo, config_info):
-        self.doubles_aa = get_stored_double_exc(eri_mo.eri_mo_aaaa_s8, config_info)
+        self.doubles_aa = get_stored_double_exc_new(eri_mo.eri_mo_aaaa_s8, config_info)
         self.max_mag_aa = get_max_magnitudes(self.doubles_aa)
         self.ndoubles_aa = len(self.doubles_aa)
-        self.doubles_bb = get_stored_double_exc(eri_mo.eri_mo_bbbb_s8, config_info)
+        self.doubles_bb = get_stored_double_exc_new(eri_mo.eri_mo_bbbb_s8, config_info)
         self.max_mag_bb = get_max_magnitudes(self.doubles_bb)
         self.ndoubles_bb = len(self.doubles_bb)
-        self.mixed_ab = get_stored_mixed_exc(eri_mo.eri_mo_aabb_s4, config_info)
+        self.mixed_ab = get_stored_mixed_exc_new(eri_mo.eri_mo_aabb_s4, config_info)
         self.max_mag_ab = np.abs(self.mixed_ab['ijkl'])
         self.nmixed_ab = len(self.mixed_ab)
         self.ptrs = self.ExcitationEntriesPtrs(self.doubles_aa.ctypes.data_as(ct.c_void_p),
@@ -150,6 +165,16 @@ class ExcitationEntries:
         sorted_indices = np.argsort(self.max_mag_ab)[::-1]
         self.mixed_ab = self.mixed_ab[sorted_indices]
         self.max_mag_ab = self.max_mag_ab[sorted_indices]
+        self.ptrs = self.ExcitationEntriesPtrs(self.doubles_aa.ctypes.data_as(ct.c_void_p),
+                                               self.max_mag_aa.ctypes.data_as(ct.c_void_p),
+                                               ct.c_size_t(self.ndoubles_aa),
+                                               self.doubles_bb.ctypes.data_as(ct.c_void_p),
+                                               self.max_mag_bb.ctypes.data_as(ct.c_void_p),
+                                               ct.c_size_t(self.ndoubles_bb),
+                                               self.mixed_ab.ctypes.data_as(ct.c_void_p),
+                                               self.max_mag_ab.ctypes.data_as(ct.c_void_p),
+                                               ct.c_size_t(self.nmixed_ab))
+        self._as_parameter_ = ct.byref(self.ptrs)
 
 class HCIVector(np.ndarray):
     '''An 2D np array for HCI coefficients'''
@@ -182,10 +207,19 @@ class HCIVector(np.ndarray):
 
     @property
     def _as_parameter_(self):
-        ptr = self.HCIVectorPtrs(self.ranks.ctypes.data_as(ct.c_void_p),
+        ptrs = self.HCIVectorPtrs(self.ranks.ctypes.data_as(ct.c_void_p),
                                  self.ctypes.data_as(ct.c_void_p),
                                  ct.c_size_t(len(self)))
-        return ct.byref(ptr)
+        return ct.byref(ptrs)
+
+class Rank(ct.Structure):
+    _fields_ = [('arank', ct.c_uint64),
+                ('brank', ct.c_uint64)]
+    
+    @classmethod
+    def from_rank_entry(cls, rank_entry):
+        return cls(rank_entry['arank'], rank_entry['brank'])
+
 
 def enlarge_space_doubles_new(hcivec, add_thresh, config_info, excitation_entries):
     norb = config_info.norb
@@ -207,6 +241,22 @@ def enlarge_space_singles_new(hcivec, add_thresh, config_info, h1e, eri_mo):
     add_list = np.empty(len(hcivec.ranks)*(nexc_a+nexc_b), dtype=rank_entry)
     nadd = libhci.enlarge_space_singles_new(hcivec, add_list.ctypes, ct.c_double(add_thresh), config_info, h1e, eri_mo)
     return add_list, nadd
+
+def get_matrix_element_by_rank_new(rank1, rank2, config_info, h1e, eri_mo):
+    return libhci.get_matrix_element_by_rank_new(rank1, rank2, config_info, h1e, eri_mo)
+    
+def get_matrix_element_by_rank_test_storage_new(rank1, rank2, config_info, excitation_entries, h1e, eri_mo):
+    return libhci.get_matrix_element_by_rank_test_storage_new(rank1, rank2, config_info, excitation_entries, h1e, eri_mo)
+
+def make_hdiag_slow_new(hcivec, config_info, h1e, eri_mo):
+    hdiag = np.empty(len(hcivec.ranks), dtype=np.double)
+    libhci.make_hdiag_slow_new(hcivec, hdiag.ctypes, config_info, h1e, eri_mo)
+    return hdiag
+
+def contract_hamiltonian_hcivec_slow_new(hcivec_old, hdiag, config_info, h1e, eri_mo):
+    coeffs_new = np.empty(len(hcivec_old), dtype=np.float64)
+    libhci.contract_hamiltonian_hcivec_slow_new(hcivec_old, coeffs_new.ctypes, hdiag.ctypes, config_info, h1e, eri_mo)
+    return coeffs_new
 
 # OLD SPAGHETTI
 # OLD SPAGHETTI
