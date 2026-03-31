@@ -55,12 +55,12 @@ double get_diag_value_new(const size_t *occ_a, const size_t *occ_b, const Config
         // Contribution from h1e_aa
         for (size_t iocc=0; iocc<nelec_a; iocc++) {
             size_t occ_orb = occ_a[iocc];
-            sum += h1e->h1e_aa[(occ_orb*norb)+occ_orb];
+            sum += h1e->h1e_mo_aa[(occ_orb*norb)+occ_orb];
         }
         // Contribution from h1e_bb
         for (size_t iocc=0; iocc<nelec_b; iocc++) {
             size_t occ_orb = occ_b[iocc];
-            sum += h1e->h1e_bb[(occ_orb*norb)+occ_orb];
+            sum += h1e->h1e_mo_bb[(occ_orb*norb)+occ_orb];
         }
         // Contribution from eri_aaaa_s8
         for (size_t iocc=0; iocc<nelec_a-1; iocc++) {
@@ -114,7 +114,7 @@ double get_single_exc_value_a_new(const ExcResult *single_exc, const size_t *occ
             sum += row[index_2d(occ_orb_2, occ_orb_2)];
         }
         // Contribution from 1e Hamiltonian
-        sum += h1e->h1e_aa[(old_orb*norb)+new_orb];
+        sum += h1e->h1e_mo_aa[(old_orb*norb)+new_orb];
 
         return single_exc->sign*sum;
 }
@@ -142,7 +142,7 @@ double get_single_exc_value_b_new(const ExcResult *single_exc, const size_t *occ
             sum += eri_mo->eri_mo_aabb_s4[(index_2d(occ_orb_2, occ_orb_2)*ncols)+col];
         }
         // Contribution from 1e Hamiltonian
-        sum += h1e->h1e_bb[(old_orb*norb)+new_orb];
+        sum += h1e->h1e_mo_bb[(old_orb*norb)+new_orb];
 
         return single_exc->sign*sum;
 }
@@ -287,7 +287,6 @@ DiffType get_diff_type_new(const size_t *occ_1, const size_t *occ_2, size_t nocc
 
 double get_matrix_element_by_rank_new(Rank rank1, Rank rank2, 
     const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
-        size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
 
@@ -365,7 +364,6 @@ double get_matrix_element_by_rank_new(Rank rank1, Rank rank2,
 
 double get_matrix_element_by_partial_rank_new(uint64_t *occ_a_1, uint64_t *occ_b_1, Rank rank2,
     const ConfigInfo *config_info, const H1E *h1e, const ERI_MO *eri_mo) {
-        size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
 

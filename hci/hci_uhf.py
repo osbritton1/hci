@@ -1,11 +1,78 @@
 from hci import lib as hcilib
+from hci.lib import CoreHamiltonian, ElectronRepulsionIntegrals, ConfigInfo, ExcitationEntries, HCIVector
 from pyscf import ao2mo, __config__
 from pyscf import lib as pyscflib
 from pyscf.lib import logger
 from pyscf.fci import direct_spin1
 from functools import reduce
 import numpy as np
+import ctypes as ct
 import math
+
+def kernel_new(myhci, hcore, eri_ao, mo, norb, nelec, add_thresh, ci0=None, tol=None, lindep=None, max_cycle=None, max_space=None,
+               nroots=None, davidson_only=None, max_memory=None, verbose=None, ecore=0, **kwargs):
+    
+    # Flags and logging
+    log = logger.new_logger(myhci, verbose)
+    if tol is None: tol = myhci.conv_tol
+    if lindep is None: lindep = myhci.lindep
+    if max_cycle is None: max_cycle = myhci.max_cycle
+    if max_space is None: max_space = myhci.max_space
+    if max_memory is None: max_memory = myhci.max_memory
+    if nroots is None: nroots = myhci.nroots
+    if myhci.verbose >= logger.WARN:
+        myhci.check_sanity()
+
+    # AO to MO transformations
+    mo_a, mo_b = mo
+    nelec_a, nelec_b = nelec
+    
+    h1e_mo_aa = reduce(np.dot, (mo_a.conj().T, hcore, mo_a))
+    h1e_mo_bb = reduce(np.dot, (mo_b.conj().T, hcore, mo_b))
+    h1e = CoreHamiltonian(h1e_mo_aa, h1e_mo_bb)
+    
+    eri_mo_aaaa_s8 = ao2mo.restore('s8', ao2mo.full(eri_ao, mo_a), norb)
+    eri_mo_bbbb_s8 = ao2mo.restore('s8', ao2mo.full(eri_ao, mo_b), norb)
+    eri_mo_aabb_s4 = ao2mo.restore('s4', ao2mo.general(eri_ao, [mo_a, mo_a, mo_b, mo_b]), norb)
+    eri_mo = ElectronRepulsionIntegrals(eri_mo_aaaa_s8, eri_mo_bbbb_s8, eri_mo_aabb_s4)
+
+    # Build ranking tables and excitation lists
+    config_info = ConfigInfo(norb, nelec)
+    excitation_entries = ExcitationEntries(eri_mo, config_info)
+
+    #Initialize HCI vector if initial guess not provided
+    if ci0 is None:
+        ranks = np.zeros(1, dtype=hcilib.rank_entry)
+        hf_gnd = HCIVector.as_HCIVector(np.array([1.0], dtype=np.float64), ranks)
+        ci0 = [hf_gnd]
+        ranks, coeffs = myhci.enlarge_space_new(ci0, add_thresh, config_info, excitation_entries, h1e, eri_mo)
+    else:
+        ranks, coeffs = ci0
+
+def enlarge_space_new(myhci, hcivecs, add_thresh, config_info, excitation_entries, h1e, eri_mo):
+    add_list_doubles, nadd_doubles = hcilib.enlarge_space_doubles_new(hcivecs[0], add_thresh, config_info, excitation_entries)
+    add_list_singles, nadd_singles = hcilib.enlarge_space_singles_new(hcivecs[0], add_thresh, config_info, h1e, eri_mo)
+    add_list = np.unique(np.concatenate([add_list_doubles[:nadd_doubles], add_list_singles[:nadd_singles]]))
+    for exc_vec in hcivecs[1:]:
+        add_list_doubles_exc, nadd_doubles_exc = hcilib.enlarge_space_doubles_new(exc_vec, add_thresh, config_info, excitation_entries)
+        add_list_singles_exc, nadd_singles_exc = hcilib.enlarge_space_singles_new(exc_vec, add_thresh, config_info, h1e, eri_mo)
+        add_list = np.unique(np.concatenate([add_list, add_list_doubles_exc[:nadd_doubles_exc], add_list_singles_exc[:nadd_singles_exc]]))
+    
+    ndets_old = len(ranks)
+    total_ranks = np.concatenate([hcivecs[0].ranks, add_list])
+    ranks_new, unique_rows = np.unique(total_ranks, return_index=True)
+    ndets_new = len(ranks_new)
+    hcivecs_new = []
+    for i, hcivec_old in enumerate(hcivecs):
+        hcivec_total = np.concatenate([hcivec_old, np.zeros(ndets_new)])
+        hcivec_new = HCIVector.as_HCIVector(hcivec_total[unique_rows], ranks_new)
+        hcivecs_new.append(hcivec_new)
+        
+    return hcivecs_new
+
+# OLD SPAGHETTI
+# OLD SPAGHETTI
+# OLD SPAGHETTI
 
 def kernel(myhci, hcore, eri_ao, mo, norb, nelec, add_thresh, ci0=None, tol=None, lindep=None, max_cycle=None, max_space=None,
            nroots=None, davidson_only=None, max_memory=None, verbose=None, ecore=0, **kwargs):

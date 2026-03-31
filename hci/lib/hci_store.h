@@ -21,6 +21,17 @@
  */
 #define MAX3(a, b, c) ((a) > (b) ? ((a) > (c) ? (a) : (c)) : ((b) > (c) ? (b) : (c)))
 
+typedef struct {
+    double *h1e_mo_aa;
+    double *h1e_mo_bb;
+} H1E;
+
+typedef struct {
+    double *eri_mo_aaaa_s8;
+    double *eri_mo_bbbb_s8;
+    double *eri_mo_aabb_s4;
+} ERI_MO;
+
 /**
  * A struct that stores the minimal amount of information necessary
  * to compute a double excitation matrix element given the four changing
@@ -66,17 +77,6 @@ typedef struct {
     double *coeffs;
     size_t len;
 } HCIVector;
-
-typedef struct {
-    double *h1e_aa;
-    double *h1e_bb;
-} H1E;
-
-typedef struct {
-    double *eri_mo_aaaa_s8;
-    double *eri_mo_bbbb_s8;
-    double *eri_mo_aabb_s4;
-} ERI_MO;
 
 void get_max_magnitudes(const DoubleExcitationEntry *doubles, double *magnitudes, size_t ndoubles);
 size_t index_2d(size_t i, size_t j);

@@ -13,9 +13,9 @@ typedef struct {
     uint64_t combmax_b;
     uint64_t *exc_table_4o;
     uint64_t *exc_table_2o;
-    uint64_t norb;
-    uint64_t nelec_a;
-    uint64_t nelec_b;
+    size_t norb;
+    size_t nelec_a;
+    size_t nelec_b;
     uint64_t mixed_ncols;
 } ConfigInfo;
 

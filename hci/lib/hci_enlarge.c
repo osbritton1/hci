@@ -84,7 +84,6 @@ bool get_changing_orbitals_new(const size_t *exc_list, size_t exc_order, const s
 
 size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcitationEntries *exc_entries, double entry_thresh, 
     Rank *add_list, const ConfigInfo *config_info) {
-        size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t iadd = 0;
         for (size_t iexc=0; iexc<exc_entries->ndoubles_aa; iexc++) {
@@ -111,7 +110,6 @@ size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcitationEntries
 
 size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcitationEntries *exc_entries, double entry_thresh, 
      Rank *add_list, const ConfigInfo *config_info) {
-        size_t norb = config_info->norb;
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
         for (size_t iexc=0; iexc<exc_entries->ndoubles_bb; iexc++) {
@@ -139,7 +137,6 @@ size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcitationEntries
 
 size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcitationEntries *exc_entries, double entry_thresh, 
      Rank *add_list, const ConfigInfo *config_info) {
-        size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
@@ -200,7 +197,6 @@ size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const size_t *oc
     const H1E *h1e, const ERI_MO *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info) {
         size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
-        size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
         for (size_t iocc=0; iocc<nelec_a; iocc++) {
             size_t occ_orb = occ_a[iocc];
@@ -225,7 +221,6 @@ size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const size_t *oc
 size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *occ_a, size_t arank, 
     const H1E *h1e, const ERI_MO *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info) {
         size_t norb = config_info->norb;
-        size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
         for (size_t iocc=0; iocc<nelec_b; iocc++) {
@@ -240,7 +235,7 @@ size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *oc
                     size_t *exc_list = SORTED(occ_orb, virt_orb);
                     get_changing_orbitals_new(exc_list, 1, occ_b, nelec_b, &single_exc_b, new_occ_b);
                     add_list[iadd].arank = arank;
-                    add_list[iadd].brank = rank_occ_a(new_occ_b, config_info);
+                    add_list[iadd].brank = rank_occ_b(new_occ_b, config_info);
                     iadd++;
                 }
             }
