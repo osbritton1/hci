@@ -168,6 +168,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N20MixedExcitationEntry4ijklE"><code class="docutils literal notranslate"><span class="pre">ijkl</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#from_rank_entry"><code class="docutils literal notranslate"><span class="pre">from_rank_entry()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">_fields_</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv44Rank"><code class="docutils literal notranslate"><span class="pre">Rank</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N4Rank5arankE"><code class="docutils literal notranslate"><span class="pre">arank</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N4Rank5brankE"><code class="docutils literal notranslate"><span class="pre">brank</span></code></a></li>
@@ -183,10 +185,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#hci.lib.hci_utils"><code class="docutils literal notranslate"><span class="pre">hci::lib::hci_utils</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.create_ranking_table"><code class="docutils literal notranslate"><span class="pre">create_ranking_table()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_stored_double_exc"><code class="docutils literal notranslate"><span class="pre">get_stored_double_exc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_stored_double_exc_new"><code class="docutils literal notranslate"><span class="pre">get_stored_double_exc_new()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_stored_mixed_exc"><code class="docutils literal notranslate"><span class="pre">get_stored_mixed_exc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_stored_mixed_exc_new"><code class="docutils literal notranslate"><span class="pre">get_stored_mixed_exc_new()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_max_magnitudes"><code class="docutils literal notranslate"><span class="pre">get_max_magnitudes()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.enlarge_space_doubles_new"><code class="docutils literal notranslate"><span class="pre">enlarge_space_doubles_new()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.enlarge_space_singles_new"><code class="docutils literal notranslate"><span class="pre">enlarge_space_singles_new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_matrix_element_by_rank_new"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank_new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_matrix_element_by_rank_test_storage_new"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank_test_storage_new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.make_hdiag_slow_new"><code class="docutils literal notranslate"><span class="pre">make_hdiag_slow_new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.contract_hamiltonian_hcivec_slow_new"><code class="docutils literal notranslate"><span class="pre">contract_hamiltonian_hcivec_slow_new()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.get_ranking_tables"><code class="docutils literal notranslate"><span class="pre">get_ranking_tables()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.rank"><code class="docutils literal notranslate"><span class="pre">rank()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hci.lib.hci_utils.unrank"><code class="docutils literal notranslate"><span class="pre">unrank()</span></code></a></li>
@@ -230,7 +238,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv430get_double_excitation_value_aaP6size_tP6size_tP6size_tP6size_tPd"><code class="docutils literal notranslate"><span class="pre">get_double_excitation_value_aa()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv430get_double_excitation_value_bbP6size_tP6size_tP6size_tP6size_tPd"><code class="docutils literal notranslate"><span class="pre">get_double_excitation_value_bb()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv438get_double_excitation_value_from_store21DoubleExcitationEntryP6size_tP6size_tP6size_tP6size_t"><code class="docutils literal notranslate"><span class="pre">get_double_excitation_value_from_store()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#_CPPv436get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_tP6size_tP6size_t"><code class="docutils literal notranslate"><span class="pre">get_double_excitation_mag_from_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv436get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_t"><code class="docutils literal notranslate"><span class="pre">get_double_excitation_mag_from_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv426get_mixed_excitation_valueP6size_tP6size_tP6size_tP6size_tP6size_tP6size_tP6size_tP6size_t6size_tPd"><code class="docutils literal notranslate"><span class="pre">get_mixed_excitation_value()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv437get_mixed_excitation_value_from_store20MixedExcitationEntry6size_t6size_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">get_mixed_excitation_value_from_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv414get_diag_valueP6size_tP6size_t6size_t6size_t6size_tPdPdPdPdPd"><code class="docutils literal notranslate"><span class="pre">get_diag_value()</span></code></a></li>
@@ -939,6 +947,27 @@
 </div>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="target" id="classhci_1_1lib_1_1hci__utils_1_1Rank"></span><span class="sig-name descname"><span class="pre">hci.lib.hci_utils.Rank</span> <span class="pre">:</span> <span class="pre">public</span> <span class="pre">ct.Structure</span></span></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="from_rank_entry">
+<span class="target" id="classhci_1_1lib_1_1hci__utils_1_1Rank_1aeefcc51ae5962c46f10ccd0e14513969"></span><span class="sig-name descname"><span class="pre">from_rank_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank_entry</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#from_rank_entry" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-static-attributes">Protected Static Attributes</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="target" id="classhci_1_1lib_1_1hci__utils_1_1Rank_1aeba956d8cc1c5d7b2205caf6e6e803d9"></span><span class="sig-name descname"><span class="pre">_fields_</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('arank',</span> <span class="pre">ct.c_uint64),('brank',</span> <span class="pre">ct.c_uint64)]</span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv44Rank">
 <span id="_CPPv34Rank"></span><span id="_CPPv24Rank"></span><span id="Rank"></span><span class="target" id="structRank"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rank</span></span></span><a class="headerlink" href="#_CPPv44Rank" title="Link to this definition"></a><br /></dt>
@@ -997,12 +1026,22 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hci.lib.hci_utils.get_stored_double_exc">
-<span class="target" id="hci__utils_8py_1a401d297d72e6a74ff3101e163fd69745"></span><span class="sig-name descname"><span class="pre">get_stored_double_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo_xxxx_s8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_stored_double_exc" title="Link to this definition"></a></dt>
+<span class="target" id="hci__utils_8py_1a80dfac51f4fbee75398aa21cf691a24f"></span><span class="sig-name descname"><span class="pre">get_stored_double_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo_xxxx_s8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_table_4o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_stored_double_exc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_utils.get_stored_double_exc_new">
+<span class="target" id="hci__utils_8py_1a41451af4933211dfa1a8d40064ba2c80"></span><span class="sig-name descname"><span class="pre">get_stored_double_exc_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo_xxxx_s8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_stored_double_exc_new" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hci.lib.hci_utils.get_stored_mixed_exc">
-<span class="target" id="hci__utils_8py_1abb0e60dde9c87aba2a6f5006a75e2c8d"></span><span class="sig-name descname"><span class="pre">get_stored_mixed_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo_aabb_s4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_stored_mixed_exc" title="Link to this definition"></a></dt>
+<span class="target" id="hci__utils_8py_1a105f7cc445235985f6ab5ad900877226"></span><span class="sig-name descname"><span class="pre">get_stored_mixed_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo_aabb_s4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_table_2o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_stored_mixed_exc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_utils.get_stored_mixed_exc_new">
+<span class="target" id="hci__utils_8py_1a88bc5b6c298264d1db6cab2aaa5252a4"></span><span class="sig-name descname"><span class="pre">get_stored_mixed_exc_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo_aabb_s4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_stored_mixed_exc_new" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -1018,6 +1057,26 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="hci.lib.hci_utils.enlarge_space_singles_new">
 <span class="target" id="hci__utils_8py_1afe9ca9b82526177e78ff911575d9b159"></span><span class="sig-name descname"><span class="pre">enlarge_space_singles_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_thresh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.enlarge_space_singles_new" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_utils.get_matrix_element_by_rank_new">
+<span class="target" id="hci__utils_8py_1a13cbb58bc56e8aa115b7d3bbfc8492e6"></span><span class="sig-name descname"><span class="pre">get_matrix_element_by_rank_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_matrix_element_by_rank_new" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_utils.get_matrix_element_by_rank_test_storage_new">
+<span class="target" id="hci__utils_8py_1a887e5be0ff0853ecc7e59d1e37ee386a"></span><span class="sig-name descname"><span class="pre">get_matrix_element_by_rank_test_storage_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitation_entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.get_matrix_element_by_rank_test_storage_new" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_utils.make_hdiag_slow_new">
+<span class="target" id="hci__utils_8py_1a3a82d3f133aeba445489b2c4fce22073"></span><span class="sig-name descname"><span class="pre">make_hdiag_slow_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.make_hdiag_slow_new" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_utils.contract_hamiltonian_hcivec_slow_new">
+<span class="target" id="hci__utils_8py_1a5dc7a8de9c18bb4a2c37a6f41b1d6636"></span><span class="sig-name descname"><span class="pre">contract_hamiltonian_hcivec_slow_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdiag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.contract_hamiltonian_hcivec_slow_new" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -1265,8 +1324,8 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv436get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_tP6size_tP6size_t">
-<span id="_CPPv336get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_tP6size_tP6size_t"></span><span id="_CPPv236get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_tP6size_tP6size_t"></span><span id="get_double_excitation_mag_from_store__DoubleExcitationEntry.sP.sP.sP.sP"></span><span class="target" id="hci__contract_8c_1a891ead8b2572a797f58e49b140862e51"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_double_excitation_mag_from_store</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv421DoubleExcitationEntry" title="DoubleExcitationEntry"><span class="n"><span class="pre">DoubleExcitationEntry</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">exc_entry</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_min_occ</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_int_occ</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">old_indices</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">new_indices</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_tP6size_tP6size_t" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv436get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_t">
+<span id="_CPPv336get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_t"></span><span id="_CPPv236get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_t"></span><span id="get_double_excitation_mag_from_store__DoubleExcitationEntry.sP.sP"></span><span class="target" id="hci__contract_8c_1a7c2e13ab3d0fa6bd0b1bae204427fae2"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_double_excitation_mag_from_store</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv421DoubleExcitationEntry" title="DoubleExcitationEntry"><span class="n"><span class="pre">DoubleExcitationEntry</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">exc_entry</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_min_occ</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_int_occ</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436get_double_excitation_mag_from_store21DoubleExcitationEntryP6size_tP6size_t" title="Link to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -1466,7 +1525,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp">
-<span class="target" id="hci__contract_8h_1a891ead8b2572a797f58e49b140862e51"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_double_excitation_mag_from_store</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv421DoubleExcitationEntry" title="DoubleExcitationEntry"><span class="n"><span class="pre">DoubleExcitationEntry</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">exc_entry</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_min_occ</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_int_occ</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">old_indices</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">new_indices</span></span><span class="sig-paren">)</span><br /></dt>
+<span class="target" id="hci__contract_8h_1a7c2e13ab3d0fa6bd0b1bae204427fae2"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_double_excitation_mag_from_store</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv421DoubleExcitationEntry" title="DoubleExcitationEntry"><span class="n"><span class="pre">DoubleExcitationEntry</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">exc_entry</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_min_occ</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_int_occ</span></span><span class="sig-paren">)</span><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
