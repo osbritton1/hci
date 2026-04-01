@@ -1,5 +1,10 @@
-C/C++ Library Files
-=============
+C Library Documentation
+=======================
 
-.. doxygenfile:: lib_doc.dox
-   :project: hci
+.. toctree::
+   :maxdepth: 2
+
+   doxygen_files/rank
+   doxygen_files/store
+   doxygen_files/enlarge
+   doxygen_files/contract

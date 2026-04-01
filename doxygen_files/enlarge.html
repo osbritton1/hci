@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subspace enlargement &mdash; HCI for PySCF 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Matrix elements and contractions" href="contract.html" />
+    <link rel="prev" title="Excitation storage" href="store.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            HCI for PySCF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../doxygen_files.html">C Library Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rank.html">Combinadic ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="store.html">Excitation storage</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Subspace enlargement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#c.NEW_DOUBLE_EXC_RESULT"><code class="docutils literal notranslate"><span class="pre">NEW_DOUBLE_EXC_RESULT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c.NEW_SINGLE_EXC_RESULT"><code class="docutils literal notranslate"><span class="pre">NEW_SINGLE_EXC_RESULT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c.SINGLE_EXC_RESULT_NOSIGN"><code class="docutils literal notranslate"><span class="pre">SINGLE_EXC_RESULT_NOSIGN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c.SORTED"><code class="docutils literal notranslate"><span class="pre">SORTED</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv421get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t"><code class="docutils literal notranslate"><span class="pre">get_changing_orbitals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv414add_doubles_aaPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_doubles_aa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv414add_doubles_bbPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_doubles_bb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv412add_mixed_abPK6size_tPK6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_mixed_ab()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv421enlarge_space_doublesPK6HCIVecP4RankdPK10ConfigInfoPK10ExcEntries"><code class="docutils literal notranslate"><span class="pre">enlarge_space_doubles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv413add_singles_aPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_singles_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv413add_singles_bPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_singles_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv421enlarge_space_singlesPK6HCIVecP4RankdPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">enlarge_space_singles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv49ExcResult"><code class="docutils literal notranslate"><span class="pre">ExcResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv44Rank"><code class="docutils literal notranslate"><span class="pre">Rank</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv46HCIVec"><code class="docutils literal notranslate"><span class="pre">HCIVec</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contract.html">Matrix elements and contractions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HCI for PySCF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../doxygen_files.html">C Library Documentation</a></li>
+      <li class="breadcrumb-item active">Subspace enlargement</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/doxygen_files/enlarge.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="subspace-enlargement">
+<h1>Subspace enlargement<a class="headerlink" href="#subspace-enlargement" title="Link to this heading"></a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="group__enlarge"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Subspace</span> <span class="pre">enlargement</span></span></dt>
+<dd><p>Implementation of the HCI configuration selection algorithm used for expanding the subspace being diagonalized. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-defines">Defines</p>
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.NEW_DOUBLE_EXC_RESULT">
+<span class="target" id="group__enlarge_1gad976b8183ddef4b0e7d32ad3f00c044e"></span><span class="sig-name descname"><span class="n"><span class="pre">NEW_DOUBLE_EXC_RESULT</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.NEW_DOUBLE_EXC_RESULT" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.NEW_SINGLE_EXC_RESULT">
+<span class="target" id="group__enlarge_1gaea902d2c78738939b3c3e11db5e2080f"></span><span class="sig-name descname"><span class="n"><span class="pre">NEW_SINGLE_EXC_RESULT</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.NEW_SINGLE_EXC_RESULT" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.SINGLE_EXC_RESULT_NOSIGN">
+<span class="target" id="group__enlarge_1ga35a4d55938e1edfc9823551a82e20110"></span><span class="sig-name descname"><span class="n"><span class="pre">SINGLE_EXC_RESULT_NOSIGN</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">old_orb</span></span>, <span class="n"><span class="pre">new_orb</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.SINGLE_EXC_RESULT_NOSIGN" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.SORTED">
+<span class="target" id="group__enlarge_1ga18d76de364ff391f94530d47acba8b32"></span><span class="sig-name descname"><span class="n"><span class="pre">SORTED</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">occ_orb</span></span>, <span class="n"><span class="pre">virt_orb</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.SORTED" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t">
+<span id="_CPPv321get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t"></span><span id="_CPPv221get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t"></span><span id="get_changing_orbitals__sCP.s.sCP.s.ExcResultP.sP"></span><span class="target" id="group__enlarge_1ga5d972eea7d87ebe0aebe88b3eedc421f"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_changing_orbitals</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_list</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exc_order</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span>, <a class="reference internal" href="#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">res</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">new_occ_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414add_doubles_aaPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo">
+<span id="_CPPv314add_doubles_aaPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"></span><span id="_CPPv214add_doubles_aaPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"></span><span id="add_doubles_aa__sCP.s.ExcEntriesCP.double.RankP.ConfigInfoCP"></span><span class="target" id="group__enlarge_1gabc2703219ab099dda7f1bc807cd0ef53"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_doubles_aa</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_a</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">brank</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv410ExcEntries" title="ExcEntries"><span class="n"><span class="pre">ExcEntries</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_entries</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">entry_thresh</span></span>, <a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">add_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414add_doubles_aaPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414add_doubles_bbPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo">
+<span id="_CPPv314add_doubles_bbPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"></span><span id="_CPPv214add_doubles_bbPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"></span><span id="add_doubles_bb__sCP.s.ExcEntriesCP.double.RankP.ConfigInfoCP"></span><span class="target" id="group__enlarge_1gab15b1e108a0ff03e6c78338e0ce986cd"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_doubles_bb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_b</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arank</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv410ExcEntries" title="ExcEntries"><span class="n"><span class="pre">ExcEntries</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_entries</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">entry_thresh</span></span>, <a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">add_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414add_doubles_bbPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412add_mixed_abPK6size_tPK6size_tPK10ExcEntriesdP4RankPK10ConfigInfo">
+<span id="_CPPv312add_mixed_abPK6size_tPK6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"></span><span id="_CPPv212add_mixed_abPK6size_tPK6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"></span><span id="add_mixed_ab__sCP.sCP.ExcEntriesCP.double.RankP.ConfigInfoCP"></span><span class="target" id="group__enlarge_1ga2dfe8fb542979d1ed1a7e22ac875962a"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_mixed_ab</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv410ExcEntries" title="ExcEntries"><span class="n"><span class="pre">ExcEntries</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_entries</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">entry_thresh</span></span>, <a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">add_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412add_mixed_abPK6size_tPK6size_tPK10ExcEntriesdP4RankPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421enlarge_space_doublesPK6HCIVecP4RankdPK10ConfigInfoPK10ExcEntries">
+<span id="_CPPv321enlarge_space_doublesPK6HCIVecP4RankdPK10ConfigInfoPK10ExcEntries"></span><span id="_CPPv221enlarge_space_doublesPK6HCIVecP4RankdPK10ConfigInfoPK10ExcEntries"></span><span id="enlarge_space_doubles__HCIVecCP.RankP.double.ConfigInfoCP.ExcEntriesCP"></span><span class="target" id="group__enlarge_1gad45c61f7bf4f9294d53728c4f6425c29"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enlarge_space_doubles</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46HCIVec" title="HCIVec"><span class="n"><span class="pre">HCIVec</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">hcivec</span></span>, <a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">add_list</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thresh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv410ExcEntries" title="ExcEntries"><span class="n"><span class="pre">ExcEntries</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_entries</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421enlarge_space_doublesPK6HCIVecP4RankdPK10ConfigInfoPK10ExcEntries" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413add_singles_aPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo">
+<span id="_CPPv313add_singles_aPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"></span><span id="_CPPv213add_singles_aPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"></span><span id="add_singles_a__sCP.sCP.sCP.s.HCoreCP.ERITensorCP.double.RankP.ConfigInfoCP"></span><span class="target" id="group__enlarge_1ga26fc378bec415bfcf3ffdc45168078d7"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_singles_a</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">virt_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_b</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">brank</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv45HCore" title="HCore"><span class="n"><span class="pre">HCore</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">h1e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">entry_thresh</span></span>, <a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">add_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413add_singles_aPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413add_singles_bPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo">
+<span id="_CPPv313add_singles_bPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"></span><span id="_CPPv213add_singles_bPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"></span><span id="add_singles_b__sCP.sCP.sCP.s.HCoreCP.ERITensorCP.double.RankP.ConfigInfoCP"></span><span class="target" id="group__enlarge_1gaafabcbd1ccdf5efa837914d88ae0b533"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_singles_b</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">virt_b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_a</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arank</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv45HCore" title="HCore"><span class="n"><span class="pre">HCore</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">h1e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">entry_thresh</span></span>, <a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">add_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413add_singles_bPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421enlarge_space_singlesPK6HCIVecP4RankdPK10ConfigInfoPK5HCorePK9ERITensor">
+<span id="_CPPv321enlarge_space_singlesPK6HCIVecP4RankdPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="_CPPv221enlarge_space_singlesPK6HCIVecP4RankdPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="enlarge_space_singles__HCIVecCP.RankP.double.ConfigInfoCP.HCoreCP.ERITensorCP"></span><span class="target" id="group__enlarge_1ga0ec54506c9377ab32ab45c55a422d45e"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enlarge_space_singles</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46HCIVec" title="HCIVec"><span class="n"><span class="pre">HCIVec</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">hcivec</span></span>, <a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">add_list</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thresh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv45HCore" title="HCore"><span class="n"><span class="pre">HCore</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">h1e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421enlarge_space_singlesPK6HCIVecP4RankdPK10ConfigInfoPK5HCorePK9ERITensor" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv49ExcResult">
+<span id="_CPPv39ExcResult"></span><span id="_CPPv29ExcResult"></span><span id="ExcResult"></span><span class="target" id="structExcResult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExcResult</span></span></span><a class="headerlink" href="#_CPPv49ExcResult" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv44Rank">
+<span id="_CPPv34Rank"></span><span id="_CPPv24Rank"></span><span id="Rank"></span><span class="target" id="structRank"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rank</span></span></span><a class="headerlink" href="#_CPPv44Rank" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv46HCIVec">
+<span id="_CPPv36HCIVec"></span><span id="_CPPv26HCIVec"></span><span id="HCIVec"></span><span class="target" id="structHCIVec"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HCIVec</span></span></span><a class="headerlink" href="#_CPPv46HCIVec" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="store.html" class="btn btn-neutral float-left" title="Excitation storage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contract.html" class="btn btn-neutral float-right" title="Matrix elements and contractions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Simon Britton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

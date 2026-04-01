@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Combinadic ranking &mdash; HCI for PySCF 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Excitation storage" href="store.html" />
+    <link rel="prev" title="C Library Documentation" href="../doxygen_files.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            HCI for PySCF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../doxygen_files.html">C Library Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Combinadic ranking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv414find_row_index8uint64_tPK8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">find_row_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv44rankPK6size_tPK8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv46unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">unrank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv415load_rank_tableP8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">load_rank_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv410rank_occ_aPK6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_occ_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv412unrank_occ_a8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_occ_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv413unrank_virt_a8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_virt_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv410rank_occ_bPK6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_occ_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv412unrank_occ_b8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_occ_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv413unrank_virt_b8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_virt_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv415rank_double_excP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_double_exc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv417unrank_double_exc8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_double_exc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv414rank_mixed_excP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_mixed_exc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv416unrank_mixed_exc8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_mixed_exc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv410ConfigInfo"><code class="docutils literal notranslate"><span class="pre">ConfigInfo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="store.html">Excitation storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enlarge.html">Subspace enlargement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contract.html">Matrix elements and contractions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HCI for PySCF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../doxygen_files.html">C Library Documentation</a></li>
+      <li class="breadcrumb-item active">Combinadic ranking</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/doxygen_files/rank.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="combinadic-ranking">
+<h1>Combinadic ranking<a class="headerlink" href="#combinadic-ranking" title="Link to this heading"></a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="group__rank"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Combinadic</span> <span class="pre">ranking</span></span></dt>
+<dd><p>Implementation of combinadic ranking system for encoding orbital occupancy and excitation lists. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414find_row_index8uint64_tPK8uint64_t6size_t6size_t">
+<span id="_CPPv314find_row_index8uint64_tPK8uint64_t6size_t6size_t"></span><span id="_CPPv214find_row_index8uint64_tPK8uint64_t6size_t6size_t"></span><span id="find_row_index__uint64_t.uint64_tCP.s.s"></span><span class="target" id="group__rank_1ga8639f0b0bce4ffaa0a5a6b494a66ed1b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">find_row_index</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">row</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">norb</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414find_row_index8uint64_tPK8uint64_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Helper function for unranking algorithm.</p>
+<p>Uses binary search to find the index of the last entry in a row of the ranking table that is less than the value of target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – <strong>[in]</strong> Target value used as a reference for the search </p></li>
+<li><p><strong>row</strong> – <strong>[in]</strong> Pointer to the row of the ranking table used for the search </p></li>
+<li><p><strong>norb</strong> – <strong>[in]</strong> Size of orbital space </p></li>
+<li><p><strong>nocc</strong> – <strong>[in]</strong> Number of occupancies; generally equal to <span class="math notranslate nohighlight">\(N_\alpha\)</span> or <span class="math notranslate nohighlight">\(N_\beta\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv44rankPK6size_tPK8uint64_t6size_t6size_t">
+<span id="_CPPv34rankPK6size_tPK8uint64_t6size_t6size_t"></span><span id="_CPPv24rankPK6size_tPK8uint64_t6size_t6size_t"></span><span id="rank__sCP.uint64_tCP.s.s"></span><span class="target" id="group__rank_1gaec3b2239c7010bdfe0240291abe29559"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rank</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">rank_table</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">norb</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44rankPK6size_tPK8uint64_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the combinatorial rank corresponding to the provided list of occupied orbitals.</p>
+<p>Formula: <div class="math notranslate nohighlight">
+\[ \sum\limits_{i=1}^{N_\text{occ}}\binom{c_i}{i}, \]</div>
+ where <span class="math notranslate nohighlight">\(c_i\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>th orbital in the occupancy list sorted in ascending order</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>occ_list</strong> – <strong>[in]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> specifying the zero-indexed occupied orbitals in ascending order </p></li>
+<li><p><strong>rank_table</strong> – <strong>[in]</strong> Pointer to ranking table initialized by <a class="reference internal" href="#group__rank_1ga7e662240bbdb74ea0f2b03cba2de7e09"><span class="std std-ref">load_rank_table(uint64_t *table, size_t norb, size_t nocc)</span></a></p></li>
+<li><p><strong>norb</strong> – <strong>[in]</strong> Size of orbital space </p></li>
+<li><p><strong>nocc</strong> – <strong>[in]</strong> Number of occupancies; generally equal to <span class="math notranslate nohighlight">\(N_\alpha\)</span> or <span class="math notranslate nohighlight">\(N_\beta\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified occupancy list </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv46unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t">
+<span id="_CPPv36unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t"></span><span id="_CPPv26unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t"></span><span id="unrank__uint64_t.sP.uint64_tCP.s.s"></span><span class="target" id="group__rank_1ga98bfaeb24b50e605d3b5a0d7ee2d1779"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rank</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">rank_table</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">norb</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Greedy unranking algorithm for computing an occupancy list given its combinatorial rank.</p>
+<p>Starting from the last row in the ranking table (corresponding to the highest occupied orbital), uses find_row_index(uint64_t target, uint64_t *row, size_t norb, size_t nocc) to find the column index of the entry that does not exceed the value of target, updates the occupancy list accordingly, then subtracts off the ranking table entry from target and repeats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rank</strong> – <strong>[in]</strong> The rank of the occupancy list to be computed </p></li>
+<li><p><strong>occ_list</strong> – <strong>[out]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> to store the occupancy list </p></li>
+<li><p><strong>rank_table</strong> – <strong>[in]</strong> Pointer to ranking table initialized by <a class="reference internal" href="#group__rank_1ga7e662240bbdb74ea0f2b03cba2de7e09"><span class="std std-ref">load_rank_table(uint64_t *table, size_t norb, size_t nocc)</span></a></p></li>
+<li><p><strong>norb</strong> – <strong>[in]</strong> Size of orbital space </p></li>
+<li><p><strong>nocc</strong> – <strong>[in]</strong> Number of occupancies; generally equal to <span class="math notranslate nohighlight">\(N_\alpha\)</span> or <span class="math notranslate nohighlight">\(N_\beta\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415load_rank_tableP8uint64_t6size_t6size_t">
+<span id="_CPPv315load_rank_tableP8uint64_t6size_t6size_t"></span><span id="_CPPv215load_rank_tableP8uint64_t6size_t6size_t"></span><span id="load_rank_table__uint64_tP.s.s"></span><span class="target" id="group__rank_1ga7e662240bbdb74ea0f2b03cba2de7e09"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load_rank_table</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">table</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">norb</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415load_rank_tableP8uint64_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Initializes the <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> by <span class="math notranslate nohighlight">\(N_\text{orb}-N_\text{occ}+1\)</span> table needed to rank and unrank combinations using the combinatorial number system.</p>
+<p>The binomial coefficients needed for the encoding the position of the ith electron are stored in row i-1. The entry in position (i, j) is nCr(i+j, i+1); when i+j &lt; i+1 (first column), this is defined to be 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – <strong>[out]</strong> Pointer to the uninitialized ranking table; must accommodate <span class="math notranslate nohighlight">\(N_\text{occ}\cdot(N_\text{orb}-N_\text{occ}+1)\)</span> entries </p></li>
+<li><p><strong>norb</strong> – <strong>[in]</strong> Size of orbital space </p></li>
+<li><p><strong>nocc</strong> – <strong>[in]</strong> Number of occupancies; generally equal to <span class="math notranslate nohighlight">\(N_\alpha\)</span> or <span class="math notranslate nohighlight">\(N_\beta\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv410rank_occ_aPK6size_tPK10ConfigInfo">
+<span id="_CPPv310rank_occ_aPK6size_tPK10ConfigInfo"></span><span id="_CPPv210rank_occ_aPK6size_tPK10ConfigInfo"></span><span id="rank_occ_a__sCP.ConfigInfoCP"></span><span class="target" id="group__rank_1gac2a19ab6a7b2ea7a10103c895ec64f86"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rank_occ_a</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410rank_occ_aPK6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Ranks a given <span class="math notranslate nohighlight">\(\alpha\)</span> orbital occupancy list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>occ_list</strong> – <strong>[in]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> specifying the zero-indexed occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals in ascending order </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412unrank_occ_a8uint64_tP6size_tPK10ConfigInfo">
+<span id="_CPPv312unrank_occ_a8uint64_tP6size_tPK10ConfigInfo"></span><span id="_CPPv212unrank_occ_a8uint64_tP6size_tPK10ConfigInfo"></span><span id="unrank_occ_a__uint64_t.sP.ConfigInfoCP"></span><span class="target" id="group__rank_1gaf25ee2914a3c0b36738b9a2f9347762b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank_occ_a</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arank</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412unrank_occ_a8uint64_tP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Unranks a given <span class="math notranslate nohighlight">\(\alpha\)</span> orbital occupancy list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list of interest </p></li>
+<li><p><strong>occ_list</strong> – <strong>[out]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> to store the <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413unrank_virt_a8uint64_tP6size_tPK10ConfigInfo">
+<span id="_CPPv313unrank_virt_a8uint64_tP6size_tPK10ConfigInfo"></span><span id="_CPPv213unrank_virt_a8uint64_tP6size_tPK10ConfigInfo"></span><span id="unrank_virt_a__uint64_t.sP.ConfigInfoCP"></span><span class="target" id="group__rank_1ga867fef926599cbfcac4139bb6bd5cbed"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank_virt_a</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arank</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">virt_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413unrank_virt_a8uint64_tP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Determines all orbitals in the complement of a <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list with given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list of interest </p></li>
+<li><p><strong>virt_list</strong> – <strong>[out]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{orb}-N_\text{occ}\)</span> to store the <span class="math notranslate nohighlight">\(\alpha\)</span> virtual orbital list </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv410rank_occ_bPK6size_tPK10ConfigInfo">
+<span id="_CPPv310rank_occ_bPK6size_tPK10ConfigInfo"></span><span id="_CPPv210rank_occ_bPK6size_tPK10ConfigInfo"></span><span id="rank_occ_b__sCP.ConfigInfoCP"></span><span class="target" id="group__rank_1gab47db350b9e3e99c685b945dff3929e1"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rank_occ_b</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410rank_occ_bPK6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Ranks a given $\beta$ orbital occupancy list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>occ_list</strong> – <strong>[in]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> specifying the zero-indexed occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals in ascending order </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412unrank_occ_b8uint64_tP6size_tPK10ConfigInfo">
+<span id="_CPPv312unrank_occ_b8uint64_tP6size_tPK10ConfigInfo"></span><span id="_CPPv212unrank_occ_b8uint64_tP6size_tPK10ConfigInfo"></span><span id="unrank_occ_b__uint64_t.sP.ConfigInfoCP"></span><span class="target" id="group__rank_1gad2c6f39421e7fe77e6e93492e556c41f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank_occ_b</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">brank</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412unrank_occ_b8uint64_tP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Unranks a given <span class="math notranslate nohighlight">\(\beta\)</span> orbital occupancy list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest </p></li>
+<li><p><strong>occ_list</strong> – <strong>[out]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> to store the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413unrank_virt_b8uint64_tP6size_tPK10ConfigInfo">
+<span id="_CPPv313unrank_virt_b8uint64_tP6size_tPK10ConfigInfo"></span><span id="_CPPv213unrank_virt_b8uint64_tP6size_tPK10ConfigInfo"></span><span id="unrank_virt_b__uint64_t.sP.ConfigInfoCP"></span><span class="target" id="group__rank_1ga7b73bf777306f5a208929e92850f2f93"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank_virt_b</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">brank</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">virt_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413unrank_virt_b8uint64_tP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Determines all orbitals in the complement of a <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list with given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest </p></li>
+<li><p><strong>virt_list</strong> – <strong>[out]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{orb}-N_\text{occ}\)</span> to store the <span class="math notranslate nohighlight">\(\beta\)</span> virtual orbital list </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415rank_double_excP6size_tPK10ConfigInfo">
+<span id="_CPPv315rank_double_excP6size_tPK10ConfigInfo"></span><span id="_CPPv215rank_double_excP6size_tPK10ConfigInfo"></span><span id="rank_double_exc__sP.ConfigInfoCP"></span><span class="target" id="group__rank_1gac15acc090702b24f6532f2381165d55d"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rank_double_exc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415rank_double_excP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Ranks a double excitation based on the four orbitals involved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_list</strong> – <strong>[in]</strong> Pointer to an array of length 4 specifying the four involved orbitals in ascending order </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified double excitation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv417unrank_double_exc8uint64_tP6size_tPK10ConfigInfo">
+<span id="_CPPv317unrank_double_exc8uint64_tP6size_tPK10ConfigInfo"></span><span id="_CPPv217unrank_double_exc8uint64_tP6size_tPK10ConfigInfo"></span><span id="unrank_double_exc__uint64_t.sP.ConfigInfoCP"></span><span class="target" id="group__rank_1ga8999606d7418dfbd98d5a4db5d59a276"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank_double_exc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exc_rank</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417unrank_double_exc8uint64_tP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Determines the four orbitals involved in a double excitation of given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_rank</strong> – <strong>[in]</strong> The rank of the double excitation of interest </p></li>
+<li><p><strong>exc_list</strong> – <strong>[out]</strong> Pointer to an array of length 4 to store the excitation orbital list </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414rank_mixed_excP6size_tPK10ConfigInfo">
+<span id="_CPPv314rank_mixed_excP6size_tPK10ConfigInfo"></span><span id="_CPPv214rank_mixed_excP6size_tPK10ConfigInfo"></span><span id="rank_mixed_exc__sP.ConfigInfoCP"></span><span class="target" id="group__rank_1ga3c6a7e91a1932ce524849b17920969e6"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rank_mixed_exc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414rank_mixed_excP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Calculates the rank of a mixed <span class="math notranslate nohighlight">\(\alpha\beta\rightarrow\alpha\beta\)</span> excitation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_list</strong> – <strong>[in]</strong> Pointer to an array of the four involved orbitals The first two are <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals (in ascending order) and the second two are <span class="math notranslate nohighlight">\(\beta\)</span> orbitals (also in ascending order) </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified mixed excitation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416unrank_mixed_exc8uint64_tP6size_tPK10ConfigInfo">
+<span id="_CPPv316unrank_mixed_exc8uint64_tP6size_tPK10ConfigInfo"></span><span id="_CPPv216unrank_mixed_exc8uint64_tP6size_tPK10ConfigInfo"></span><span id="unrank_mixed_exc__uint64_t.sP.ConfigInfoCP"></span><span class="target" id="group__rank_1gab4d5039a1c8be2ab626d1b900ce0ecad"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank_mixed_exc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exc_rank_ab</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416unrank_mixed_exc8uint64_tP6size_tPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Determines the occupancy list corresponding to a mixed excitation with given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_rank_ab</strong> – <strong>[in]</strong> The rank of the mixed excitation </p></li>
+<li><p><strong>exc_list</strong> – <strong>[out]</strong> Pointer to an array of length 4 to store the excitation orbital list </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv410ConfigInfo">
+<span id="_CPPv310ConfigInfo"></span><span id="_CPPv210ConfigInfo"></span><span id="ConfigInfo"></span><span class="target" id="structConfigInfo"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConfigInfo</span></span></span><a class="headerlink" href="#_CPPv410ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_rank.h&gt;</em></div>
+<p>A struct that holds pointers to all of the ranking tables needed for carrying out HCI calculations, along with their associated parameters. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../doxygen_files.html" class="btn btn-neutral float-left" title="C Library Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="store.html" class="btn btn-neutral float-right" title="Excitation storage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Simon Britton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

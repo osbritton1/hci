@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excitation storage &mdash; HCI for PySCF 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Subspace enlargement" href="enlarge.html" />
+    <link rel="prev" title="Combinadic ranking" href="rank.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            HCI for PySCF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../doxygen_files.html">C Library Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rank.html">Combinadic ranking</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Excitation storage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#c.MAX"><code class="docutils literal notranslate"><span class="pre">MAX</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c.MAX3"><code class="docutils literal notranslate"><span class="pre">MAX3</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv43nC26size_t"><code class="docutils literal notranslate"><span class="pre">nC2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv48index_2d6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">index_2d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv48index_4d6size_t6size_t6size_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">index_4d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv48index_8d6size_t6size_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">index_8d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv419get_max_mag_doublesPK14DoubleExcEntryPd6size_t"><code class="docutils literal notranslate"><span class="pre">get_max_mag_doubles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv417get_max_mag_mixedPK13MixedExcEntryPd6size_t"><code class="docutils literal notranslate"><span class="pre">get_max_mag_mixed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv421load_doubles_from_eriP14DoubleExcEntryPKdPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">load_doubles_from_eri()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv419load_mixed_from_eriP13MixedExcEntryPKdPK10ConfigInfo6size_t"><code class="docutils literal notranslate"><span class="pre">load_mixed_from_eri()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv425load_exc_entries_from_eriP10ExcEntriesPK9ERITensorPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">load_exc_entries_from_eri()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv45HCore"><code class="docutils literal notranslate"><span class="pre">HCore</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv49ERITensor"><code class="docutils literal notranslate"><span class="pre">ERITensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv414DoubleExcEntry"><code class="docutils literal notranslate"><span class="pre">DoubleExcEntry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv413MixedExcEntry"><code class="docutils literal notranslate"><span class="pre">MixedExcEntry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv410ExcEntries"><code class="docutils literal notranslate"><span class="pre">ExcEntries</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="enlarge.html">Subspace enlargement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contract.html">Matrix elements and contractions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HCI for PySCF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../doxygen_files.html">C Library Documentation</a></li>
+      <li class="breadcrumb-item active">Excitation storage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/doxygen_files/store.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="excitation-storage">
+<h1>Excitation storage<a class="headerlink" href="#excitation-storage" title="Link to this heading"></a></h1>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="group__store"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Excitation</span> <span class="pre">storage</span></span></dt>
+<dd><p>Data structures for storing double excitations as well as managing the core Hamiltonian and ERI tensor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-defines">Defines</p>
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.MAX">
+<span class="target" id="group__store_1gafa99ec4acc4ecb2dc3c2d05da15d0e3f"></span><span class="sig-name descname"><span class="n"><span class="pre">MAX</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">a</span></span>, <span class="n"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.MAX" title="Link to this definition"></a><br /></dt>
+<dd><p>Function-like macro to compute the maximum of two numbers </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – <strong>[in]</strong> </p></li>
+<li><p><strong>b</strong> – <strong>[in]</strong> </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>max(a,b) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.MAX3">
+<span class="target" id="group__store_1ga37c6d7fcb9c177c308ef38e1d51d35e3"></span><span class="sig-name descname"><span class="n"><span class="pre">MAX3</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">a</span></span>, <span class="n"><span class="pre">b</span></span>, <span class="n"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.MAX3" title="Link to this definition"></a><br /></dt>
+<dd><p>Function-like macro to compute the maximum of three numbers </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – <strong>[in]</strong> </p></li>
+<li><p><strong>b</strong> – <strong>[in]</strong> </p></li>
+<li><p><strong>c</strong> – <strong>[in]</strong> </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>max(a,b,c) </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv43nC26size_t">
+<span id="_CPPv33nC26size_t"></span><span id="_CPPv23nC26size_t"></span><span id="nC2__s"></span><span class="target" id="group__store_1gae5d11c309bce2cfd9b06834931f5a01e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nC2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43nC26size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Helper function for computing nCr(n,2)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> – <strong>[in]</strong> </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>nCr(n,2) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv48index_2d6size_t6size_t">
+<span id="_CPPv38index_2d6size_t6size_t"></span><span id="_CPPv28index_2d6size_t6size_t"></span><span id="index_2d__s.s"></span><span class="target" id="group__store_1gab2bb48a63f20e88eef0f11bd64dfc189"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_2d</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48index_2d6size_t6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Given two indices i and j, computes the index in the corresponding row-major packed lower triangular array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – <strong>[in]</strong> The row index </p></li>
+<li><p><strong>j</strong> – <strong>[in]</strong> The column index </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the index of the (i,j) entry in a row-major packed lower triangular array </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv48index_4d6size_t6size_t6size_t6size_t6size_t">
+<span id="_CPPv38index_4d6size_t6size_t6size_t6size_t6size_t"></span><span id="_CPPv28index_4d6size_t6size_t6size_t6size_t6size_t"></span><span id="index_4d__s.s.s.s.s"></span><span class="target" id="group__store_1ga8f5f02f1f615cb1e82a9b8c922511d95"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_4d</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ncols</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48index_4d6size_t6size_t6size_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the index of [ij|kl] in a fourfold-compressed ERI tensor.</p>
+<p>ncols should be norb*(norb+1)/2. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – <strong>[in]</strong> The zero-based index of the first orbital </p></li>
+<li><p><strong>j</strong> – <strong>[in]</strong> The zero-based index of the second orbital </p></li>
+<li><p><strong>k</strong> – <strong>[in]</strong> The zero-based index of the third orbital </p></li>
+<li><p><strong>l</strong> – <strong>[in]</strong> The zero-based index of the fourth orbital </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the index of [ij|kl] in a fourfold-compressed ERI tensor </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv48index_8d6size_t6size_t6size_t6size_t">
+<span id="_CPPv38index_8d6size_t6size_t6size_t6size_t"></span><span id="_CPPv28index_8d6size_t6size_t6size_t6size_t"></span><span id="index_8d__s.s.s.s"></span><span class="target" id="group__store_1ga94f0ad270de912d6055d6b7f2155a3cc"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_8d</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48index_8d6size_t6size_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the index of [ij|kl] in an eightfold-compressed ERI tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – <strong>[in]</strong> The zero-based index of the first orbital </p></li>
+<li><p><strong>j</strong> – <strong>[in]</strong> The zero-based index of the second orbital </p></li>
+<li><p><strong>k</strong> – <strong>[in]</strong> The zero-based index of the third orbital </p></li>
+<li><p><strong>l</strong> – <strong>[in]</strong> The zero-based index of the fourth orbital </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the index of [ij|kl] in an eightfold-compressed ERI tensor </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419get_max_mag_doublesPK14DoubleExcEntryPd6size_t">
+<span id="_CPPv319get_max_mag_doublesPK14DoubleExcEntryPd6size_t"></span><span id="_CPPv219get_max_mag_doublesPK14DoubleExcEntryPd6size_t"></span><span id="get_max_mag_doubles__DoubleExcEntryCP.doubleP.s"></span><span class="target" id="group__store_1gaa1649205684acdb87699487fe649d28d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_max_mag_doubles</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv414DoubleExcEntry" title="DoubleExcEntry"><span class="n"><span class="pre">DoubleExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">doubles</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">magnitudes</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ndoubles</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419get_max_mag_doublesPK14DoubleExcEntryPd6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes the maximum magnitude of all excitations associated with the same four changing orbitals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doubles</strong> – <strong>[in]</strong> Pointer to the array of double excitations of length ndoubles </p></li>
+<li><p><strong>magnitudes</strong> – <strong>[out]</strong> Pointer to the output array of magnitudes of length ndoubles </p></li>
+<li><p><strong>ndoubles</strong> – <strong>[in]</strong> The number of double excitation entries to be processed </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv417get_max_mag_mixedPK13MixedExcEntryPd6size_t">
+<span id="_CPPv317get_max_mag_mixedPK13MixedExcEntryPd6size_t"></span><span id="_CPPv217get_max_mag_mixedPK13MixedExcEntryPd6size_t"></span><span id="get_max_mag_mixed__MixedExcEntryCP.doubleP.s"></span><span class="target" id="group__store_1ga6a79b89a5b0393b3530f4ea610e1fc29"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_max_mag_mixed</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413MixedExcEntry" title="MixedExcEntry"><span class="n"><span class="pre">MixedExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mixed</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">magnitudes</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nmixed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417get_max_mag_mixedPK13MixedExcEntryPd6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Extracts the absolute values of the stored mixed excitations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mixed</strong> – <strong>[in]</strong> Pointer to the array of mixed excitations of length nmixed </p></li>
+<li><p><strong>magnitudes</strong> – <strong>[out]</strong> Pointer to the output array of magnitudes of length nmixed </p></li>
+<li><p><strong>nmixed</strong> – <strong>[in]</strong> The number of mixed excitation entries to be processed </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421load_doubles_from_eriP14DoubleExcEntryPKdPK10ConfigInfo">
+<span id="_CPPv321load_doubles_from_eriP14DoubleExcEntryPKdPK10ConfigInfo"></span><span id="_CPPv221load_doubles_from_eriP14DoubleExcEntryPKdPK10ConfigInfo"></span><span id="load_doubles_from_eri__DoubleExcEntryP.doubleCP.ConfigInfoCP"></span><span class="target" id="group__store_1gab85fe7bdef8ea8afc2b959989cb84a56"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load_doubles_from_eri</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414DoubleExcEntry" title="DoubleExcEntry"><span class="n"><span class="pre">DoubleExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">doubles</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo_xxxx_s8</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421load_doubles_from_eriP14DoubleExcEntryPKdPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes and stores the minimal amount of data needed to generate all possible double excitation matrix elements from a given ERI tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doubles</strong> – <strong>[out]</strong> Pointer to an array of DoubleExcitationEntry of length <span class="math notranslate nohighlight">\(\binom{N_\text{orb}, 4}\)</span></p></li>
+<li><p><strong>eri_mo_xxxx_s8</strong> – <strong>[in]</strong> Pointer to the eightfold-compressed ERI tensor (of <span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(\beta\)</span> type) </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419load_mixed_from_eriP13MixedExcEntryPKdPK10ConfigInfo6size_t">
+<span id="_CPPv319load_mixed_from_eriP13MixedExcEntryPKdPK10ConfigInfo6size_t"></span><span id="_CPPv219load_mixed_from_eriP13MixedExcEntryPKdPK10ConfigInfo6size_t"></span><span id="load_mixed_from_eri__MixedExcEntryP.doubleCP.ConfigInfoCP.s"></span><span class="target" id="group__store_1ga3277e13a7ca55515089b77c93dc825a9"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load_mixed_from_eri</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413MixedExcEntry" title="MixedExcEntry"><span class="n"><span class="pre">MixedExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mixed</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo_aabb_s4</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ncols_aabb</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419load_mixed_from_eriP13MixedExcEntryPKdPK10ConfigInfo6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes and stores mixed excitations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mixed</strong> – <strong>[out]</strong> Pointer to an array of MixedExcitationEntry of length <span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{2}\)</span></p></li>
+<li><p><strong>eri_mo_aabb_s4</strong> – <strong>[in]</strong> Pointer to the fourfold-compressed mixed ERI tensor of mixed type </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+<li><p><strong>ncols_aabb</strong> – <strong>[in]</strong> <span class="math notranslate nohighlight">\(\binom{N_\text{orb}+1}{2}\)</span>, i.e. the number of entries in the mixed ERI tensor associated with a single pair of <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425load_exc_entries_from_eriP10ExcEntriesPK9ERITensorPK10ConfigInfo">
+<span id="_CPPv325load_exc_entries_from_eriP10ExcEntriesPK9ERITensorPK10ConfigInfo"></span><span id="_CPPv225load_exc_entries_from_eriP10ExcEntriesPK9ERITensorPK10ConfigInfo"></span><span id="load_exc_entries_from_eri__ExcEntriesP.ERITensorCP.ConfigInfoCP"></span><span class="target" id="group__store_1ga6e904375df3db79ef1aeecf65cc74b25"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load_exc_entries_from_eri</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410ExcEntries" title="ExcEntries"><span class="n"><span class="pre">ExcEntries</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_entries</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425load_exc_entries_from_eriP10ExcEntriesPK9ERITensorPK10ConfigInfo" title="Link to this definition"></a><br /></dt>
+<dd><p>Computes and stores all double and mixed excitations for a given system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_entries</strong> – <strong>[out]</strong> Pointer to an <a class="reference internal" href="#structExcEntries"><span class="std std-ref">ExcEntries</span></a> struct specifying where to find the requisite output arrays </p></li>
+<li><p><strong>eri_mo</strong> – <strong>[in]</strong> Pointer to an <a class="reference internal" href="#structERITensor"><span class="std std-ref">ERITensor</span></a> struct providing the input electron repulsion integrals </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv45HCore">
+<span id="_CPPv35HCore"></span><span id="_CPPv25HCore"></span><span id="HCore"></span><span class="target" id="structHCore"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HCore</span></span></span><a class="headerlink" href="#_CPPv45HCore" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>A structure that holds pointers to the core Hamiltonian in both the <span class="math notranslate nohighlight">\(\alpha\)</span> MO and <span class="math notranslate nohighlight">\(\beta\)</span> MO bases.</p>
+<p>Neither array is expected to be compressed (i.e. both must have all <span class="math notranslate nohighlight">\(N_\text{orb}^2\)</span> entries). </p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv49ERITensor">
+<span id="_CPPv39ERITensor"></span><span id="_CPPv29ERITensor"></span><span id="ERITensor"></span><span class="target" id="structERITensor"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ERITensor</span></span></span><a class="headerlink" href="#_CPPv49ERITensor" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>A structure that holds pointers to the electron repulsion integrals in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO and <span class="math notranslate nohighlight">\(\beta\)</span> MO bases (in chemist’s notation).</p>
+<p>The tag at the end of each field name indicates the expected degree of compression (see <a class="reference external" href="https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html">https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html</a>). </p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv414DoubleExcEntry">
+<span id="_CPPv314DoubleExcEntry"></span><span id="_CPPv214DoubleExcEntry"></span><span id="DoubleExcEntry"></span><span class="target" id="structDoubleExcEntry"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoubleExcEntry</span></span></span><a class="headerlink" href="#_CPPv414DoubleExcEntry" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>A struct that stores the minimal amount of information necessary to compute a double excitation matrix element given the four changing orbitals encoded by rank (referred to as i, j, k, and l in ascending order).</p>
+<p>[ik|lj]-[ij|lk] may be recovered by computing negative the sum of ijkl and iljk; all double excitation matrix elements involving these four orbitals may be mapped to one of these three values up to a sign (see get_double_exc_value_from_store(const DoubleExcEntry *exc_entry, const ExcResult *double_exc)). </p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv413MixedExcEntry">
+<span id="_CPPv313MixedExcEntry"></span><span id="_CPPv213MixedExcEntry"></span><span id="MixedExcEntry"></span><span class="target" id="structMixedExcEntry"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MixedExcEntry</span></span></span><a class="headerlink" href="#_CPPv413MixedExcEntry" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>A struct to represent mixed excitations.</p>
+<p>Because the ERI tensor is real, only excitations with <span class="math notranslate nohighlight">\(i&lt;j\)</span> and <span class="math notranslate nohighlight">\(k&lt;l\)</span> need to be stored; there are no restrictions otherwise because <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> index <span class="math notranslate nohighlight">\(\alpha\)</span> MOs while <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(l\)</span> index <span class="math notranslate nohighlight">\(\beta\)</span> MOs. </p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv410ExcEntries">
+<span id="_CPPv310ExcEntries"></span><span id="_CPPv210ExcEntries"></span><span id="ExcEntries"></span><span class="target" id="structExcEntries"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExcEntries</span></span></span><a class="headerlink" href="#_CPPv410ExcEntries" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>A struct that organizes information about stored double excitation matrix elements.</p>
+<p>Used to enlarge the configuration space according to the HCI algorithm. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rank.html" class="btn btn-neutral float-left" title="Combinadic ranking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="enlarge.html" class="btn btn-neutral float-right" title="Subspace enlargement" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Simon Britton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

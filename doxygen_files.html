@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>C/C++ Library Files &mdash; HCI for PySCF 0.1.0 documentation</title>
+  <title>C Library Documentation &mdash; HCI for PySCF 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,6 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Combinadic ranking" href="doxygen_files/rank.html" />
     <link rel="prev" title="Welcome to HCI for PySCF’s documentation!" href="index.html" /> 
 </head>
 
@@ -43,7 +44,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">C/C++ Library Files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">C Library Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html">Combinadic ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html">Excitation storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html">Subspace enlargement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html">Matrix elements and contractions</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -60,7 +67,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">C/C++ Library Files</li>
+      <li class="breadcrumb-item active">C Library Documentation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/doxygen_files.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -70,8 +77,87 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="c-c-library-files">
-<h1>C/C++ Library Files<a class="headerlink" href="#c-c-library-files" title="Link to this heading"></a></h1>
+  <section id="c-library-documentation">
+<h1>C Library Documentation<a class="headerlink" href="#c-library-documentation" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="doxygen_files/rank.html">Combinadic ranking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv414find_row_index8uint64_tPK8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">find_row_index()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv44rankPK6size_tPK8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">rank()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv46unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">unrank()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv415load_rank_tableP8uint64_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">load_rank_table()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv410rank_occ_aPK6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_occ_a()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv412unrank_occ_a8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_occ_a()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv413unrank_virt_a8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_virt_a()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv410rank_occ_bPK6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_occ_b()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv412unrank_occ_b8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_occ_b()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv413unrank_virt_b8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_virt_b()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv415rank_double_excP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_double_exc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv417unrank_double_exc8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_double_exc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv414rank_mixed_excP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_mixed_exc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv416unrank_mixed_exc8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_mixed_exc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/rank.html#_CPPv410ConfigInfo"><code class="docutils literal notranslate"><span class="pre">ConfigInfo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doxygen_files/store.html">Excitation storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#c.MAX"><code class="docutils literal notranslate"><span class="pre">MAX</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#c.MAX3"><code class="docutils literal notranslate"><span class="pre">MAX3</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv43nC26size_t"><code class="docutils literal notranslate"><span class="pre">nC2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv48index_2d6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">index_2d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv48index_4d6size_t6size_t6size_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">index_4d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv48index_8d6size_t6size_t6size_t6size_t"><code class="docutils literal notranslate"><span class="pre">index_8d()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv419get_max_mag_doublesPK14DoubleExcEntryPd6size_t"><code class="docutils literal notranslate"><span class="pre">get_max_mag_doubles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv417get_max_mag_mixedPK13MixedExcEntryPd6size_t"><code class="docutils literal notranslate"><span class="pre">get_max_mag_mixed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv421load_doubles_from_eriP14DoubleExcEntryPKdPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">load_doubles_from_eri()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv419load_mixed_from_eriP13MixedExcEntryPKdPK10ConfigInfo6size_t"><code class="docutils literal notranslate"><span class="pre">load_mixed_from_eri()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv425load_exc_entries_from_eriP10ExcEntriesPK9ERITensorPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">load_exc_entries_from_eri()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv45HCore"><code class="docutils literal notranslate"><span class="pre">HCore</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv49ERITensor"><code class="docutils literal notranslate"><span class="pre">ERITensor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv414DoubleExcEntry"><code class="docutils literal notranslate"><span class="pre">DoubleExcEntry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv413MixedExcEntry"><code class="docutils literal notranslate"><span class="pre">MixedExcEntry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/store.html#_CPPv410ExcEntries"><code class="docutils literal notranslate"><span class="pre">ExcEntries</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doxygen_files/enlarge.html">Subspace enlargement</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#c.NEW_DOUBLE_EXC_RESULT"><code class="docutils literal notranslate"><span class="pre">NEW_DOUBLE_EXC_RESULT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#c.NEW_SINGLE_EXC_RESULT"><code class="docutils literal notranslate"><span class="pre">NEW_SINGLE_EXC_RESULT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#c.SINGLE_EXC_RESULT_NOSIGN"><code class="docutils literal notranslate"><span class="pre">SINGLE_EXC_RESULT_NOSIGN</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#c.SORTED"><code class="docutils literal notranslate"><span class="pre">SORTED</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv421get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t"><code class="docutils literal notranslate"><span class="pre">get_changing_orbitals()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv414add_doubles_aaPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_doubles_aa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv414add_doubles_bbPK6size_t6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_doubles_bb()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv412add_mixed_abPK6size_tPK6size_tPK10ExcEntriesdP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_mixed_ab()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv421enlarge_space_doublesPK6HCIVecP4RankdPK10ConfigInfoPK10ExcEntries"><code class="docutils literal notranslate"><span class="pre">enlarge_space_doubles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv413add_singles_aPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_singles_a()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv413add_singles_bPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_singles_b()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv421enlarge_space_singlesPK6HCIVecP4RankdPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">enlarge_space_singles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv49ExcResult"><code class="docutils literal notranslate"><span class="pre">ExcResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv44Rank"><code class="docutils literal notranslate"><span class="pre">Rank</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/enlarge.html#_CPPv46HCIVec"><code class="docutils literal notranslate"><span class="pre">HCIVec</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doxygen_files/contract.html">Matrix elements and contractions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv48DiffType"><code class="docutils literal notranslate"><span class="pre">DiffType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv410DESIGNATOR"><code class="docutils literal notranslate"><span class="pre">DESIGNATOR</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv418sort_changing_orbsP6size_tPK6size_tPK6size_t"><code class="docutils literal notranslate"><span class="pre">sort_changing_orbs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv414get_diag_valuePK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_diag_value()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv422get_single_exc_value_aPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_single_exc_value_a()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv422get_single_exc_value_bPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_single_exc_value_b()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv423get_double_exc_value_aaPK9ExcResultPK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_double_exc_value_aa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv423get_double_exc_value_bbPK9ExcResultPK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_double_exc_value_bb()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv431get_double_exc_value_from_storePK14DoubleExcEntryPK9ExcResult"><code class="docutils literal notranslate"><span class="pre">get_double_exc_value_from_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv419get_mixed_exc_valuePK9ExcResultPK9ExcResultPK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_mixed_exc_value()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv430get_mixed_exc_value_from_storePK13MixedExcEntryPK9ExcResultPK9ExcResult"><code class="docutils literal notranslate"><span class="pre">get_mixed_exc_value_from_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv413get_diff_typePK6size_tPK6size_t6size_tP9ExcResult"><code class="docutils literal notranslate"><span class="pre">get_diff_type()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv426get_matrix_element_by_rank4Rank4RankPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv434get_matrix_element_by_partial_rankP8uint64_tP8uint64_t4RankPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_partial_rank()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv439get_matrix_element_by_rank_test_storage4Rank4RankPK10ConfigInfoPK10ExcEntriesPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank_test_storage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv415make_hdiag_slowP6HCIVecPdPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">make_hdiag_slow()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="doxygen_files/contract.html#_CPPv432contract_hamiltonian_hcivec_slowP6HCIVecPdPKdPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">contract_hamiltonian_hcivec_slow()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 
 
@@ -79,6 +165,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to HCI for PySCF’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doxygen_files/rank.html" class="btn btn-neutral float-right" title="Combinadic ranking" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
