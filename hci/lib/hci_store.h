@@ -1,8 +1,7 @@
 #ifndef HCI_STORE_H
 #define HCI_STORE_H
 
-#include <stdlib.h>
-#include <stdint.h>
+#include "hci_rank.h"
 
 /**
  * Function-like macro to compute the maximum of two numbers
@@ -24,13 +23,14 @@
 typedef struct {
     double *h1e_mo_aa;
     double *h1e_mo_bb;
-} H1E;
+} HCore;
 
 typedef struct {
     double *eri_mo_aaaa_s8;
     double *eri_mo_bbbb_s8;
     double *eri_mo_aabb_s4;
-} ERI_MO;
+    uint64_t ncols_aabb;
+} ERITensor;
 
 /**
  * A struct that stores the minimal amount of information necessary
@@ -44,7 +44,7 @@ typedef struct {
     uint64_t rank; /**< The combinatorial rank of the list of four changing orbitals; see rank(const size_t *occ_list, const uint64_t *rank_table, size_t norb, size_t nocc) */
     double ijkl; /**< [ij|kl]-[il|kj] in chemist's notation */
     double iljk; /**< [il|jk]-[ik|jl] in chemist's notation */
-} DoubleExcitationEntry;
+} DoubleExcEntry;
 
 /**
  * A struct to represent mixed ab excitations; i<j and k<l, but there are no restrictions
@@ -53,19 +53,19 @@ typedef struct {
 typedef struct {
     uint64_t rank; /**< The rank of the mixed excitation; see rank_mixed(size_t *occ_list, const uint64_t *exc_table_2o, size_t norb) */
     double ijkl; /**< [ij|kl] in chemist's notation; i and j are alpha orbitals, while k and l are beta orbitals */
-} MixedExcitationEntry;
+} MixedExcEntry;
 
 typedef struct {
-    DoubleExcitationEntry *doubles_aa;
+    DoubleExcEntry *doubles_aa;
     double *max_mag_aa;
     size_t ndoubles_aa;
-    DoubleExcitationEntry *doubles_bb;
+    DoubleExcEntry *doubles_bb;
     double *max_mag_bb;
     size_t ndoubles_bb;
-    MixedExcitationEntry *mixed_ab;
+    MixedExcEntry *mixed_ab;
     double *max_mag_ab;
     size_t nmixed_ab;
-} ExcitationEntries;
+} ExcEntries;
 
 typedef struct {
     uint64_t arank;
@@ -76,13 +76,12 @@ typedef struct {
     Rank *ranks;
     double *coeffs;
     size_t len;
-} HCIVector;
+} HCIVec;
 
-void get_max_magnitudes(const DoubleExcitationEntry *doubles, double *magnitudes, size_t ndoubles);
 size_t index_2d(size_t i, size_t j);
 size_t index_4d(size_t i, size_t j, size_t k, size_t l, size_t ncols);
 size_t index_8d(size_t i, size_t j, size_t k, size_t l);
-void load_doubles_from_eri(DoubleExcitationEntry *doubles, const double *eri_s8, const uint64_t *exc_table_4o, size_t norb);
-void load_mixed_from_eri(MixedExcitationEntry *mixed, double *eri_s4, const uint64_t *exc_table_2o, size_t norb);
+void get_max_magnitudes(const DoubleExcEntry *doubles, double *magnitudes, size_t ndoubles);
+void load_exc_entries_from_eri(ExcEntries *exc_entries, ERITensor *eri_mo, const ConfigInfo *config_info);
 
 #endif

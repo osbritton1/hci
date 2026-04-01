@@ -1,20 +1,13 @@
-#include <math.h>
 #include "hci_store.h"
-#include "hci_rank.h"
+#include <math.h>
 
 /**
- * Computes the maximum magnitude of all excitations associated with the same four changing orbitals.
- * @param[in] doubles A pointer to the array of double excitations of length ndoubles
- * @param[out] magnitudes A pointer to the output array of magnitudes of length ndoubles
- * @param[in] ndoubles The number of entries to be processed
+ * Helper function for computing nCr(n,2)
+ * @param[in] n
+ * @return nCr(n,2)
  */
-void get_max_magnitudes(const DoubleExcitationEntry *doubles, double *magnitudes, size_t ndoubles) {
-    for (size_t i=0; i<ndoubles; i++) {
-        DoubleExcitationEntry entry = doubles[i];
-        double ijkl = entry.ijkl;
-        double iljk = entry.iljk;
-        magnitudes[i] = MAX3(fabs(ijkl), fabs(iljk), fabs(ijkl+iljk));
-    }
+static uint64_t nC2(size_t n) {
+    return (n % 2 == 0) ? n/2*(n-1) : (n-1)/2*n;
 }
 
 /**
@@ -54,6 +47,21 @@ size_t index_8d(size_t i, size_t j, size_t k, size_t l) {
 }
 
 /**
+ * Computes the maximum magnitude of all excitations associated with the same four changing orbitals.
+ * @param[in] doubles A pointer to the array of double excitations of length ndoubles
+ * @param[out] magnitudes A pointer to the output array of magnitudes of length ndoubles
+ * @param[in] ndoubles The number of entries to be processed
+ */
+void get_max_magnitudes(const DoubleExcEntry *doubles, double *magnitudes, size_t ndoubles) {
+    for (size_t i=0; i<ndoubles; i++) {
+        DoubleExcEntry entry = doubles[i];
+        double ijkl = entry.ijkl;
+        double iljk = entry.iljk;
+        magnitudes[i] = MAX3(fabs(ijkl), fabs(iljk), fabs(ijkl+iljk));
+    }
+}
+
+/**
  * Computes and stores the minimal amount of data needed to generate
  * all possible double excitation matrix elements from a given ERI tensor.
  * @param[out] doubles A pointer to an array of DoubleExcitationEntry of length nCr(norb, 4)
@@ -61,16 +69,17 @@ size_t index_8d(size_t i, size_t j, size_t k, size_t l) {
  * @param[in] exc_table_4o A pointer to the four-orbital excitation table
  * @param[in] norb The number of orbitals
  */
-void load_doubles_from_eri(DoubleExcitationEntry *doubles, const double *eri_s8, const uint64_t *exc_table_4o, size_t norb) {
+static void load_doubles_from_eri(DoubleExcEntry *doubles, const double *eri_mo_xxxx_s8, const ConfigInfo *config_info) {
+    size_t norb = config_info->norb;
     for (size_t i=0; i<norb-3; i++) {
         for (size_t j=i+1; j<norb-2; j++) {
             for (size_t k=j+1; k<norb-1; k++) {
                 for (size_t l=k+1; l<norb; l++) {
                     size_t occ_list[4] = {i, j, k, l};
-                    size_t entry_rank = rank(occ_list, exc_table_4o, norb, 4);
-                    double ijkl = eri_s8[index_8d(i, j, k, l)]-eri_s8[index_8d(i, l, k, j)];
-                    double iljk = eri_s8[index_8d(i, l, j, k)]-eri_s8[index_8d(i, k, j, l)];
-                    DoubleExcitationEntry entry = {entry_rank, ijkl, iljk};
+                    size_t entry_rank = rank_double_exc(occ_list, config_info);
+                    double ijkl = eri_mo_xxxx_s8[index_8d(i, j, k, l)]-eri_mo_xxxx_s8[index_8d(i, l, k, j)];
+                    double iljk = eri_mo_xxxx_s8[index_8d(i, l, j, k)]-eri_mo_xxxx_s8[index_8d(i, k, j, l)];
+                    DoubleExcEntry entry = {entry_rank, ijkl, iljk};
                     doubles[entry_rank] = entry;
                 }
             }
@@ -85,20 +94,26 @@ void load_doubles_from_eri(DoubleExcitationEntry *doubles, const double *eri_s8,
  * @param[in] exc_table_2o A pointer to the two-orbital excitation table
  * @param[in] norb The number of orbitals
  */
-void load_mixed_from_eri(MixedExcitationEntry *mixed, double *eri_s4, const uint64_t *exc_table_2o, size_t norb) {
-    size_t ncols = nC2(norb+1);
+static void load_mixed_from_eri(MixedExcEntry *mixed, double *eri_mo_aabb_s4, const ConfigInfo *config_info, size_t ncols_aabb) {
+    size_t norb = config_info->norb;
     for (size_t i=0; i<norb-1; i++) {
         for (size_t j=i+1; j<norb; j++) {
-            double *row = eri_s4+(index_2d(i, j)*ncols);
+            double *row = eri_mo_aabb_s4+(index_2d(i, j)*ncols_aabb);
             for (size_t k=0; k<norb-1; k++) {
                 for (size_t l=k+1; l<norb; l++) {
                     size_t col = index_2d(k, l);
                     size_t occ_list[4] = {i, j, k, l};
-                    size_t entry_rank = rank_mixed(occ_list, exc_table_2o, norb);
-                    MixedExcitationEntry entry = {entry_rank, row[col]};
+                    size_t entry_rank = rank_mixed_exc(occ_list, config_info);
+                    MixedExcEntry entry = {entry_rank, row[col]};
                     mixed[entry_rank] = entry;
                 }
             }
         }
     }
+}
+
+void load_exc_entries_from_eri(ExcEntries *exc_entries, ERITensor *eri_mo, const ConfigInfo *config_info) {
+    load_doubles_from_eri(exc_entries->doubles_aa, eri_mo->eri_mo_aaaa_s8, config_info);
+    load_doubles_from_eri(exc_entries->doubles_bb, eri_mo->eri_mo_bbbb_s8, config_info);
+    load_mixed_from_eri(exc_entries->mixed_ab, eri_mo->eri_mo_aabb_s4, config_info, eri_mo->ncols_aabb);
 }

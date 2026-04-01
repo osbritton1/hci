@@ -16,16 +16,10 @@ typedef struct {
     size_t norb;
     size_t nelec_a;
     size_t nelec_b;
-    uint64_t mixed_ncols;
+    uint64_t ncols_mixed;
 } ConfigInfo;
 
-void get_rank_table(uint64_t *table, size_t norb, size_t nocc);
-uint64_t rank(const size_t *occ_list, const uint64_t *rank_table, size_t norb, size_t nocc);
-size_t find_row_index(uint64_t target, const uint64_t *row, size_t norb, size_t nocc);
-void unrank(uint64_t rank, size_t *occ_list, const uint64_t *rank_table, size_t norb, size_t nocc);
-uint64_t nC2(size_t n);
-uint64_t rank_mixed(size_t *occ_list, const uint64_t *exc_table_2o, size_t norb);
-void unrank_mixed(uint64_t rank, size_t *occ_list, const uint64_t *exc_table_2o, size_t norb);
+void load_rank_table(uint64_t *table, size_t norb, size_t nocc);
 
 uint64_t rank_occ_a(const size_t *occ_list, const ConfigInfo *config_info);
 void unrank_occ_a(uint64_t arank, size_t *occ_list, const ConfigInfo *config_info);
@@ -35,8 +29,10 @@ uint64_t rank_occ_b(const size_t *occ_list, const ConfigInfo *config_info);
 void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_info);
 void unrank_virt_b(uint64_t brank, size_t *virt_list, const ConfigInfo *config_info);
 
-void unrank_exc_aa(uint64_t exc_rank_aa, size_t *exc_list, const ConfigInfo *config_info);
-void unrank_exc_bb(uint64_t exc_rank_bb, size_t *exc_list, const ConfigInfo *config_info);
-void unrank_exc_ab(uint64_t exc_rank_ab, size_t *exc_list, const ConfigInfo *config_info);
+uint64_t rank_double_exc(size_t *exc_list, const ConfigInfo *config_info);
+void unrank_double_exc(uint64_t exc_rank, size_t *exc_list, const ConfigInfo *config_info);
+
+uint64_t rank_mixed_exc(size_t *exc_list, const ConfigInfo *config_info);
+void unrank_mixed_exc(uint64_t exc_rank_ab, size_t *exc_list, const ConfigInfo *config_info);
 
 #endif
