@@ -160,10 +160,9 @@ size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *
         return iadd;
 }
 
-size_t enlarge_space_doubles_new(const HCIVec *hcivec, Rank *add_list, double thresh, 
+size_t enlarge_space_doubles(const HCIVec *hcivec, Rank *add_list, double thresh, 
     const ConfigInfo *config_info, const ExcEntries *exc_entries) {
         size_t iadd = 0;
-        size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
         for (size_t iconfig=0; iconfig<hcivec->len; iconfig++) {
@@ -241,7 +240,7 @@ size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *oc
         return iadd;
 }
 
-size_t enlarge_space_singles_new(const HCIVec *hcivec, Rank *add_list, double thresh,
+size_t enlarge_space_singles(const HCIVec *hcivec, Rank *add_list, double thresh,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t iadd = 0;
         size_t norb = config_info->norb;

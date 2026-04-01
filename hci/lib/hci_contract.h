@@ -1,10 +1,7 @@
 #ifndef HCI_CONTRACT_H
 #define HCI_CONTRACT_H
 
-#include <stdint.h>
-#include <stdbool.h>
 #include "hci_enlarge.h"
-#include "hci_store.h"
 
 typedef enum {
     ZERO,

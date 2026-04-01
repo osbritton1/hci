@@ -99,29 +99,29 @@ void load_rank_table(uint64_t *table, size_t norb, size_t nocc) {
 }
 
 uint64_t rank_occ_a(const size_t *occ_list, const ConfigInfo *config_info) {
-    return rank(occ_list, config_info->config_table_a, config_info->norb, config_info->nelec_a);
+    return rank(occ_list, config_info->occ_table_a, config_info->norb, config_info->nelec_a);
 }
 
 void unrank_occ_a(uint64_t arank, size_t *occ_list, const ConfigInfo *config_info) {
-    unrank(arank, occ_list, config_info->config_table_a, config_info->norb, config_info->nelec_a);
+    unrank(arank, occ_list, config_info->occ_table_a, config_info->norb, config_info->nelec_a);
 }
 
 void unrank_virt_a(uint64_t arank, size_t *virt_list, const ConfigInfo *config_info) {
     unrank(config_info->combmax_a-arank-1, virt_list, 
-        config_info->config_table_a_complement, config_info->norb, config_info->norb-config_info->nelec_a);
+        config_info->virt_table_a, config_info->norb, config_info->norb-config_info->nelec_a);
 }
 
 uint64_t rank_occ_b(const size_t *occ_list, const ConfigInfo *config_info) {
-    return rank(occ_list, config_info->config_table_b, config_info->norb, config_info->nelec_b);
+    return rank(occ_list, config_info->occ_table_b, config_info->norb, config_info->nelec_b);
 }
 
 void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_info) {
-    unrank(brank, occ_list, config_info->config_table_b, config_info->norb, config_info->nelec_b);
+    unrank(brank, occ_list, config_info->occ_table_b, config_info->norb, config_info->nelec_b);
 }
 
 void unrank_virt_b(uint64_t brank, size_t *virt_list, const ConfigInfo *config_info) {
     unrank(config_info->combmax_b-brank-1, virt_list, 
-        config_info->config_table_b_complement, config_info->norb, config_info->norb-config_info->nelec_b);
+        config_info->virt_table_b, config_info->norb, config_info->norb-config_info->nelec_b);
 }
 
 uint64_t rank_double_exc(size_t *exc_list, const ConfigInfo *config_info) {

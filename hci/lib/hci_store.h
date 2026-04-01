@@ -67,21 +67,9 @@ typedef struct {
     size_t nmixed_ab;
 } ExcEntries;
 
-typedef struct {
-    uint64_t arank;
-    uint64_t brank;
-} Rank;
-
-typedef struct {
-    Rank *ranks;
-    double *coeffs;
-    size_t len;
-} HCIVec;
-
 size_t index_2d(size_t i, size_t j);
 size_t index_4d(size_t i, size_t j, size_t k, size_t l, size_t ncols);
 size_t index_8d(size_t i, size_t j, size_t k, size_t l);
-void get_max_magnitudes(const DoubleExcEntry *doubles, double *magnitudes, size_t ndoubles);
 void load_exc_entries_from_eri(ExcEntries *exc_entries, ERITensor *eri_mo, const ConfigInfo *config_info);
 
 #endif

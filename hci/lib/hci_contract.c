@@ -1,11 +1,6 @@
-#include <stdlib.h>
-#include <stdint.h>
-#include <math.h>
-#include <string.h>
-#include <assert.h>
 #include "hci_contract.h"
-#include "hci_rank.h"
-#include "hci_store.h"
+#include <math.h>
+#include <assert.h>
 
 enum DESIGNATOR {
     IJKL,
@@ -105,7 +100,7 @@ double get_single_exc_value_a(const ExcResult *single_exc, const size_t *occ_a, 
         size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
-        size_t ncols = eri_mo->ncols_aabb;;
+        size_t ncols = eri_mo->ncols_aabb;
         size_t old_orb = single_exc->old_orbs[0];
         size_t new_orb = single_exc->new_orbs[0];
         double sum = 0.0;
@@ -367,7 +362,7 @@ double get_matrix_element_by_rank(Rank rank1, Rank rank2,
         return 0.0;
 }
 
-double get_matrix_element_by_partial_rank_new(uint64_t *occ_a_1, uint64_t *occ_b_1, Rank rank2,
+double get_matrix_element_by_partial_rank(uint64_t *occ_a_1, uint64_t *occ_b_1, Rank rank2,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
@@ -436,10 +431,9 @@ double get_matrix_element_by_partial_rank_new(uint64_t *occ_a_1, uint64_t *occ_b
         return 0.0;
 }
 
-double get_matrix_element_by_rank_test_storage_new(Rank rank1, Rank rank2, 
+double get_matrix_element_by_rank_test_storage(Rank rank1, Rank rank2, 
     const ConfigInfo *config_info, const ExcEntries *excitation_entries,
     const HCore *h1e, const ERITensor *eri_mo) {
-        size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
 
@@ -540,7 +534,7 @@ double get_matrix_element_by_rank_test_storage_new(Rank rank1, Rank rank2,
         return 0.0;
 }
 
-void make_hdiag_slow_new(HCIVec *hcivec, double *hdiag,
+void make_hdiag_slow(HCIVec *hcivec, double *hdiag,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
@@ -555,7 +549,7 @@ void make_hdiag_slow_new(HCIVec *hcivec, double *hdiag,
         }
 }
 
-void contract_hamiltonian_hcivec_slow_new(HCIVec *hcivec_old, double *coeffs_new, const double *hdiag,
+void contract_hamiltonian_hcivec_slow(HCIVec *hcivec_old, double *coeffs_new, const double *hdiag,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
@@ -573,7 +567,7 @@ void contract_hamiltonian_hcivec_slow_new(HCIVec *hcivec_old, double *coeffs_new
                 if (coeffs[j] == 0.0) {
                     continue;
                 }
-                sum += get_matrix_element_by_partial_rank_new(bra_occ_a, bra_occ_b, ranks[j],
+                sum += get_matrix_element_by_partial_rank(bra_occ_a, bra_occ_b, ranks[j],
                     config_info, h1e, eri_mo)*coeffs[j];
             }
             sum += hdiag[i]*coeffs[i];
@@ -581,7 +575,7 @@ void contract_hamiltonian_hcivec_slow_new(HCIVec *hcivec_old, double *coeffs_new
                 if (coeffs[j] == 0.0) {
                     continue;
                 }
-                sum += get_matrix_element_by_partial_rank_new(bra_occ_a, bra_occ_b, ranks[j],
+                sum += get_matrix_element_by_partial_rank(bra_occ_a, bra_occ_b, ranks[j],
                     config_info, h1e, eri_mo)*coeffs[j];
             }
             coeffs_new[i] = sum;

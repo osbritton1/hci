@@ -52,12 +52,18 @@ size_t index_8d(size_t i, size_t j, size_t k, size_t l) {
  * @param[out] magnitudes A pointer to the output array of magnitudes of length ndoubles
  * @param[in] ndoubles The number of entries to be processed
  */
-void get_max_magnitudes(const DoubleExcEntry *doubles, double *magnitudes, size_t ndoubles) {
+static void get_max_mag_doubles(const DoubleExcEntry *doubles, double *magnitudes, size_t ndoubles) {
     for (size_t i=0; i<ndoubles; i++) {
         DoubleExcEntry entry = doubles[i];
         double ijkl = entry.ijkl;
         double iljk = entry.iljk;
         magnitudes[i] = MAX3(fabs(ijkl), fabs(iljk), fabs(ijkl+iljk));
+    }
+}
+
+static void get_max_mag_mixed(const MixedExcEntry *mixed, double *magnitudes, size_t nmixed) {
+    for (size_t i=0; i<nmixed; i++) {
+        magnitudes[i] = fabs(mixed[i].ijkl);
     }
 }
 
@@ -114,6 +120,9 @@ static void load_mixed_from_eri(MixedExcEntry *mixed, double *eri_mo_aabb_s4, co
 
 void load_exc_entries_from_eri(ExcEntries *exc_entries, ERITensor *eri_mo, const ConfigInfo *config_info) {
     load_doubles_from_eri(exc_entries->doubles_aa, eri_mo->eri_mo_aaaa_s8, config_info);
+    get_max_mag_doubles(exc_entries->doubles_aa, exc_entries->max_mag_aa, exc_entries->ndoubles_aa);
     load_doubles_from_eri(exc_entries->doubles_bb, eri_mo->eri_mo_bbbb_s8, config_info);
+    get_max_mag_doubles(exc_entries->doubles_bb, exc_entries->max_mag_bb, exc_entries->ndoubles_bb);
     load_mixed_from_eri(exc_entries->mixed_ab, eri_mo->eri_mo_aabb_s4, config_info, eri_mo->ncols_aabb);
+    get_max_mag_mixed(exc_entries->mixed_ab, exc_entries->max_mag_ab, exc_entries->nmixed_ab);
 }
