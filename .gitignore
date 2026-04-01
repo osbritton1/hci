@@ -1,0 +1,9 @@
+docs/build
+docs/doxy_files
+__pycache__/
+.vscode
+.ipynb_checkpoints/
+.cache
+.vscode
+*.ipynb
+*.so
