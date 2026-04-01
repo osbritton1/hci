@@ -1,5 +1,7 @@
 /**
- * \ingroup contract
+ * \file hci_contract.c
+ * \addtogroup contract
+ * @{
  */
 
 #include "hci_contract.h"
@@ -592,3 +594,7 @@ void contract_hamiltonian_hcivec_slow(HCIVec *hcivec_old, double *coeffs_new, co
             coeffs_new[i] = sum;
         }
 }
+
+/**
+ * @}
+ */

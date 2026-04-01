@@ -1,5 +1,7 @@
 /**
- * \ingroup store
+ * \file hci_store.h
+ * \addtogroup store
+ * @{
  */
 
 #ifndef HCI_STORE_H
@@ -47,7 +49,7 @@ typedef struct {
     double *eri_mo_aaaa_s8; /** Pointer to the eightfold compressed ERI tensor in the \f$\alpha\f$ MO basis */
     double *eri_mo_bbbb_s8; /** Pointer to the eightfold compressed ERI tensor in the \f$\beta\f$ MO basis */
     double *eri_mo_aabb_s4; /** Pointer to the fourfold compressed ERI tensor in the mixed MO basis */
-    uint64_t ncols_aabb; /** \f$\binom{N_\text{orb}+1}{2}$, i.e. the number of entries in the mixed ERI tensor associated with a single pair of \f$\alpha\f$ orbitals */
+    uint64_t ncols_aabb; /** \f$\binom{N_\text{orb}+1}{2}\f$, i.e. the number of entries in the mixed ERI tensor associated with a single pair of \f$\alpha\f$ orbitals */
 } ERITensor;
 
 /**
@@ -100,6 +102,10 @@ typedef struct {
 size_t index_2d(size_t i, size_t j);
 size_t index_4d(size_t i, size_t j, size_t k, size_t l, size_t ncols);
 size_t index_8d(size_t i, size_t j, size_t k, size_t l);
-void load_exc_entries_from_eri(ExcEntries *exc_entries, ERITensor *eri_mo, const ConfigInfo *config_info);
+void load_exc_entries_from_eri(ExcEntries *exc_entries, const ERITensor *eri_mo, const ConfigInfo *config_info);
 
 #endif
+
+/**
+ * @}
+ */

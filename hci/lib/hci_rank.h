@@ -1,5 +1,7 @@
 /**
- * \ingroup rank
+ * \file hci_rank.h
+ * \addtogroup rank
+ * @{
  */
 
 #ifndef HCI_RANK_H
@@ -52,3 +54,7 @@ uint64_t rank_mixed_exc(size_t *exc_list, const ConfigInfo *config_info);
 void unrank_mixed_exc(uint64_t exc_rank_ab, size_t *exc_list, const ConfigInfo *config_info);
 
 #endif
+
+/**
+ * @}
+ */

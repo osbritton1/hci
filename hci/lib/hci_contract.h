@@ -1,5 +1,7 @@
 /**
- * \ingroup contract
+ * \file hci_contract.h
+ * \addtogroup contract
+ * @{
  */
 
 #ifndef HCI_CONTRACT_H
@@ -39,3 +41,7 @@ void contract_hamiltonian_hcivec_slow(HCIVec *hcivec_old, double *coeffs_new, co
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo);
 
 #endif
+
+/**
+ * @}
+ */

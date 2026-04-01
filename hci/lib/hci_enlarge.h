@@ -1,5 +1,7 @@
 /**
- * \ingroup enlarge
+ * \file hci_enlarge.h
+ * \addtogroup enlarge
+ * @{
  */
 
 #ifndef HCI_ENLARGE_H
@@ -57,3 +59,7 @@ size_t enlarge_space_singles(const HCIVec *hcivec, Rank *add_list, double thresh
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo);
 
 #endif
+
+/**
+ * @}
+ */

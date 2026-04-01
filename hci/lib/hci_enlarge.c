@@ -1,5 +1,7 @@
 /**
- * \ingroup enlarge
+ * \file hci_enlarge.c
+ * \addtogroup enlarge
+ * @{
  */
 
 #include "hci_enlarge.h"
@@ -277,3 +279,7 @@ size_t enlarge_space_singles(const HCIVec *hcivec, Rank *add_list, double thresh
         }
         return iadd;
 }
+
+/**
+ * @}
+ */

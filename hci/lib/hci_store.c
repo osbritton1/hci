@@ -1,5 +1,7 @@
 /**
- * \ingroup store
+ * \file hci_store.c
+ * \addtogroup store
+ * @{
  */
 
 #include "hci_store.h"
@@ -57,8 +59,8 @@ size_t index_8d(size_t i, size_t j, size_t k, size_t l) {
 /**
  * Computes the maximum magnitude of all excitations associated with the same four changing orbitals.
  *
- * @param[in] doubles A pointer to the array of double excitations of length ndoubles
- * @param[out] magnitudes A pointer to the output array of magnitudes of length ndoubles
+ * @param[in] doubles Pointer to the array of double excitations of length ndoubles
+ * @param[out] magnitudes Pointer to the output array of magnitudes of length ndoubles
  * @param[in] ndoubles The number of double excitation entries to be processed
  */
 static void get_max_mag_doubles(const DoubleExcEntry *doubles, double *magnitudes, size_t ndoubles) {
@@ -73,8 +75,8 @@ static void get_max_mag_doubles(const DoubleExcEntry *doubles, double *magnitude
 /**
  * Extracts the absolute values of the stored mixed excitations.
  *
- * @param[in] mixed A pointer to the array of mixed excitations of length nmixed
- * @param[out] magnitudes A pointer to the output array of magnitudes of length nmixed
+ * @param[in] mixed Pointer to the array of mixed excitations of length nmixed
+ * @param[out] magnitudes Pointer to the output array of magnitudes of length nmixed
  * @param[in] nmixed The number of mixed excitation entries to be processed
  */
 static void get_max_mag_mixed(const MixedExcEntry *mixed, double *magnitudes, size_t nmixed) {
@@ -87,10 +89,9 @@ static void get_max_mag_mixed(const MixedExcEntry *mixed, double *magnitudes, si
  * Computes and stores the minimal amount of data needed to generate
  * all possible double excitation matrix elements from a given ERI tensor.
  *
- * @param[out] doubles A pointer to an array of DoubleExcitationEntry of length nCr(norb, 4)
- * @param[in] eri_s8 A pointer to the eightfold-compressed ERI tensor (of aaaa or bbbb type)
- * @param[in] exc_table_4o A pointer to the four-orbital excitation table
- * @param[in] norb The number of orbitals
+ * @param[out] doubles Pointer to an array of DoubleExcitationEntry of length \f$\binom{N_\text{orb}, 4}\f$
+ * @param[in] eri_mo_xxxx_s8 Pointer to the eightfold-compressed ERI tensor (of \f$\alpha\f$ or \f$\beta\f$ type)
+ * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
  */
 static void load_doubles_from_eri(DoubleExcEntry *doubles, const double *eri_mo_xxxx_s8, const ConfigInfo *config_info) {
     size_t norb = config_info->norb;
@@ -112,16 +113,17 @@ static void load_doubles_from_eri(DoubleExcEntry *doubles, const double *eri_mo_
 
 /**
  * Computes and stores mixed excitations.
- * @param[out] mixed A pointer to an array of MixedExcitationEntry of length nCr(norb, 2)**2
- * @param[in] eri_s4 A pointer to the fourfold-compressed ERI tensor (of aabb type)
- * @param[in] exc_table_2o A pointer to the two-orbital excitation table
- * @param[in] norb The number of orbitals
+ *
+ * @param[out] mixed Pointer to an array of MixedExcitationEntry of length \f$\binom{N_\text{orb}}{2}\f$
+ * @param[in] eri_mo_aabb_s4 Pointer to the fourfold-compressed mixed ERI tensor of mixed type
+ * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] ncols_aabb \f$\binom{N_\text{orb}+1}{2}\f$, i.e. the number of entries in the mixed ERI tensor associated with a single pair of \f$\alpha\f$ orbitals
  */
-static void load_mixed_from_eri(MixedExcEntry *mixed, double *eri_mo_aabb_s4, const ConfigInfo *config_info, size_t ncols_aabb) {
+static void load_mixed_from_eri(MixedExcEntry *mixed, const double *eri_mo_aabb_s4, const ConfigInfo *config_info, size_t ncols_aabb) {
     size_t norb = config_info->norb;
     for (size_t i=0; i<norb-1; i++) {
         for (size_t j=i+1; j<norb; j++) {
-            double *row = eri_mo_aabb_s4+(index_2d(i, j)*ncols_aabb);
+            const double *row = eri_mo_aabb_s4+(index_2d(i, j)*ncols_aabb);
             for (size_t k=0; k<norb-1; k++) {
                 for (size_t l=k+1; l<norb; l++) {
                     size_t col = index_2d(k, l);
@@ -135,7 +137,14 @@ static void load_mixed_from_eri(MixedExcEntry *mixed, double *eri_mo_aabb_s4, co
     }
 }
 
-void load_exc_entries_from_eri(ExcEntries *exc_entries, ERITensor *eri_mo, const ConfigInfo *config_info) {
+/**
+ * Computes and stores all double and mixed excitations for a given system.
+ *
+ * @param[out] exc_entries Pointer to an ExcEntries struct specifying where to find the requisite output arrays
+ * @param[in] eri_mo Pointer to an ERITensor struct providing the input electron repulsion integrals
+ * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ */
+void load_exc_entries_from_eri(ExcEntries *exc_entries, const ERITensor *eri_mo, const ConfigInfo *config_info) {
     load_doubles_from_eri(exc_entries->doubles_aa, eri_mo->eri_mo_aaaa_s8, config_info);
     get_max_mag_doubles(exc_entries->doubles_aa, exc_entries->max_mag_aa, exc_entries->ndoubles_aa);
     load_doubles_from_eri(exc_entries->doubles_bb, eri_mo->eri_mo_bbbb_s8, config_info);
@@ -143,3 +152,7 @@ void load_exc_entries_from_eri(ExcEntries *exc_entries, ERITensor *eri_mo, const
     load_mixed_from_eri(exc_entries->mixed_ab, eri_mo->eri_mo_aabb_s4, config_info, eri_mo->ncols_aabb);
     get_max_mag_mixed(exc_entries->mixed_ab, exc_entries->max_mag_ab, exc_entries->nmixed_ab);
 }
+
+/**
+ * @}
+ */

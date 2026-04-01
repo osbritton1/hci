@@ -1,5 +1,7 @@
 /**
- * \ingroup rank
+ * \file hci_rank.c
+ * \addtogroup rank
+ * @{
  */
 
 #include "hci_rank.h"
@@ -205,8 +207,8 @@ void unrank_double_exc(uint64_t exc_rank, size_t *exc_list, const ConfigInfo *co
 /**
  * Calculates the rank of a mixed \f$\alpha\beta\rightarrow\alpha\beta\f$ excitation.
  *
- * @param[in] exc_list A pointer to an array of the four involved orbitals.
- * The first two are \f$\alpha\f$ orbitals (in ascending order) and the second two are \f$\beta\f$ orbitals (also in ascending order).
+ * @param[in] exc_list Pointer to an array of the four involved orbitals
+ * The first two are \f$\alpha\f$ orbitals (in ascending order) and the second two are \f$\beta\f$ orbitals (also in ascending order)
  * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
  * @return The rank of the specified mixed excitation
  */
@@ -230,3 +232,7 @@ void unrank_mixed_exc(uint64_t exc_rank_ab, size_t *exc_list, const ConfigInfo *
     unrank(ij_rank, exc_list, config_info->exc_table_2o, config_info->norb, 2);
     unrank(kl_rank, exc_list+2, config_info->exc_table_2o, config_info->norb, 2);
 }
+
+/**
+ * @}
+ */

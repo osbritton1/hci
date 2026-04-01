@@ -29,7 +29,7 @@
  */
 
  /**
- * \defgroup enlarge Matrix elements and contractions
+ * \defgroup contract Matrix elements and contractions
  * @{
  * Methods for calculating matrix elements between configurations
  * and for contracting the Hamiltonian with a CI vector.
