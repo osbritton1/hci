@@ -1,8 +1,8 @@
+.. _C lib:
 C Library Documentation
 =======================
 
 .. toctree::
-   :maxdepth: 2
 
    doxygen_files/rank
    doxygen_files/store

@@ -7,11 +7,10 @@ Welcome to HCI for PySCF's documentation!
 =========================================
 
 .. toctree::
-   :maxdepth: 2
    :caption: Contents:
 
+   modules
    doxygen_files
-
 
 Indices and tables
 ==================
