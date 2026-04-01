@@ -86,15 +86,15 @@ typedef struct {
  * Used to enlarge the configuration space according to the HCI algorithm.
  */
 typedef struct {
-    DoubleExcEntry *doubles_aa;
-    double *max_mag_aa;
-    size_t ndoubles_aa;
-    DoubleExcEntry *doubles_bb;
-    double *max_mag_bb;
-    size_t ndoubles_bb;
-    MixedExcEntry *mixed_ab;
-    double *max_mag_ab;
-    size_t nmixed_ab;
+    DoubleExcEntry *doubles_aa; /** Pointer to the stored double \f$\alpha\f$ matrix elements */
+    double *max_mag_aa; /** Pointer to an array specifying the max. magnitude of all matrix elements associated with a given doubles_aa entry*/
+    size_t ndoubles_aa; /**\f$\binom{N_\text{orb}}{4}\f$, the number of double \f$\alpha\f$ excitations */
+    DoubleExcEntry *doubles_bb;/** Pointer to the stored double \f$\beta\f$ matrix elements */
+    double *max_mag_bb; /** Pointer to an array specifying the max. magnitude of all matrix elements associated with a given doubles_bb entry*/
+    size_t ndoubles_bb; /**\f$\binom{N_\text{orb}}{4}\f$, the number of double \f$\beta\f$ excitations */
+    MixedExcEntry *mixed_ab; /** Pointer to the stored mixed excitation matrix elements */
+    double *max_mag_ab; /** Pointer to an array specying the magnitude of the mixed_ab entries */
+    size_t nmixed_ab; /**\f$\binom{N_\text{orb}}{2}^2\f$, the number of mixed excitations */
 } ExcEntries;
 
 size_t index_2d(size_t i, size_t j);
