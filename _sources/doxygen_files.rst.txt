@@ -1,5 +1,5 @@
 C/C++ Library Files
 =============
 
-.. doxygenindex::
+.. doxygenfile:: lib_doc.dox
    :project: hci
