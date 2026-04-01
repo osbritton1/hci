@@ -3,7 +3,8 @@ docs/doxy_files
 __pycache__/
 .vscode
 .ipynb_checkpoints/
-.cache
+.cache/
 .vscode
 *.ipynb
 *.so
+build/
