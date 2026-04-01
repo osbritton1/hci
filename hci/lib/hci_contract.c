@@ -1,15 +1,26 @@
+/**
+ * \ingroup contract
+ */
+
 #include "hci_contract.h"
 #include <math.h>
 #include <assert.h>
 
-enum DESIGNATOR {
+typedef enum {
+    ZERO,
+    SINGLE,
+    DOUBLE,
+    THREE_PLUS
+} DiffType;
+
+typedef enum {
     IJKL,
     IJLK,
     IKJL,
     IKLJ,
     ILJK,
     ILKJ
-};
+} DESIGNATOR;
 
 static void sort_changing_orbs(size_t *orb_list, const size_t *old_orbs, const size_t *new_orbs) {
     if (old_orbs[0] < new_orbs[0]) {

@@ -1,14 +1,11 @@
+/**
+ * \ingroup contract
+ */
+
 #ifndef HCI_CONTRACT_H
 #define HCI_CONTRACT_H
 
 #include "hci_enlarge.h"
-
-typedef enum {
-    ZERO,
-    SINGLE,
-    DOUBLE,
-    THREE_PLUS
-} DiffType;
 
 double get_diag_value(const size_t *occ_a, const size_t *occ_b, const ConfigInfo *config_info,
     const HCore *h1e, const ERITensor *eri_mo);
@@ -26,8 +23,6 @@ double get_mixed_exc_value(const ExcResult *single_exc_a, const ExcResult *singl
     const ERITensor *eri_mo);
 double get_mixed_exc_value_from_store(const MixedExcEntry *exc_entry, 
     const ExcResult *single_exc_a, const ExcResult *single_exc_b);
-
-DiffType get_diff_type(const size_t *occ_1, const size_t *occ_2, size_t nocc, ExcResult *exc_result);
 
 double get_matrix_element_by_rank(Rank rank1, Rank rank2, 
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo);

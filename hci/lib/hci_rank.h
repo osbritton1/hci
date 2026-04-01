@@ -1,3 +1,7 @@
+/**
+ * \ingroup rank
+ */
+
 #ifndef HCI_RANK_H
 #define HCI_RANK_H
 
@@ -5,7 +9,7 @@
 #include <stdint.h>
 
 /**
- * A structure that holds pointers to all of the ranking tables
+ * A struct that holds pointers to all of the ranking tables
  * needed for carrying out HCI calculations, along with their
  * associated parameters.
  */
@@ -13,19 +17,19 @@ typedef struct {
     size_t norb; /**< Total size of input orbital space \f$N_\text{orb}\f$ */
     size_t nelec_a; /**< Number of \f$\alpha\f$ electrons \f$N_\alpha\f$ */
     size_t nelec_b; /**< Number of \f$\beta\f$ electrons \f$N_\beta\f$ */
-    uint64_t *occ_table_a; /**< Ranking table for determining occupied \f$\alpha\f$ orbitals */
-    uint64_t *virt_table_a; /**< Ranking table for determining virtual \f$\alpha\f$ orbitals */
+    uint64_t *occ_table_a; /**< Pointer to the ranking table for determining occupied \f$\alpha\f$ orbitals */
+    uint64_t *virt_table_a; /**< Pointer to the ranking table for determining virtual \f$\alpha\f$ orbitals */
     uint64_t combmax_a; /**< Total number of \f$\alpha\f$ occupancy lists, \f$\binom{N_\text{orb}}{N_\alpha}\f$ */
-    uint64_t *occ_table_b; /**< Ranking table for determining occupied \f$\beta\f$ orbitals */
-    uint64_t *virt_table_b; /**< Ranking table for determining virtual \f$\beta\f$ orbitals */
+    uint64_t *occ_table_b; /**< Pointer to the ranking table for determining occupied \f$\beta\f$ orbitals */
+    uint64_t *virt_table_b; /**< Pointer to the ranking table for determining virtual \f$\beta\f$ orbitals */
     uint64_t combmax_b; /**< Total number of \f$\beta\f$ occupancy lists, \f$\binom{N_\text{orb}}{N_\beta}\f$ */
     /** 
-     * Ranking table for organizing double excitations of \f$\alpha\alpha\rightarrow\alpha\alpha\f$ or 
+     * Pointer to the ranking table for organizing double excitations of \f$\alpha\alpha\rightarrow\alpha\alpha\f$ or 
      * \f$\beta\beta\rightarrow\beta\beta\f$ type
     */
     uint64_t *exc_table_4o; 
     /** 
-     * Ranking table for organizing mixed excitations of \f$\alpha\beta\rightarrow\alpha\beta\f$ type
+     * Pointer to the ranking table for organizing mixed excitations of \f$\alpha\beta\rightarrow\alpha\beta\f$ type
     */
     uint64_t *exc_table_2o;
     uint64_t ncols_mixed; /**< \f$\binom{N_\text{orb}}{2}\f$, used for ranking and unranking mixed excitations*/

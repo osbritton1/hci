@@ -1,3 +1,7 @@
+/**
+ * \ingroup enlarge
+ */
+
 #ifndef HCI_ENLARGE_H
 #define HCI_ENLARGE_H
 

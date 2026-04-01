@@ -1,0 +1,37 @@
+/**
+ * \mainpage C Library Files
+ * \author Simon Britton <obritton2022@gmail.com>
+ */
+
+/**
+ * \defgroup rank Combinadic ranking
+ * @{
+ * Implementation of combinadic ranking system for
+ * encoding orbital occupancy and excitation lists.
+ * @}
+ */
+
+/**
+ * \defgroup store Excitation storage 
+ * @{
+ * Data structures for storing double excitations 
+ * as well as managing the core Hamiltonian and ERI tensor.
+ * @}
+ */
+
+/**
+ * \defgroup enlarge Subspace enlargement
+ * @{
+ * Implementation of the HCI configuration selection
+ * algorithm used for expanding the subspace being
+ * diagonalized.
+ * @}
+ */
+
+ /**
+ * \defgroup enlarge Matrix elements and contractions
+ * @{
+ * Methods for calculating matrix elements between configurations
+ * and for contracting the Hamiltonian with a CI vector.
+ * @}
+ */

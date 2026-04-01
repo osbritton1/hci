@@ -1,3 +1,7 @@
+/**
+ * \ingroup store
+ */
+
 #include "hci_store.h"
 #include <math.h>
 

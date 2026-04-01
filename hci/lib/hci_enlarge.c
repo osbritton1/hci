@@ -1,3 +1,7 @@
+/**
+ * \ingroup enlarge
+ */
+
 #include "hci_enlarge.h"
 #include "hci_contract.h"
 #include <math.h>
