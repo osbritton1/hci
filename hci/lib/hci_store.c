@@ -7,6 +7,7 @@
 
 /**
  * Helper function for computing nCr(n,2)
+ *
  * @param[in] n
  * @return nCr(n,2)
  */
@@ -17,6 +18,7 @@ static uint64_t nC2(size_t n) {
 /**
  * Given two indices i and j, computes the index in the corresponding row-major packed
  * lower triangular array
+ *
  * @param[in] i The row index
  * @param[in] j The column index
  * @return the index of the (i,j) entry in a row-major packed lower triangular array
@@ -27,7 +29,8 @@ size_t index_2d(size_t i, size_t j) {
 
 /**
  * Computes the index of [ij|kl] in a fourfold-compressed ERI tensor.
- * ncols should be norb*(norb+1)/2
+ *
+ * ncols should be norb*(norb+1)/2.
  * @param[in] i The zero-based index of the first orbital
  * @param[in] j The zero-based index of the second orbital
  * @param[in] k The zero-based index of the third orbital
@@ -40,6 +43,7 @@ size_t index_4d(size_t i, size_t j, size_t k, size_t l, size_t ncols) {
 
 /**
  * Computes the index of [ij|kl] in an eightfold-compressed ERI tensor.
+ *
  * @param[in] i The zero-based index of the first orbital
  * @param[in] j The zero-based index of the second orbital
  * @param[in] k The zero-based index of the third orbital
@@ -52,9 +56,10 @@ size_t index_8d(size_t i, size_t j, size_t k, size_t l) {
 
 /**
  * Computes the maximum magnitude of all excitations associated with the same four changing orbitals.
+ *
  * @param[in] doubles A pointer to the array of double excitations of length ndoubles
  * @param[out] magnitudes A pointer to the output array of magnitudes of length ndoubles
- * @param[in] ndoubles The number of entries to be processed
+ * @param[in] ndoubles The number of double excitation entries to be processed
  */
 static void get_max_mag_doubles(const DoubleExcEntry *doubles, double *magnitudes, size_t ndoubles) {
     for (size_t i=0; i<ndoubles; i++) {
@@ -65,6 +70,13 @@ static void get_max_mag_doubles(const DoubleExcEntry *doubles, double *magnitude
     }
 }
 
+/**
+ * Extracts the absolute values of the stored mixed excitations.
+ *
+ * @param[in] mixed A pointer to the array of mixed excitations of length nmixed
+ * @param[out] magnitudes A pointer to the output array of magnitudes of length nmixed
+ * @param[in] nmixed The number of mixed excitation entries to be processed
+ */
 static void get_max_mag_mixed(const MixedExcEntry *mixed, double *magnitudes, size_t nmixed) {
     for (size_t i=0; i<nmixed; i++) {
         magnitudes[i] = fabs(mixed[i].ijkl);
@@ -74,6 +86,7 @@ static void get_max_mag_mixed(const MixedExcEntry *mixed, double *magnitudes, si
 /**
  * Computes and stores the minimal amount of data needed to generate
  * all possible double excitation matrix elements from a given ERI tensor.
+ *
  * @param[out] doubles A pointer to an array of DoubleExcitationEntry of length nCr(norb, 4)
  * @param[in] eri_s8 A pointer to the eightfold-compressed ERI tensor (of aaaa or bbbb type)
  * @param[in] exc_table_4o A pointer to the four-orbital excitation table
