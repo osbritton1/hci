@@ -16,6 +16,7 @@
       <script src="../_static/documentation_options.js?v=01f34227"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -66,6 +67,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv418sort_changing_orbsP6size_tPK6size_tPK6size_t"><code class="docutils literal notranslate"><span class="pre">sort_changing_orbs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv413get_diff_typePK6size_tPK6size_t6size_tP9ExcResult"><code class="docutils literal notranslate"><span class="pre">get_diff_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv414get_diag_valuePK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_diag_value()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv422get_single_exc_value_aPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_single_exc_value_a()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv422get_single_exc_value_bPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_single_exc_value_b()</span></code></a></li>
@@ -74,7 +76,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv431get_double_exc_value_from_storePK14DoubleExcEntryPK9ExcResult"><code class="docutils literal notranslate"><span class="pre">get_double_exc_value_from_store()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv419get_mixed_exc_valuePK9ExcResultPK9ExcResultPK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_mixed_exc_value()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv430get_mixed_exc_value_from_storePK13MixedExcEntryPK9ExcResultPK9ExcResult"><code class="docutils literal notranslate"><span class="pre">get_mixed_exc_value_from_store()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv413get_diff_typePK6size_tPK6size_t6size_tP9ExcResult"><code class="docutils literal notranslate"><span class="pre">get_diff_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv426get_matrix_element_by_rank4Rank4RankPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv434get_matrix_element_by_partial_rankP8uint64_tP8uint64_t4RankPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_partial_rank()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv439get_matrix_element_by_rank_test_storage4Rank4RankPK10ConfigInfoPK10ExcEntriesPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank_test_storage()</span></code></a></li>
@@ -122,7 +123,8 @@
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv48DiffType">
 <span id="_CPPv38DiffType"></span><span id="_CPPv28DiffType"></span><span class="target" id="group__contract_1ga4f72c76ecf6a186ee470acf55db0b194"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DiffType</span></span></span><a class="headerlink" href="#_CPPv48DiffType" title="Link to this definition"></a><br /></dt>
-<dd><p><em>Values:</em></p>
+<dd><p>Enum to encode number of differences between two occupancy lists; more than two differences results in a matrix element of zero because only one- and two-electron operators are involved in the Hamiltonian. </p>
+<p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8DiffType4ZEROE">
 <span id="_CPPv3N8DiffType4ZEROE"></span><span id="_CPPv2N8DiffType4ZEROE"></span><span class="target" id="group__contract_1gga4f72c76ecf6a186ee470acf55db0b194ae117e3533122c80b262257b49b21cddf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZERO</span></span></span><a class="headerlink" href="#_CPPv4N8DiffType4ZEROE" title="Link to this definition"></a><br /></dt>
@@ -148,7 +150,8 @@
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv410DESIGNATOR">
 <span id="_CPPv310DESIGNATOR"></span><span id="_CPPv210DESIGNATOR"></span><span class="target" id="group__contract_1ga673876743a609ec50567983821d8d25a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DESIGNATOR</span></span></span><a class="headerlink" href="#_CPPv410DESIGNATOR" title="Link to this definition"></a><br /></dt>
-<dd><p><em>Values:</em></p>
+<dd><p>Enum used in the determination of the correct double excitation matrix element from storage. </p>
+<p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N10DESIGNATOR4IJKLE">
 <span id="_CPPv3N10DESIGNATOR4IJKLE"></span><span id="_CPPv2N10DESIGNATOR4IJKLE"></span><span class="target" id="group__contract_1gga673876743a609ec50567983821d8d25aa717cad155428ba1243d9b73f7bd1a02c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IJKL</span></span></span><a class="headerlink" href="#_CPPv4N10DESIGNATOR4IJKLE" title="Link to this definition"></a><br /></dt>
@@ -187,52 +190,255 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418sort_changing_orbsP6size_tPK6size_tPK6size_t">
 <span id="_CPPv318sort_changing_orbsP6size_tPK6size_tPK6size_t"></span><span id="_CPPv218sort_changing_orbsP6size_tPK6size_tPK6size_t"></span><span id="sort_changing_orbs__sP.sCP.sCP"></span><span class="target" id="group__contract_1gafe3a24d2d0b7102479433d2529588b91"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sort_changing_orbs</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">orb_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">old_orbs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">new_orbs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418sort_changing_orbsP6size_tPK6size_tPK6size_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Helper method to merge two sorted two-orbital lists into a sorted four-orbital list in the calculation of the rank of a double excitation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orb_list</strong> – <strong>[out]</strong> Pointer to the sorted four-orbital list </p></li>
+<li><p><strong>old_orbs</strong> – <strong>[in]</strong> Pointer to the first sorted two-orbital list </p></li>
+<li><p><strong>new_orbs</strong> – <strong>[in]</strong> Pointer to the second sorted two-orbital list </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413get_diff_typePK6size_tPK6size_t6size_tP9ExcResult">
+<span id="_CPPv313get_diff_typePK6size_tPK6size_t6size_tP9ExcResult"></span><span id="_CPPv213get_diff_typePK6size_tPK6size_t6size_tP9ExcResult"></span><span id="get_diff_type__sCP.sCP.s.ExcResultP"></span><span class="target" id="group__contract_1ga91a48dc05344d8cf997f836d713767a9"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv48DiffType" title="DiffType"><span class="n"><span class="pre">DiffType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_diff_type</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_2</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span>, <a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413get_diff_typePK6size_tPK6size_t6size_tP9ExcResult" title="Link to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414get_diag_valuePK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor">
 <span id="_CPPv314get_diag_valuePK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="_CPPv214get_diag_valuePK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="get_diag_value__sCP.sCP.ConfigInfoCP.HCoreCP.ERITensorCP"></span><span class="target" id="group__contract_1gae42e6534c125fefbc196bbf8f4f11e01"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_diag_value</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv45HCore" title="HCore"><span class="n"><span class="pre">HCore</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">h1e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414get_diag_valuePK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Calculates the expectation value of the Hamiltonian for a given configuration (i.e. the on-diagonal element).</p>
+<p>Formula: <div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned} 
+          \langle\Psi|\Psi\rangle=&amp;\sum\limits_a [a|h_\text{core}|a] + \dfrac{1}{2}\sum\limits_{ab} [aa|bb]-[ab|ba]&amp;\\
+          =\,&amp;\sum\limits_a (a|h_\text{core}|a) + \sum\limits_\bar{a} (\bar{a}|h_\text{core}|\bar{a})&amp;\text{From $\verb|h1e_aa|$ and $\verb|h1e_bb|$}\\
+          +\,&amp;\sum\limits_{a&lt;b} (aa|bb)-(ab|ba)&amp;\text{From $\verb|eri_mo_aaaa_s8|$}\\
+          +\,&amp;\sum\limits_{\bar{a}&lt;\bar{b}} (\bar{a}\bar{a}|\bar{b}\bar{b})-(\bar{a}\bar{b}|\bar{b}\bar{a})&amp;\text{From $\verb|eri_mo_bbbb_s8|$}\\
+          +\,&amp;\sum\limits_{a\bar{b}} (aa|\bar{b}\bar{b})&amp;\text{From $\verb|eri_mo_aabb_s4|$}
+        \end{aligned}\end{split}\]</div>
+</p>
+<p>Formula conventions:<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\([\quad|\quad]\)</span> are used for spin orbital summations, while <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> are used for spatial orbital summations</p></li>
+<li><p><span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> index occupied spin orbitals in <span class="math notranslate nohighlight">\(\Psi\)</span> if <span class="math notranslate nohighlight">\([\quad|\quad]\)</span> are used and occupied spatial orbitals if <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> are used</p></li>
+<li><p>When summing over spatial orbitals, <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are <span class="math notranslate nohighlight">\(\alpha\)</span> MOs while <span class="math notranslate nohighlight">\(\bar{a}\)</span> and <span class="math notranslate nohighlight">\(\bar{b}\)</span> are <span class="math notranslate nohighlight">\(\beta\)</span> MOs</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>occ_a</strong> – <strong>[in]</strong> Pointer to the list of occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
+<li><p><strong>occ_b</strong> – <strong>[in]</strong> Pointer to the list of occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> object needed to perform unranking, control loop structure, etc. </p></li>
+<li><p><strong>h1e</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structHCore"><span class="std std-ref">HCore</span></a> object storing locations of the core Hamiltonian matrix elements </p></li>
+<li><p><strong>eri_mo</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structERITensor"><span class="std std-ref">ERITensor</span></a> object storing locations of the electron repulsion integrals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The expectation value of the energy of the configuration </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422get_single_exc_value_aPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor">
 <span id="_CPPv322get_single_exc_value_aPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="_CPPv222get_single_exc_value_aPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="get_single_exc_value_a__ExcResultCP.sCP.sCP.ConfigInfoCP.HCoreCP.ERITensorCP"></span><span class="target" id="group__contract_1gadd3ff6cb8ea63a1f23a8b7a917ecb64a"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_single_exc_value_a</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">single_exc</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv45HCore" title="HCore"><span class="n"><span class="pre">HCore</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">h1e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422get_single_exc_value_aPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Calculates the matrix element between configurations that differ by one <span class="math notranslate nohighlight">\(\alpha\)</span> orbital.</p>
+<p>Formula: <div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned} 
+          \langle\Psi|\Psi_a^r\rangle=&amp;[a|h_\text{core}|r] + \sum\limits_{b} [ar|bb]-[ab|br]&amp;\\
+          =\,&amp;(a|h_\text{core}|r) &amp;\text{From $\verb|h1e_aa|$}\\
+          +\,&amp;\sum\limits_{b} (ar|bb)-(ab|br)&amp;\text{From $\verb|eri_mo_aaaa_s8|$}\\
+          +\,&amp;\sum\limits_{\bar{b}} (ar|\bar{b}\bar{b})&amp;\text{From $\verb|eri_mo_aabb_s4|$}
+        \end{aligned}\end{split}\]</div>
+</p>
+<p>Formula conventions:<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\([\quad|\quad]\)</span> are used for spin orbital summations, while <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> are used for spatial orbital summations</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Psi_a^r\)</span> differs from <span class="math notranslate nohighlight">\(\Psi\)</span> in the substitution of <span class="math notranslate nohighlight">\(\alpha\)</span> orbital <span class="math notranslate nohighlight">\(a\)</span> for <span class="math notranslate nohighlight">\(r\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(b\)</span> indexes occupied spin orbitals in <span class="math notranslate nohighlight">\(\Psi\)</span> if <span class="math notranslate nohighlight">\([\quad|\quad]\)</span> is used and occupied spatial orbitals if <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> is used</p></li>
+<li><p>When summing over spatial orbitals, <span class="math notranslate nohighlight">\(b\)</span> is an <span class="math notranslate nohighlight">\(\alpha\)</span> MO while <span class="math notranslate nohighlight">\(\bar{b}\)</span> is a <span class="math notranslate nohighlight">\(\beta\)</span> MO</p></li>
+<li><p>The above formula assumes the configurations are in maximum coincidence; an extra sign factor derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary, which is calculated in the computation of <code class="docutils literal notranslate"><span class="pre">single_exc</span></code></p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>single_exc</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation orbitals </p></li>
+<li><p><strong>occ_a</strong> – <strong>[in]</strong> Pointer to the list of occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
+<li><p><strong>occ_b</strong> – <strong>[in]</strong> Pointer to the list of occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> object needed to perform unranking, control loop structure, etc. </p></li>
+<li><p><strong>h1e</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structHCore"><span class="std std-ref">HCore</span></a> object storing locations of the core Hamiltonian matrix elements </p></li>
+<li><p><strong>eri_mo</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structERITensor"><span class="std std-ref">ERITensor</span></a> object storing locations of the electron repulsion integrals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The single excitation matrix element </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422get_single_exc_value_bPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor">
 <span id="_CPPv322get_single_exc_value_bPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="_CPPv222get_single_exc_value_bPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor"></span><span id="get_single_exc_value_b__ExcResultCP.sCP.sCP.ConfigInfoCP.HCoreCP.ERITensorCP"></span><span class="target" id="group__contract_1ga9d4b1ffc3eb828d552950e22fa950794"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_single_exc_value_b</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">single_exc</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><span class="n"><span class="pre">ConfigInfo</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config_info</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv45HCore" title="HCore"><span class="n"><span class="pre">HCore</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">h1e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422get_single_exc_value_bPK9ExcResultPK6size_tPK6size_tPK10ConfigInfoPK5HCorePK9ERITensor" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Calculates the matrix element between configurations that differ by one <span class="math notranslate nohighlight">\(\beta\)</span> orbital.</p>
+<p>Formula: <div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned} 
+          \langle\Psi|\Psi_\bar{a}^\bar{r}\rangle=&amp;[\bar{a}|h_\text{core}|\bar{r}] + \sum\limits_{b} [\bar{a}\bar{r}|bb]-[\bar{a}b|b\bar{r}]&amp;\\
+          =\,&amp;(\bar{a}|h_\text{core}|\bar{r}) &amp;\text{From $\verb|h1e_bb|$}\\
+          +\,&amp;\sum\limits_{\bar{b}} (\bar{a}\bar{r}|\bar{b}\bar{b})-(\bar{a}\bar{b}|\bar{b}\bar{r})&amp;\text{From $\verb|eri_mo_bbbb_s8|$}\\
+          +\,&amp;\sum\limits_{b} (bb|\bar{a}\bar{r})&amp;\text{From $\verb|eri_mo_aabb_s4|$}
+        \end{aligned}\end{split}\]</div>
+</p>
+<p>Formula conventions:<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\([\quad|\quad]\)</span> are used for spin orbital summations, while <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> are used for spatial orbital summations</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Psi_\bar{a}^\bar{r}\)</span> differs from <span class="math notranslate nohighlight">\(\Psi\)</span> in the substitution of <span class="math notranslate nohighlight">\(\beta\)</span> orbital <span class="math notranslate nohighlight">\(\bar{a}\)</span> for <span class="math notranslate nohighlight">\(\bar{r}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(b\)</span> indexes occupied spin orbitals in <span class="math notranslate nohighlight">\(\Psi\)</span> if <span class="math notranslate nohighlight">\([\quad|\quad]\)</span> is used and occupied spatial orbitals if <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> is used</p></li>
+<li><p>When summing over spatial orbitals, <span class="math notranslate nohighlight">\(b\)</span> is an <span class="math notranslate nohighlight">\(\alpha\)</span> MO while <span class="math notranslate nohighlight">\(\bar{b}\)</span> is a <span class="math notranslate nohighlight">\(\beta\)</span> MO</p></li>
+<li><p>The above formula assumes the configurations are in maximum coincidence; an extra sign factor derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary, which is calculated in the computation of <code class="docutils literal notranslate"><span class="pre">single_exc</span></code></p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>single_exc</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation orbitals </p></li>
+<li><p><strong>occ_a</strong> – <strong>[in]</strong> Pointer to the list of occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
+<li><p><strong>occ_b</strong> – <strong>[in]</strong> Pointer to the list of occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p></li>
+<li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> object needed to perform unranking, control loop structure, etc. </p></li>
+<li><p><strong>h1e</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structHCore"><span class="std std-ref">HCore</span></a> object storing locations of the core Hamiltonian matrix elements </p></li>
+<li><p><strong>eri_mo</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structERITensor"><span class="std std-ref">ERITensor</span></a> object storing locations of the electron repulsion integrals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The single excitation matrix element </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423get_double_exc_value_aaPK9ExcResultPK9ERITensor">
 <span id="_CPPv323get_double_exc_value_aaPK9ExcResultPK9ERITensor"></span><span id="_CPPv223get_double_exc_value_aaPK9ExcResultPK9ERITensor"></span><span id="get_double_exc_value_aa__ExcResultCP.ERITensorCP"></span><span class="target" id="group__contract_1gaadd98a9432c6a9d94878a4c4e4845988"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_double_exc_value_aa</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">double_exc</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423get_double_exc_value_aaPK9ExcResultPK9ERITensor" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Calculates the matrix element between configurations that differ by two <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals.</p>
+<p>Formula: <div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned} 
+          \langle\Psi|\Psi_{ab}^{rs}\rangle=&amp;[ar|bs]-[as|br]&amp;\\
+          =\,&amp;(ar|bs)-(as|br) &amp;\text{From $\verb|eri_mo_aaaa_s8|$}\\
+        \end{aligned}\end{split}\]</div>
+&#64;_fakenls</p>
+<p>Formula conventions:<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\([\quad|\quad]\)</span> are used for spin orbitals, while <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> are used for spatial orbitals</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Psi_{ab}^{rs}\)</span> differs from <span class="math notranslate nohighlight">\(\Psi\)</span> in the substitution of <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> for <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(s\)</span></p></li>
+<li><p>The above formula assumes the configurations are in maximum coincidence; an extra sign factor derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary, which is calculated in the computation of <code class="docutils literal notranslate"><span class="pre">double_exc</span></code></p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>double_exc</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation orbitals </p></li>
+<li><p><strong>eri_mo</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structERITensor"><span class="std std-ref">ERITensor</span></a> object storing locations of the electron repulsion integrals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The double excitation matrix element </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423get_double_exc_value_bbPK9ExcResultPK9ERITensor">
 <span id="_CPPv323get_double_exc_value_bbPK9ExcResultPK9ERITensor"></span><span id="_CPPv223get_double_exc_value_bbPK9ExcResultPK9ERITensor"></span><span id="get_double_exc_value_bb__ExcResultCP.ERITensorCP"></span><span class="target" id="group__contract_1ga4510600edd60b1c347adc42c54e9e853"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_double_exc_value_bb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">double_exc</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423get_double_exc_value_bbPK9ExcResultPK9ERITensor" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Calculates the matrix element between configurations that differ by two <span class="math notranslate nohighlight">\(\beta\)</span> orbitals.</p>
+<p>Formula: <div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned} 
+          \langle\Psi|\Psi_{\bar{a}\bar{b}}^{\bar{r}\bar{s}}\rangle=&amp;[\bar{a}\bar{r}|\bar{b}\bar{s}]-[\bar{a}\bar{s}|\bar{b}\bar{r}]&amp;\\
+          =\,&amp;(\bar{a}\bar{r}|\bar{b}\bar{s})-(\bar{a}\bar{s}|\bar{b}\bar{r}) &amp;\text{From $\verb|eri_mo_bbbb_s8|$}\\
+        \end{aligned}\end{split}\]</div>
+</p>
+<p>Formula conventions:<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\([\quad|\quad]\)</span> are used for spin orbitals, while <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> are used for spatial orbitals</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Psi_{\bar{a}\bar{b}}^{\bar{r}\bar{s}}\)</span> differs from <span class="math notranslate nohighlight">\(\Psi\)</span> in the substitution of <span class="math notranslate nohighlight">\(\beta\)</span> orbitals <span class="math notranslate nohighlight">\(\bar{a}\)</span> and <span class="math notranslate nohighlight">\(\bar{b}\)</span> for <span class="math notranslate nohighlight">\(\bar{r}\)</span> and <span class="math notranslate nohighlight">\(\bar{s}\)</span></p></li>
+<li><p>The above formula assumes the configurations are in maximum coincidence; an extra sign factor derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary, which is calculated in the computation of <code class="docutils literal notranslate"><span class="pre">double_exc</span></code></p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>double_exc</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation orbitals </p></li>
+<li><p><strong>eri_mo</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structERITensor"><span class="std std-ref">ERITensor</span></a> object storing locations of the electron repulsion integrals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The double excitation matrix element </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431get_double_exc_value_from_storePK14DoubleExcEntryPK9ExcResult">
 <span id="_CPPv331get_double_exc_value_from_storePK14DoubleExcEntryPK9ExcResult"></span><span id="_CPPv231get_double_exc_value_from_storePK14DoubleExcEntryPK9ExcResult"></span><span id="get_double_exc_value_from_store__DoubleExcEntryCP.ExcResultCP"></span><span class="target" id="group__contract_1ga981302785a6bc1791b0a92558eb9ec62"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_double_exc_value_from_store</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv414DoubleExcEntry" title="DoubleExcEntry"><span class="n"><span class="pre">DoubleExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_entry</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">double_exc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431get_double_exc_value_from_storePK14DoubleExcEntryPK9ExcResult" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Extracts a double excitation matrix element from storage in a <a class="reference internal" href="store.html#structDoubleExcEntry"><span class="std std-ref">DoubleExcEntry</span></a>.</p>
+<p>Given the list of occupied/old and excitation/new orbitals, first swaps the lowest-numbered orbital <span class="math notranslate nohighlight">\(i\)</span> into position using the symmetries of the ERI tensor, then determines the ordering of the remaining orbitals <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(k\)</span>, and <span class="math notranslate nohighlight">\(l\)</span>, where <span class="math notranslate nohighlight">\(i&lt;j&lt;k&lt;l\)</span>. Once <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(k\)</span>, and <span class="math notranslate nohighlight">\(l\)</span> are located, the correct stored value can be extracted. As with <a class="reference internal" href="#group__contract_1gaadd98a9432c6a9d94878a4c4e4845988"><span class="std std-ref">get_double_exc_value_aa</span></a> and <a class="reference internal" href="#group__contract_1ga4510600edd60b1c347adc42c54e9e853"><span class="std std-ref">get_double_exc_value_bb</span></a>, an additional sign factor is necessary, handled in the computation of <code class="docutils literal notranslate"><span class="pre">exc_entry</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_entry</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structDoubleExcEntry"><span class="std std-ref">DoubleExcEntry</span></a> storing the excitation matrix element </p></li>
+<li><p><strong>double_exc</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation orbitals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The stored double excitation matrix element </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419get_mixed_exc_valuePK9ExcResultPK9ExcResultPK9ERITensor">
 <span id="_CPPv319get_mixed_exc_valuePK9ExcResultPK9ExcResultPK9ERITensor"></span><span id="_CPPv219get_mixed_exc_valuePK9ExcResultPK9ExcResultPK9ERITensor"></span><span id="get_mixed_exc_value__ExcResultCP.ExcResultCP.ERITensorCP"></span><span class="target" id="group__contract_1ga2ad2e14c7c38e0d57e44bacab3df3578"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_mixed_exc_value</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">single_exc_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">single_exc_b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv49ERITensor" title="ERITensor"><span class="n"><span class="pre">ERITensor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">eri_mo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419get_mixed_exc_valuePK9ExcResultPK9ExcResultPK9ERITensor" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Calculates the matrix element between configurations that differ by one <span class="math notranslate nohighlight">\(\alpha\)</span> and one <span class="math notranslate nohighlight">\(\beta\)</span> orbital.</p>
+<p>Formula: <div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned} 
+          \langle\Psi|\Psi_{a\bar{b}}^{r\bar{s}}\rangle=&amp;[ar|\bar{b}\bar{s}]&amp;\\
+          =\,&amp;(ar|\bar{b}\bar{s}) &amp;\text{From $\verb|eri_mo_aabb_s4|$}\\
+        \end{aligned}\end{split}\]</div>
+</p>
+<p>Formula conventions:<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\([\quad|\quad]\)</span> are used for spin orbitals, while <span class="math notranslate nohighlight">\((\quad|\quad)\)</span> are used for spatial orbitals</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Psi_{\bar{a}\bar{b}}^{\bar{r}\bar{s}}\)</span> differs from <span class="math notranslate nohighlight">\(\Psi\)</span> in the substitution of <span class="math notranslate nohighlight">\(\alpha\)</span> orbital <span class="math notranslate nohighlight">\(a\)</span> for <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> orbitals <span class="math notranslate nohighlight">\(\bar{b}\)</span> and <span class="math notranslate nohighlight">\(\bar{s}\)</span></p></li>
+<li><p>The above formula assumes the configurations are in maximum coincidence; an extra sign factor derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary, which is calculated in the computation of <code class="docutils literal notranslate"><span class="pre">single_exc_a</span></code> and <code class="docutils literal notranslate"><span class="pre">single_exc_b</span></code></p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>single_exc_a</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
+<li><p><strong>single_exc_b</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p></li>
+<li><p><strong>eri_mo</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structERITensor"><span class="std std-ref">ERITensor</span></a> object storing locations of the electron repulsion integrals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mixed excitation matrix element </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv430get_mixed_exc_value_from_storePK13MixedExcEntryPK9ExcResultPK9ExcResult">
 <span id="_CPPv330get_mixed_exc_value_from_storePK13MixedExcEntryPK9ExcResultPK9ExcResult"></span><span id="_CPPv230get_mixed_exc_value_from_storePK13MixedExcEntryPK9ExcResultPK9ExcResult"></span><span id="get_mixed_exc_value_from_store__MixedExcEntryCP.ExcResultCP.ExcResultCP"></span><span class="target" id="group__contract_1gaf929118666f87cab7419de075f3397ac"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_mixed_exc_value_from_store</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="store.html#_CPPv413MixedExcEntry" title="MixedExcEntry"><span class="n"><span class="pre">MixedExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_entry</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">single_exc_a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">single_exc_b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430get_mixed_exc_value_from_storePK13MixedExcEntryPK9ExcResultPK9ExcResult" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv413get_diff_typePK6size_tPK6size_t6size_tP9ExcResult">
-<span id="_CPPv313get_diff_typePK6size_tPK6size_t6size_tP9ExcResult"></span><span id="_CPPv213get_diff_typePK6size_tPK6size_t6size_tP9ExcResult"></span><span id="get_diff_type__sCP.sCP.s.ExcResultP"></span><span class="target" id="group__contract_1gabf505f65fb7f284fb41e2b55e9040ae2"></span><a class="reference internal" href="#_CPPv48DiffType" title="DiffType"><span class="n"><span class="pre">DiffType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_diff_type</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_2</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span>, <a class="reference internal" href="enlarge.html#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413get_diff_typePK6size_tPK6size_t6size_tP9ExcResult" title="Link to this definition"></a><br /></dt>
-<dd></dd></dl>
+<dd><p>Extracts a mixed excitation matrix element from storage in a <a class="reference internal" href="store.html#structMixedExcEntry"><span class="std std-ref">MixedExcEntry</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_entry</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structMixedExcEntry"><span class="std std-ref">MixedExcEntry</span></a> storing the excitation matrix element </p></li>
+<li><p><strong>single_exc_a</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
+<li><p><strong>single_exc_b</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="enlarge.html#structExcResult"><span class="std std-ref">ExcResult</span></a> describing occupied and excitation <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The stored mixed excitation matrix element </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426get_matrix_element_by_rank4Rank4RankPK10ConfigInfoPK5HCorePK9ERITensor">

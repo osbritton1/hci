@@ -147,13 +147,13 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv43nC26size_t">
 <span id="_CPPv33nC26size_t"></span><span id="_CPPv23nC26size_t"></span><span id="nC2__s"></span><span class="target" id="group__store_1gae5d11c309bce2cfd9b06834931f5a01e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nC2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv43nC26size_t" title="Link to this definition"></a><br /></dt>
-<dd><p>Helper function for computing nCr(n,2)</p>
+<dd><p>Helper function for computing <span class="math notranslate nohighlight">\(\binom{n}{2}\)</span></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – <strong>[in]</strong> </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>nCr(n,2) </p>
+<dd class="field-even"><p><span class="math notranslate nohighlight">\(\binom{n}{2}\)</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -179,7 +179,7 @@
 <dt class="sig sig-object cpp" id="_CPPv48index_4d6size_t6size_t6size_t6size_t6size_t">
 <span id="_CPPv38index_4d6size_t6size_t6size_t6size_t6size_t"></span><span id="_CPPv28index_4d6size_t6size_t6size_t6size_t6size_t"></span><span id="index_4d__s.s.s.s.s"></span><span class="target" id="group__store_1ga8f5f02f1f615cb1e82a9b8c922511d95"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_4d</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ncols</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48index_4d6size_t6size_t6size_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
 <dd><p>Computes the index of [ij|kl] in a fourfold-compressed ERI tensor.</p>
-<p>ncols should be norb*(norb+1)/2. </p>
+<p>ncols should be <span class="math notranslate nohighlight">\(N_\text{orb}(N_\text{orb}+1)/2\)</span>. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -221,8 +221,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>doubles</strong> – <strong>[in]</strong> Pointer to the array of double excitations of length ndoubles </p></li>
-<li><p><strong>magnitudes</strong> – <strong>[out]</strong> Pointer to the output array of magnitudes of length ndoubles </p></li>
+<li><p><strong>doubles</strong> – <strong>[in]</strong> Pointer to the array of double excitations of length <code class="docutils literal notranslate"><span class="pre">ndoubles</span></code></p></li>
+<li><p><strong>magnitudes</strong> – <strong>[out]</strong> Pointer to the output array of magnitudes of length <code class="docutils literal notranslate"><span class="pre">ndoubles</span></code></p></li>
 <li><p><strong>ndoubles</strong> – <strong>[in]</strong> The number of double excitation entries to be processed </p></li>
 </ul>
 </dd>
@@ -236,8 +236,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mixed</strong> – <strong>[in]</strong> Pointer to the array of mixed excitations of length nmixed </p></li>
-<li><p><strong>magnitudes</strong> – <strong>[out]</strong> Pointer to the output array of magnitudes of length nmixed </p></li>
+<li><p><strong>mixed</strong> – <strong>[in]</strong> Pointer to the array of mixed excitations of length <code class="docutils literal notranslate"><span class="pre">nmixed</span></code></p></li>
+<li><p><strong>magnitudes</strong> – <strong>[out]</strong> Pointer to the output array of magnitudes of length <code class="docutils literal notranslate"><span class="pre">nmixed</span></code></p></li>
 <li><p><strong>nmixed</strong> – <strong>[in]</strong> The number of mixed excitation entries to be processed </p></li>
 </ul>
 </dd>
@@ -251,7 +251,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>doubles</strong> – <strong>[out]</strong> Pointer to an array of DoubleExcitationEntry of length <span class="math notranslate nohighlight">\(\binom{N_\text{orb}, 4}\)</span></p></li>
+<li><p><strong>doubles</strong> – <strong>[out]</strong> Pointer to an array of DoubleExcitationEntry of length <span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{4}\)</span></p></li>
 <li><p><strong>eri_mo_xxxx_s8</strong> – <strong>[in]</strong> Pointer to the eightfold-compressed ERI tensor (of <span class="math notranslate nohighlight">\(\alpha\)</span> or <span class="math notranslate nohighlight">\(\beta\)</span> type) </p></li>
 <li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
 </ul>
@@ -315,7 +315,7 @@
 <dd><div class="docutils container">
 <em>#include &lt;hci_store.h&gt;</em></div>
 <p>A struct that stores the minimal amount of information necessary to compute a double excitation matrix element given the four changing orbitals encoded by rank (referred to as i, j, k, and l in ascending order).</p>
-<p>[ik|lj]-[ij|lk] may be recovered by computing negative the sum of ijkl and iljk; all double excitation matrix elements involving these four orbitals may be mapped to one of these three values up to a sign (see get_double_exc_value_from_store(const DoubleExcEntry *exc_entry, const ExcResult *double_exc)). </p>
+<p>[ik|lj]-[ij|lk] may be recovered by computing negative the sum of ijkl and iljk; all double excitation matrix elements involving these four orbitals may be mapped to one of these three values up to a sign (see <a class="reference internal" href="contract.html#group__contract_1ga981302785a6bc1791b0a92558eb9ec62"><span class="std std-ref">get_double_exc_value_from_store</span></a>). </p>
 </dd></dl>
 
 <dl class="cpp struct">
