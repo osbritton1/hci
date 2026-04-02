@@ -62,9 +62,23 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv413add_singles_aPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_singles_a()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv413add_singles_bPK6size_tPK6size_tPK6size_t6size_tPK5HCorePK9ERITensordP4RankPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">add_singles_b()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv421enlarge_space_singlesPK6HCIVecP4RankdPK10ConfigInfoPK5HCorePK9ERITensor"><code class="docutils literal notranslate"><span class="pre">enlarge_space_singles()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv49ExcResult"><code class="docutils literal notranslate"><span class="pre">ExcResult</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv44Rank"><code class="docutils literal notranslate"><span class="pre">Rank</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv46HCIVec"><code class="docutils literal notranslate"><span class="pre">HCIVec</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv49ExcResult"><code class="docutils literal notranslate"><span class="pre">ExcResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ExcResult8old_orbsE"><code class="docutils literal notranslate"><span class="pre">old_orbs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ExcResult8new_orbsE"><code class="docutils literal notranslate"><span class="pre">new_orbs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ExcResult4signE"><code class="docutils literal notranslate"><span class="pre">sign</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv44Rank"><code class="docutils literal notranslate"><span class="pre">Rank</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4Rank5arankE"><code class="docutils literal notranslate"><span class="pre">arank</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4Rank5brankE"><code class="docutils literal notranslate"><span class="pre">brank</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv46HCIVec"><code class="docutils literal notranslate"><span class="pre">HCIVec</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N6HCIVec5ranksE"><code class="docutils literal notranslate"><span class="pre">ranks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N6HCIVec6coeffsE"><code class="docutils literal notranslate"><span class="pre">coeffs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N6HCIVec3lenE"><code class="docutils literal notranslate"><span class="pre">len</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="contract.html">Matrix elements and contractions</a></li>
@@ -136,7 +150,7 @@
 <dt class="sig sig-object cpp" id="_CPPv421get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t">
 <span id="_CPPv321get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t"></span><span id="_CPPv221get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t"></span><span id="get_changing_orbitals__sCP.s.sCP.s.ExcResultP.sP"></span><span class="target" id="group__enlarge_1ga98600c7b584bef80411995835fda4ea5"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_changing_orbitals</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">exc_list</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">exc_order</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span>, <a class="reference internal" href="#_CPPv49ExcResult" title="ExcResult"><span class="n"><span class="pre">ExcResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">res</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">new_occ_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421get_changing_orbitalsPK6size_t6size_tPK6size_t6size_tP9ExcResultP6size_t" title="Link to this definition"></a><br /></dt>
 <dd><p>Given a list of excitation orbitals, attempts to excite the provided configuration; on success, outputs the detailed information of the excitation and generates a new occupancy list.</p>
-<p>To be explicit, this function returns true exactly when the the intersection of <code class="docutils literal notranslate"><span class="pre">exc_list</span></code> and <code class="docutils literal notranslate"><span class="pre">occ_list</span></code> and the set difference <code class="docutils literal notranslate"><span class="pre">exc_list\</span></code> <code class="docutils literal notranslate"><span class="pre">occ_list</span></code> are both of size <code class="docutils literal notranslate"><span class="pre">exc_order</span></code>, in which case the intersection will be written to <code class="docutils literal notranslate"><span class="pre">res-&gt;old_orbs</span></code>, the difference to <code class="docutils literal notranslate"><span class="pre">res-&gt;new_orbs</span></code> and the excited configuration formed by substituting <code class="docutils literal notranslate"><span class="pre">old_orbs</span></code> with <code class="docutils literal notranslate"><span class="pre">new_orbs</span></code> to <code class="docutils literal notranslate"><span class="pre">new_occ_list</span></code>. This is essentially a customized merge algorithm for sorted lists.</p>
+<p>To be explicit, this function returns true exactly when the the intersection of <code class="docutils literal notranslate"><span class="pre">exc_list</span></code> and <code class="docutils literal notranslate"><span class="pre">occ_list</span></code> and the set difference <code class="docutils literal notranslate"><span class="pre">exc_list</span></code> \ <code class="docutils literal notranslate"><span class="pre">occ_list</span></code> are both of size <code class="docutils literal notranslate"><span class="pre">exc_order</span></code>, in which case the intersection will be written to <code class="docutils literal notranslate"><span class="pre">res-&gt;old_orbs</span></code>, the difference to <code class="docutils literal notranslate"><span class="pre">res-&gt;new_orbs</span></code> and the excited configuration formed by substituting <code class="docutils literal notranslate"><span class="pre">old_orbs</span></code> with <code class="docutils literal notranslate"><span class="pre">new_orbs</span></code> to <code class="docutils literal notranslate"><span class="pre">new_occ_list</span></code>. This is essentially a customized merge algorithm for sorted lists.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -163,7 +177,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>occ_a</strong> – <strong>[in]</strong> Pointer to list of occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
 <li><p><strong>brank</strong> – <strong>[in]</strong> <a class="reference internal" href="#structRank"><span class="std std-ref">Rank</span></a> of associated <span class="math notranslate nohighlight">\(\beta\)</span> string being left unchanged </p></li>
-<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to desc. sorted <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object providing location of stored double <span class="math notranslate nohighlight">\(\alpha\)</span> excitations </p></li>
+<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object sorted desc. by magnitude providing location of stored double <span class="math notranslate nohighlight">\(\alpha\)</span> excitations </p></li>
 <li><p><strong>entry_thresh</strong> – <strong>[in]</strong> Selection threshold; value handed in from outer loop in <a class="reference internal" href="#group__enlarge_1gad45c61f7bf4f9294d53728c4f6425c29"><span class="std std-ref">enlarge_space_doubles</span></a></p></li>
 <li><p><strong>add_list</strong> – <strong>[out]</strong> Pointer to <a class="reference internal" href="#structRank"><span class="std std-ref">Rank</span></a> list storing configurations to be added </p></li>
 <li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> object needed to perform unranking, control loop structure, etc. </p></li>
@@ -181,7 +195,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>occ_b</strong> – <strong>[in]</strong> Pointer to list of occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p></li>
 <li><p><strong>arank</strong> – <strong>[in]</strong> <a class="reference internal" href="#structRank"><span class="std std-ref">Rank</span></a> of associated <span class="math notranslate nohighlight">\(\alpha\)</span> string being left unchanged </p></li>
-<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to desc. sorted <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object providing location of stored double <span class="math notranslate nohighlight">\(\beta\)</span> excitations </p></li>
+<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object sorted desc. by magnitude providing location of stored double <span class="math notranslate nohighlight">\(\beta\)</span> excitations </p></li>
 <li><p><strong>entry_thresh</strong> – <strong>[in]</strong> Selection threshold; value handed in from outer loop in <a class="reference internal" href="#group__enlarge_1gad45c61f7bf4f9294d53728c4f6425c29"><span class="std std-ref">enlarge_space_doubles</span></a></p></li>
 <li><p><strong>add_list</strong> – <strong>[out]</strong> Pointer to <a class="reference internal" href="#structRank"><span class="std std-ref">Rank</span></a> list storing configurations to be added </p></li>
 <li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> object needed to perform unranking, control loop structure, etc. </p></li>
@@ -199,7 +213,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>occ_a</strong> – <strong>[in]</strong> Pointer to list of occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p></li>
 <li><p><strong>occ_b</strong> – <strong>[in]</strong> Pointer to list of occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p></li>
-<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to desc. sorted <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object providing location of stored mixed excitations </p></li>
+<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object sorted desc. by magnitude providing location of stored mixed excitations </p></li>
 <li><p><strong>entry_thresh</strong> – <strong>[in]</strong> Selection threshold; value handed in from outer loop in <a class="reference internal" href="#group__enlarge_1gad45c61f7bf4f9294d53728c4f6425c29"><span class="std std-ref">enlarge_space_doubles</span></a></p></li>
 <li><p><strong>add_list</strong> – <strong>[out]</strong> Pointer to <a class="reference internal" href="#structRank"><span class="std std-ref">Rank</span></a> list storing configurations to be added </p></li>
 <li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> object needed to perform unranking, control loop structure, etc. </p></li>
@@ -219,7 +233,7 @@
 <li><p><strong>add_list</strong> – <strong>[out]</strong> Pointer to <a class="reference internal" href="#structRank"><span class="std std-ref">Rank</span></a> list storing configurations to be added </p></li>
 <li><p><strong>thresh</strong> – <strong>[in]</strong> The threshold used for adding a determinant to the configuration space; compared to the magnitude of the coefficient times the excitation matrix element </p></li>
 <li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="rank.html#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> object needed to perform unranking, control loop structure, etc. </p></li>
-<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to desc. sorted <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object providing location of stored mixed excitations </p></li>
+<li><p><strong>exc_entries</strong> – <strong>[in]</strong> Pointer to <a class="reference internal" href="store.html#structExcEntries"><span class="std std-ref">ExcEntries</span></a> object sorted desc. by magnitude providing location of stored mixed excitations </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -298,6 +312,27 @@
 <dd><div class="docutils container">
 <em>#include &lt;hci_enlarge.h&gt;</em></div>
 <p>Given a reference configuration and an excited configuration, stores which orbitals are being substituted for new orbitals and the sign of the resulting excitation </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ExcResult8old_orbsE">
+<span id="_CPPv3N9ExcResult8old_orbsE"></span><span id="_CPPv2N9ExcResult8old_orbsE"></span><span id="ExcResult::old_orbs__sP"></span><span class="target" id="structExcResult_1a6809c65bb084a352cbcb5cc43bef8508"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">old_orbs</span></span></span><a class="headerlink" href="#_CPPv4N9ExcResult8old_orbsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to list of orbitals present in the reference but not the excited determinant </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ExcResult8new_orbsE">
+<span id="_CPPv3N9ExcResult8new_orbsE"></span><span id="_CPPv2N9ExcResult8new_orbsE"></span><span id="ExcResult::new_orbs__sP"></span><span class="target" id="structExcResult_1a9d1ae9b0dbc5434146b0215b3a5bd1db"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">new_orbs</span></span></span><a class="headerlink" href="#_CPPv4N9ExcResult8new_orbsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to list of orbitals present in the excited determinant but not the reference </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ExcResult4signE">
+<span id="_CPPv3N9ExcResult4signE"></span><span id="_CPPv2N9ExcResult4signE"></span><span id="ExcResult::sign__double"></span><span class="target" id="structExcResult_1a3a1cc7f16e44b0f8635a7614336532ff"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sign</span></span></span><a class="headerlink" href="#_CPPv4N9ExcResult4signE" title="Link to this definition"></a><br /></dt>
+<dd><p>The sign of the excitation, computed from indices in the old and new orbital lists </p>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 <dl class="cpp struct">
@@ -306,6 +341,21 @@
 <dd><div class="docutils container">
 <em>#include &lt;hci_enlarge.h&gt;</em></div>
 <p>Lightweight tuple-like struct for storing associated <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> ranks. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4Rank5arankE">
+<span id="_CPPv3N4Rank5arankE"></span><span id="_CPPv2N4Rank5arankE"></span><span id="Rank::arank__uint64_t"></span><span class="target" id="structRank_1a76b46d529663fe91f71ec2af81ef2c47"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arank</span></span></span><a class="headerlink" href="#_CPPv4N4Rank5arankE" title="Link to this definition"></a><br /></dt>
+<dd><p>The rank of the <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list of the associated configuration </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4Rank5brankE">
+<span id="_CPPv3N4Rank5brankE"></span><span id="_CPPv2N4Rank5brankE"></span><span id="Rank::brank__uint64_t"></span><span class="target" id="structRank_1a6c0445a17650add09aeda9b2d3fa0990"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">brank</span></span></span><a class="headerlink" href="#_CPPv4N4Rank5brankE" title="Link to this definition"></a><br /></dt>
+<dd><p>The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of the associated configuration </p>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 <dl class="cpp struct">
@@ -315,6 +365,27 @@
 <em>#include &lt;hci_enlarge.h&gt;</em></div>
 <p>Struct representing a weighted sum of configurations.</p>
 <p>Implemented as a structure of arrays to make interoperability with <code class="docutils literal notranslate"><span class="pre">NumPy</span></code> and <code class="docutils literal notranslate"><span class="pre">PySCF</span></code> easier. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6HCIVec5ranksE">
+<span id="_CPPv3N6HCIVec5ranksE"></span><span id="_CPPv2N6HCIVec5ranksE"></span><span id="HCIVec::ranks__RankP"></span><span class="target" id="structHCIVec_1a9bece7300db2990c31d29ae42cfe1b44"></span><a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">ranks</span></span></span><a class="headerlink" href="#_CPPv4N6HCIVec5ranksE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to list of ranks specifying the configurations </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6HCIVec6coeffsE">
+<span id="_CPPv3N6HCIVec6coeffsE"></span><span id="_CPPv2N6HCIVec6coeffsE"></span><span id="HCIVec::coeffs__doubleP"></span><span class="target" id="structHCIVec_1aaf6aa987cc2ef76435f15f3e063a8e79"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">coeffs</span></span></span><a class="headerlink" href="#_CPPv4N6HCIVec6coeffsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to list of coefficients of the corresponding ranks </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6HCIVec3lenE">
+<span id="_CPPv3N6HCIVec3lenE"></span><span id="_CPPv2N6HCIVec3lenE"></span><span id="HCIVec::len__s"></span><span class="target" id="structHCIVec_1a0c82a55e249c48f282238cf0b6c143e6"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">len</span></span></span><a class="headerlink" href="#_CPPv4N6HCIVec3lenE" title="Link to this definition"></a><br /></dt>
+<dd><p>Length of the vector </p>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </dd></dl>

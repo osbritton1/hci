@@ -62,7 +62,21 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv417unrank_double_exc8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_double_exc()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv414rank_mixed_excP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">rank_mixed_exc()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv416unrank_mixed_exc8uint64_tP6size_tPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">unrank_mixed_exc()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv410ConfigInfo"><code class="docutils literal notranslate"><span class="pre">ConfigInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv410ConfigInfo"><code class="docutils literal notranslate"><span class="pre">ConfigInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo4norbE"><code class="docutils literal notranslate"><span class="pre">norb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo7nelec_aE"><code class="docutils literal notranslate"><span class="pre">nelec_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo7nelec_bE"><code class="docutils literal notranslate"><span class="pre">nelec_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo11occ_table_aE"><code class="docutils literal notranslate"><span class="pre">occ_table_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo12virt_table_aE"><code class="docutils literal notranslate"><span class="pre">virt_table_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo9combmax_aE"><code class="docutils literal notranslate"><span class="pre">combmax_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo11occ_table_bE"><code class="docutils literal notranslate"><span class="pre">occ_table_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo12virt_table_bE"><code class="docutils literal notranslate"><span class="pre">virt_table_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo9combmax_bE"><code class="docutils literal notranslate"><span class="pre">combmax_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo12exc_table_4oE"><code class="docutils literal notranslate"><span class="pre">exc_table_4o</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo12exc_table_2oE"><code class="docutils literal notranslate"><span class="pre">exc_table_2o</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ConfigInfo11ncols_mixedE"><code class="docutils literal notranslate"><span class="pre">ncols_mixed</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="store.html">Excitation storage</a></li>
@@ -109,7 +123,7 @@
 <dt class="sig sig-object cpp" id="_CPPv414find_row_index8uint64_tPK8uint64_t6size_t6size_t">
 <span id="_CPPv314find_row_index8uint64_tPK8uint64_t6size_t6size_t"></span><span id="_CPPv214find_row_index8uint64_tPK8uint64_t6size_t6size_t"></span><span id="find_row_index__uint64_t.uint64_tCP.s.s"></span><span class="target" id="group__rank_1ga8639f0b0bce4ffaa0a5a6b494a66ed1b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">find_row_index</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">target</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">row</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">norb</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414find_row_index8uint64_tPK8uint64_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
 <dd><p>Helper function for unranking algorithm.</p>
-<p>Uses binary search to find the index of the last entry in a row of the ranking table that is less than the value of target.</p>
+<p>Uses binary search to find the index of the last entry in a row of the ranking table that is less than the value of <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -118,6 +132,9 @@
 <li><p><strong>norb</strong> – <strong>[in]</strong> Size of orbital space </p></li>
 <li><p><strong>nocc</strong> – <strong>[in]</strong> Number of occupancies; generally equal to <span class="math notranslate nohighlight">\(N_\alpha\)</span> or <span class="math notranslate nohighlight">\(N_\beta\)</span></p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The column index of the last entry smaller than the value of <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -148,7 +165,7 @@
 <dt class="sig sig-object cpp" id="_CPPv46unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t">
 <span id="_CPPv36unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t"></span><span id="_CPPv26unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t"></span><span id="unrank__uint64_t.sP.uint64_tCP.s.s"></span><span class="target" id="group__rank_1ga98bfaeb24b50e605d3b5a0d7ee2d1779"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unrank</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rank</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">occ_list</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">rank_table</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">norb</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nocc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46unrank8uint64_tP6size_tPK8uint64_t6size_t6size_t" title="Link to this definition"></a><br /></dt>
 <dd><p>Greedy unranking algorithm for computing an occupancy list given its combinatorial rank.</p>
-<p>Starting from the last row in the ranking table (corresponding to the highest occupied orbital), uses find_row_index to find the column index of the entry that does not exceed the value of target, updates the occupancy list accordingly, then subtracts off the ranking table entry from target and repeats.</p>
+<p>Starting from the last row in the ranking table (corresponding to the highest occupied orbital), uses <a class="reference internal" href="#group__rank_1ga8639f0b0bce4ffaa0a5a6b494a66ed1b"><span class="std std-ref">find_row_index</span></a> to find the column index of the entry that does not exceed the value of target, updates the occupancy list accordingly, then subtracts off the ranking table entry from target and repeats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -249,7 +266,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>arank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest </p></li>
+<li><p><strong>brank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest </p></li>
 <li><p><strong>occ_list</strong> – <strong>[out]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{occ}\)</span> to store the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list </p></li>
 <li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
 </ul>
@@ -264,7 +281,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>arank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest </p></li>
+<li><p><strong>brank</strong> – <strong>[in]</strong> The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest </p></li>
 <li><p><strong>virt_list</strong> – <strong>[out]</strong> Pointer to an array of length <span class="math notranslate nohighlight">\(N_\text{orb}-N_\text{occ}\)</span> to store the <span class="math notranslate nohighlight">\(\beta\)</span> virtual orbital list </p></li>
 <li><p><strong>config_info</strong> – <strong>[in]</strong> Pointer to a <a class="reference internal" href="#structConfigInfo"><span class="std std-ref">ConfigInfo</span></a> struct storing the location of the necessary tables </p></li>
 </ul>
@@ -343,6 +360,81 @@
 <dd><div class="docutils container">
 <em>#include &lt;hci_rank.h&gt;</em></div>
 <p>A struct that holds pointers to all of the ranking tables needed for carrying out HCI calculations, along with their associated parameters. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo4norbE">
+<span id="_CPPv3N10ConfigInfo4norbE"></span><span id="_CPPv2N10ConfigInfo4norbE"></span><span id="ConfigInfo::norb__s"></span><span class="target" id="structConfigInfo_1a4f1b921b327be61b01703f3ed80de658"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">norb</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo4norbE" title="Link to this definition"></a><br /></dt>
+<dd><p>Total size of input orbital space <span class="math notranslate nohighlight">\(N_\text{orb}\)</span></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo7nelec_aE">
+<span id="_CPPv3N10ConfigInfo7nelec_aE"></span><span id="_CPPv2N10ConfigInfo7nelec_aE"></span><span id="ConfigInfo::nelec_a__s"></span><span class="target" id="structConfigInfo_1a01f59cab8f8e410e639c972ebb1c1192"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nelec_a</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo7nelec_aE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of <span class="math notranslate nohighlight">\(\alpha\)</span> electrons <span class="math notranslate nohighlight">\(N_\alpha\)</span></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo7nelec_bE">
+<span id="_CPPv3N10ConfigInfo7nelec_bE"></span><span id="_CPPv2N10ConfigInfo7nelec_bE"></span><span id="ConfigInfo::nelec_b__s"></span><span class="target" id="structConfigInfo_1a6d9788a982692ec8d6ea5ac2d88bae82"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nelec_b</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo7nelec_bE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of <span class="math notranslate nohighlight">\(\beta\)</span> electrons <span class="math notranslate nohighlight">\(N_\beta\)</span></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo11occ_table_aE">
+<span id="_CPPv3N10ConfigInfo11occ_table_aE"></span><span id="_CPPv2N10ConfigInfo11occ_table_aE"></span><span id="ConfigInfo::occ_table_a__uint64_tP"></span><span class="target" id="structConfigInfo_1aa13c32921e7f19ffe7115a924f5d30ce"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">occ_table_a</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo11occ_table_aE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the ranking table for determining occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo12virt_table_aE">
+<span id="_CPPv3N10ConfigInfo12virt_table_aE"></span><span id="_CPPv2N10ConfigInfo12virt_table_aE"></span><span id="ConfigInfo::virt_table_a__uint64_tP"></span><span class="target" id="structConfigInfo_1a9123462632eef5e7dafcd0c113048e2c"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">virt_table_a</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo12virt_table_aE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the ranking table for determining virtual <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo9combmax_aE">
+<span id="_CPPv3N10ConfigInfo9combmax_aE"></span><span id="_CPPv2N10ConfigInfo9combmax_aE"></span><span id="ConfigInfo::combmax_a__uint64_t"></span><span class="target" id="structConfigInfo_1a73092681535005b9a2ccaf31e02eb6c0"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">combmax_a</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo9combmax_aE" title="Link to this definition"></a><br /></dt>
+<dd><p>Total number of <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy lists, <span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{N_\alpha}\)</span></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo11occ_table_bE">
+<span id="_CPPv3N10ConfigInfo11occ_table_bE"></span><span id="_CPPv2N10ConfigInfo11occ_table_bE"></span><span id="ConfigInfo::occ_table_b__uint64_tP"></span><span class="target" id="structConfigInfo_1a63dabad70fbf3b5505291481fbcb49a6"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">occ_table_b</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo11occ_table_bE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the ranking table for determining occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo12virt_table_bE">
+<span id="_CPPv3N10ConfigInfo12virt_table_bE"></span><span id="_CPPv2N10ConfigInfo12virt_table_bE"></span><span id="ConfigInfo::virt_table_b__uint64_tP"></span><span class="target" id="structConfigInfo_1aa4ce408a3f865b9e90832f0b962aa443"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">virt_table_b</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo12virt_table_bE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the ranking table for determining virtual <span class="math notranslate nohighlight">\(\beta\)</span> orbitals </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo9combmax_bE">
+<span id="_CPPv3N10ConfigInfo9combmax_bE"></span><span id="_CPPv2N10ConfigInfo9combmax_bE"></span><span id="ConfigInfo::combmax_b__uint64_t"></span><span class="target" id="structConfigInfo_1a6a2e7fe2dfd27dc2fdbe2c0c2469c97e"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">combmax_b</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo9combmax_bE" title="Link to this definition"></a><br /></dt>
+<dd><p>Total number of <span class="math notranslate nohighlight">\(\beta\)</span> occupancy lists, <span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{N_\beta}\)</span></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo12exc_table_4oE">
+<span id="_CPPv3N10ConfigInfo12exc_table_4oE"></span><span id="_CPPv2N10ConfigInfo12exc_table_4oE"></span><span id="ConfigInfo::exc_table_4o__uint64_tP"></span><span class="target" id="structConfigInfo_1a1f6279be1f1e3a6c6bc72448054beb97"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">exc_table_4o</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo12exc_table_4oE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the ranking table for organizing double excitations of <span class="math notranslate nohighlight">\(\alpha\alpha\rightarrow\alpha\alpha\)</span> or <span class="math notranslate nohighlight">\(\beta\beta\rightarrow\beta\beta\)</span> type </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo12exc_table_2oE">
+<span id="_CPPv3N10ConfigInfo12exc_table_2oE"></span><span id="_CPPv2N10ConfigInfo12exc_table_2oE"></span><span id="ConfigInfo::exc_table_2o__uint64_tP"></span><span class="target" id="structConfigInfo_1af2eb22542d4146f0920200dc9517e3da"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">exc_table_2o</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo12exc_table_2oE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the ranking table for organizing mixed excitations of <span class="math notranslate nohighlight">\(\alpha\beta\rightarrow\alpha\beta\)</span> type </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10ConfigInfo11ncols_mixedE">
+<span id="_CPPv3N10ConfigInfo11ncols_mixedE"></span><span id="_CPPv2N10ConfigInfo11ncols_mixedE"></span><span id="ConfigInfo::ncols_mixed__uint64_t"></span><span class="target" id="structConfigInfo_1aa8161175aedaf0459db9fe61f249a190"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ncols_mixed</span></span></span><a class="headerlink" href="#_CPPv4N10ConfigInfo11ncols_mixedE" title="Link to this definition"></a><br /></dt>
+<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{2}\)</span>, used for ranking and unranking mixed excitations </p>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </dd></dl>
