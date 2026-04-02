@@ -37,3 +37,4 @@ html_static_path = ['_static']
 
 breathe_projects = { "hci": "../doxy_files/xml/" }
 breathe_default_project = "hci"
+breathe_default_members = ('members', 'protected-members', 'undoc-members')

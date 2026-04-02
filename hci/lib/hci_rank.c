@@ -12,12 +12,13 @@
  * Helper function for unranking algorithm. 
  * 
  * Uses binary search to find the index of the last entry in a row of 
- * the ranking table that is less than the value of target.
+ * the ranking table that is less than the value of \p target.
  *
  * @param[in] target Target value used as a reference for the search
  * @param[in] row Pointer to the row of the ranking table used for the search
  * @param[in] norb Size of orbital space
  * @param[in] nocc Number of occupancies; generally equal to \f$N_\alpha\f$ or \f$N_\beta\f$
+ * @return The column index of the last entry smaller than the value of \p target
  */
 static size_t find_row_index(uint64_t target, const uint64_t *row, size_t norb, size_t nocc) {
     size_t low = 0;
@@ -161,7 +162,7 @@ uint64_t rank_occ_b(const size_t *occ_list, const ConfigInfo *config_info) {
 /**
  * Unranks a given \f$\beta\f$ orbital occupancy list.
  * 
- * @param[in] arank The rank of the \f$\beta\f$ occupancy list of interest
+ * @param[in] brank The rank of the \f$\beta\f$ occupancy list of interest
  * @param[out] occ_list Pointer to an array of length \f$N_\text{occ}\f$ to store the \f$\beta\f$ occupancy list
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
@@ -172,7 +173,7 @@ void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_inf
 /**
  * Determines all orbitals in the complement of a \f$\beta\f$ occupancy list with given rank.
  * 
- * @param[in] arank The rank of the \f$\beta\f$ occupancy list of interest
+ * @param[in] brank The rank of the \f$\beta\f$ occupancy list of interest
  * @param[out] virt_list Pointer to an array of length \f$N_\text{orb}-N_\text{occ}\f$ to store the \f$\beta\f$ virtual orbital list
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */

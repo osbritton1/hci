@@ -15,7 +15,7 @@
  * occupancy list.
  *
  * To be explicit, this function returns true exactly when the the intersection of \p exc_list
- * and \p occ_list and the set difference \p exc_list\ \p occ_list are both of size \p exc_order, in which
+ * and \p occ_list and the set difference \p exc_list \ \p occ_list are both of size \p exc_order, in which
  * case the intersection will be written to \p res->old_orbs, the difference to \p res->new_orbs
  * and the excited configuration formed by substituting \c old_orbs with \c new_orbs to \p new_occ_list.
  * This is essentially a customized merge algorithm for sorted lists.
@@ -107,7 +107,7 @@ static bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, cons
  *
  * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
  * @param[in] brank Rank of associated \f$\beta\f$ string being left unchanged
- * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored double \f$\alpha\f$ excitations
+ * @param[in] exc_entries Pointer to \ref ExcEntries object  sorted desc. by magnitude providing location of stored double \f$\alpha\f$ excitations
  * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
@@ -147,7 +147,7 @@ static size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries
  *
  * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
  * @param[in] arank Rank of associated \f$\alpha\f$ string being left unchanged
- * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored double \f$\beta\f$ excitations
+ * @param[in] exc_entries Pointer to \ref ExcEntries object  sorted desc. by magnitude providing location of stored double \f$\beta\f$ excitations
  * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
@@ -188,7 +188,7 @@ static size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries
  *
  * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
  * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
- * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored mixed excitations
+ * @param[in] exc_entries Pointer to \ref ExcEntries object  sorted desc. by magnitude providing location of stored mixed excitations
  * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
@@ -229,7 +229,7 @@ static size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEn
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] thresh The threshold used for adding a determinant to the configuration space; compared to the magnitude of the coefficient times the excitation matrix element
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
- * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored mixed excitations
+ * @param[in] exc_entries Pointer to \ref ExcEntries object sorted desc. by magnitude providing location of stored mixed excitations
  * @return The number of (not necessarily distinct) configurations written to \p add_list
  */
 size_t enlarge_space_doubles(const HCIVec *hcivec, Rank *add_list, double thresh, 

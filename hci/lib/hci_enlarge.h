@@ -25,8 +25,8 @@ typedef struct {
  * Lightweight tuple-like struct for storing associated \f$\alpha\f$ and \f$\beta\f$ ranks.
  */
 typedef struct {
-    uint64_t arank;
-    uint64_t brank;
+    uint64_t arank; /**< The rank of the \f$\alpha\f$ occupancy list of the associated configuration */
+    uint64_t brank; /**< The rank of the \f$\beta\f$ occupancy list of the associated configuration */
 } Rank;
 
 /**

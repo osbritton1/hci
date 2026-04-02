@@ -34,7 +34,7 @@ double get_matrix_element_by_rank_test_storage(Rank rank1, Rank rank2,
     const ConfigInfo *config_info, const ExcEntries *excitation_entries,
     const HCore *h1e, const ERITensor *eri_mo);
 
-void make_hdiag_slow(HCIVec *hcivec, double *hdiag,
+void make_hdiag_slow(const HCIVec *hcivec, double *hdiag,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo);
 
 void contract_hamiltonian_hcivec_slow(HCIVec *hcivec_old, double *coeffs_new, const double *hdiag,

@@ -76,17 +76,28 @@ static void sort_changing_orbs(size_t *orb_list, const size_t *old_orbs, const s
     }
 }
 
-
+/**
+ * Given two occupation lists, determines if they are identical or differ by a single orbital,
+ * two orbitals, or three or more orbitals, writing \p occ_1 \ \p occ_2 to \c old_orbs and
+ * \p occ_2 \ \p occ_1 to \c new_orbs of \p exc_result (computing the sign of the excitation
+ * along the way).
+ *
+ * @param[in] occ_1 Pointer to the first orbital occupancy list of length \p nocc
+ * @param[in] occ_2 Pointer to the second orbital occupancy list of length \p nocc
+ * @param[in] nocc The number of occupied orbitals
+ * @param[out] exc_result Pointer to the output \ref ExcResult 
+ */
 static DiffType get_diff_type(const size_t *occ_1, const size_t *occ_2, size_t nocc, ExcResult *exc_result) {
-    size_t iold = 0;
-    size_t inew = 0;
-    size_t iocc_1 = 0;
-    size_t iocc_2 = 0;
-    double sign = 1.0;
+    size_t iold = 0; // Index of ExcResult old_orbs being written to
+    size_t inew = 0; // Index of ExcResult new_orbs being written to
+    size_t iocc_1 = 0;  // Index of first orbital occupancy list being read from
+    size_t iocc_2 = 0; // Index of second orbital occupancy list being read from
+    double sign = 1.0; // Sign of excitation
     while ((iocc_1 < nocc) && (iocc_2 < nocc)) {
         size_t occ_orb_1 = occ_1[iocc_1];
         size_t occ_orb_2 = occ_2[iocc_2];
         if (occ_orb_1 < occ_orb_2) {
+            // Three or more orbitals found in occ_1\occ_2
             if (iold == 2) {
                 return THREE_PLUS;
             }
@@ -95,6 +106,7 @@ static DiffType get_diff_type(const size_t *occ_1, const size_t *occ_2, size_t n
             iocc_1++;
             iold++;
         } else if (occ_orb_2 < occ_orb_1) {
+            // Three or more orbitals found in occ_2\occ_1
             if (inew == 2) {
                 return THREE_PLUS;
             }
@@ -107,6 +119,8 @@ static DiffType get_diff_type(const size_t *occ_1, const size_t *occ_2, size_t n
             iocc_2++;
         }
     }
+    // Determine which condition caused the while loop to exit and handle the remaining
+    // part of the relevant list
     if ((iocc_1 == nocc) && (iocc_2 < nocc)) {
         size_t nrem = nocc-iocc_2;
         if ((inew + nrem) > 2) {
@@ -334,7 +348,7 @@ double get_single_exc_value_b(const ExcResult *single_exc, const size_t *occ_a, 
  * Formula: \f{aligned}{ 
              \langle\Psi|\Psi_{ab}^{rs}\rangle=&[ar|bs]-[as|br]&\\
              =\,&(ar|bs)-(as|br) &\text{From $\verb|eri_mo_aaaa_s8|$}\\
-           \f}s
+           \f}
  * 
  * Formula conventions:
  * - \f$[\quad|\quad]\f$ are used for spin orbitals, while \f$(\quad|\quad)\f$ are used for spatial orbitals
@@ -473,6 +487,16 @@ double get_mixed_exc_value_from_store(const MixedExcEntry *exc_entry,
         return sign*exc_entry->ijkl;
 }
 
+/**
+ * Calculates the Hamiltonian matrix element between two configurations given their ranks.
+ *
+ * @param[in] rank1 \ref Rank specifying the \f$\alpha\f$ and \f$\beta\f$ string of the first configuration
+ * @param[in] rank2 \ref Rank specifying the \f$\alpha\f$ and \f$\beta\f$ string of the second configuration
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The matrix element of of the Hamiltonian between the two configurations
+ */
 double get_matrix_element_by_rank(Rank rank1, Rank rank2, 
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
@@ -550,6 +574,18 @@ double get_matrix_element_by_rank(Rank rank1, Rank rank2,
         return 0.0;
 }
 
+/**
+ * Calculates the Hamiltonian matrix element between two configurations given occupancy lists for the first
+ * configuration and the \ref Rank associated with the second configuration.
+ *
+ * @param[in] occ_a_1 Pointer to \f$\alpha\f$ occupancy list of first configuration
+ * @param[in] occ_b_1 Pointer to \f$\beta\f$ occupancy list of first configuration
+ * @param[in] rank2 \ref Rank specifying the \f$\alpha\f$ and \f$\beta\f$ string of the second configuration
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The matrix element of of the Hamiltonian between the two configurations
+ */
 double get_matrix_element_by_partial_rank(uint64_t *occ_a_1, uint64_t *occ_b_1, Rank rank2,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
@@ -619,8 +655,21 @@ double get_matrix_element_by_partial_rank(uint64_t *occ_a_1, uint64_t *occ_b_1, 
         return 0.0;
 }
 
+/**
+ * Calculates the Hamiltonian matrix element between two configurations given their ranks;
+ * uses the excitation matrix elements stored in \p exc_entries instead of \p eri_mo directly
+ * for the purposes of checking the extraction logic.
+ *
+ * @param[in] rank1 \ref Rank specifying the \f$\alpha\f$ and \f$\beta\f$ string of the first configuration
+ * @param[in] rank2 \ref Rank specifying the \f$\alpha\f$ and \f$\beta\f$ string of the second configuration
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] exc_entries Pointer to \ref ExcEntries object sorted inc. by rank providing location of stored excitations
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The matrix element of of the Hamiltonian between the two configurations
+ */
 double get_matrix_element_by_rank_test_storage(Rank rank1, Rank rank2, 
-    const ConfigInfo *config_info, const ExcEntries *excitation_entries,
+    const ConfigInfo *config_info, const ExcEntries *exc_entries,
     const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
@@ -653,7 +702,7 @@ double get_matrix_element_by_rank_test_storage(Rank rank1, Rank rank2,
                         size_t exc_label[4];
                         sort_changing_orbs(exc_label, exc_b.old_orbs, exc_b.new_orbs);
                         size_t exc_rank = rank_double_exc(exc_label, config_info);
-                        return get_double_exc_value_from_store(excitation_entries->doubles_bb+exc_rank, &exc_b);
+                        return get_double_exc_value_from_store(exc_entries->doubles_bb+exc_rank, &exc_b);
                     }
                     case THREE_PLUS:
                         return 0.0;
@@ -689,7 +738,7 @@ double get_matrix_element_by_rank_test_storage(Rank rank1, Rank rank2,
                             exc_label[3] = exc_b.old_orbs[0];
                         }
                         size_t exc_rank = rank_mixed_exc(exc_label, config_info);
-                        return get_mixed_exc_value_from_store(excitation_entries->mixed_ab+exc_rank, &exc_a, &exc_b);
+                        return get_mixed_exc_value_from_store(exc_entries->mixed_ab+exc_rank, &exc_a, &exc_b);
                     }
                     case DOUBLE:
                     case THREE_PLUS:
@@ -708,7 +757,7 @@ double get_matrix_element_by_rank_test_storage(Rank rank1, Rank rank2,
                         size_t exc_label[4];
                         sort_changing_orbs(exc_label, exc_a.old_orbs, exc_a.new_orbs);
                         size_t exc_rank = rank_double_exc(exc_label, config_info);
-                        return get_double_exc_value_from_store(excitation_entries->doubles_aa+exc_rank, &exc_a);
+                        return get_double_exc_value_from_store(exc_entries->doubles_aa+exc_rank, &exc_a);
                     }
                     case SINGLE:
                     case DOUBLE:
@@ -722,7 +771,17 @@ double get_matrix_element_by_rank_test_storage(Rank rank1, Rank rank2,
         return 0.0;
 }
 
-void make_hdiag_slow(HCIVec *hcivec, double *hdiag,
+/**
+ * Assembles all diagonal matrix elements for configurations contained
+ * in \p hcivec naively; used for the Davidson preconditioner.
+ *
+ * @param[in] hcivec Pointer to a \ref HCIVec supplying configuration ranks (and their coefficients too)
+ * @param[out] hdiag Pointer to array of length \p hcivec->len where the diagonal elements should be written to
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ */
+void make_hdiag_slow(const HCIVec *hcivec, double *hdiag,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
@@ -737,6 +796,17 @@ void make_hdiag_slow(HCIVec *hcivec, double *hdiag,
         }
 }
 
+/**
+ * Contracts \p hcivec_old with the Hamiltonian in the subspace spanned by the \p hcivec_old->ranks
+ * in a naive fashion, outputting the new coefficients to \p coeffs_new.
+ *
+ * @param[in] hcivec_old Pointer to a \ref HCIVec supplying configuration ranks and their coefficients
+ * @param[out] coeffs_new The coefficients after contraction with the Hamiltonian
+ * @param[in] hdiag Pointer to the diagonal elements of the Hamiltonian
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ */
 void contract_hamiltonian_hcivec_slow(HCIVec *hcivec_old, double *coeffs_new, const double *hdiag,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;

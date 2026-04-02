@@ -37,6 +37,7 @@ size_t index_2d(size_t i, size_t j) {
  * @param[in] j The zero-based index of the second orbital
  * @param[in] k The zero-based index of the third orbital
  * @param[in] l The zero-based index of the fourth orbital
+ * @param[in] ncols \f$\binom{N_\text{orb}+1}{2}\f$, i.e. the number of entries in a fourfold compressed ERI tensor associated with a single pair of orbitals \f$ij\f$
  * @return the index of [ij|kl] in a fourfold-compressed ERI tensor
  */
 size_t index_4d(size_t i, size_t j, size_t k, size_t l, size_t ncols) {
@@ -89,7 +90,7 @@ static void get_max_mag_mixed(const MixedExcEntry *mixed, double *magnitudes, si
  * Computes and stores the minimal amount of data needed to generate
  * all possible double excitation matrix elements from a given ERI tensor.
  *
- * @param[out] doubles Pointer to an array of \ref DoubleExcitationEntry of length \f$\binom{N_\text{orb}}{4}\f$
+ * @param[out] doubles Pointer to an array of \ref DoubleExcEntry of length \f$\binom{N_\text{orb}}{4}\f$
  * @param[in] eri_mo_xxxx_s8 Pointer to the eightfold-compressed ERI tensor (of \f$\alpha\f$ or \f$\beta\f$ type)
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
@@ -114,7 +115,7 @@ static void load_doubles_from_eri(DoubleExcEntry *doubles, const double *eri_mo_
 /**
  * Computes and stores mixed excitations.
  *
- * @param[out] mixed Pointer to an array of \ref MixedExcitationEntry of length \f$\binom{N_\text{orb}}{2}\f$
+ * @param[out] mixed Pointer to an array of \ref MixedExcEntry of length \f$\binom{N_\text{orb}}{2}\f$
  * @param[in] eri_mo_aabb_s4 Pointer to the fourfold-compressed mixed ERI tensor of mixed type
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  * @param[in] ncols_aabb \f$\binom{N_\text{orb}+1}{2}\f$, i.e. the number of entries in the mixed ERI tensor associated with a single pair of \f$\alpha\f$ orbitals
