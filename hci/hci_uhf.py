@@ -1,5 +1,12 @@
-import lib as hcilib
-from lib import HCore, ERITensor, ConfigInfo, ExcEntries, HCIVec
+import sys
+parent_module = sys.modules['.'.join(__name__.split('.')[:-1]) or '__main__']
+if __name__ == '__main__' or parent_module.__name__ == '__main__':
+    import lib as hcilib
+    from lib import HCore, ERITensor, ConfigInfo, ExcEntries, HCIVec
+else:
+    import hci.lib as hcilib
+    from hci.lib import HCore, ERITensor, ConfigInfo, ExcEntries, HCIVec
+
 from pyscf import ao2mo, __config__
 from pyscf import lib as pyscflib
 from pyscf.lib import logger

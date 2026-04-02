@@ -16,6 +16,7 @@ double_exc_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double), ('iljk', 
 mixed_exc_entry = np.dtype([('rank', np.uint64), ('ijkl', np.double)])
 
 libhci = load_library("libhci")
+libhci.__name__ = "libhci"
 libhci.get_matrix_element_by_rank.restype = ct.c_double
 libhci.get_matrix_element_by_rank_test_storage.restype = ct.c_double
 
