@@ -9,14 +9,33 @@
 #include <math.h>
 #include <string.h>
 
-bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, const size_t *occ_list, size_t nocc,
+/**
+ * Given a list of excitation orbitals, attempts to excite the provided configuration;
+ * on success, outputs the detailed information of the excitation and generates a new
+ * occupancy list.
+ *
+ * To be explicit, this function returns true exactly when the the intersection of \p exc_list
+ * and \p occ_list and the set difference \p exc_list\ \p occ_list are both of size \p exc_order, in which
+ * case the intersection will be written to \p res->old_orbs, the difference to \p res->new_orbs
+ * and the excited configuration formed by substituting \c old_orbs with \c new_orbs to \p new_occ_list.
+ * This is essentially a customized merge algorithm for sorted lists.
+ *
+ * @param[in] exc_list Pointer to the list of orbitals involved in the excitation of length 2*\p exc_order (sorted in asc. order)
+ * @param[in] exc_order The order of the excitation
+ * @param[in] occ_list Pointer to the occupancy list of the reference determinant of length \p nocc (sorted in asc. order)
+ * @param[in] nocc The number of orbitals occupied in the reference determinant
+ * @param[out] res Pointer to the ExcResult to be written to on success
+ * @param[out] new_occ_list Pointer to array where the new occupied orbitals should be stored (of length \p nocc); will be sorted in asc. order as well
+ * @return True if the given excitation and determinant are compatible; when false, \p res and \p new_occ_list are garbage
+ */
+static bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, const size_t *occ_list, size_t nocc,
     ExcResult *res, size_t *new_occ_list) {
-        size_t iexc = 0;
-        size_t iocc = 0;
-        size_t iold = 0;
-        size_t inew = 0;
-        size_t inew_occ = 0;
-        double sign = 1.0;
+        size_t iexc = 0; // Index of excitation list being read from
+        size_t iocc = 0; // Index of occupancy list being read from
+        size_t iold = 0; // Index of ExcResult old_orbs being written to
+        size_t inew = 0; // Index of ExcResult new_orbs being written to
+        size_t inew_occ = 0; // Index of new occupancy list being written to
+        double sign = 1.0; // Sign of excitation
         while ((iexc < 2*exc_order) && (iocc < nocc)) {
             size_t exc_orb = exc_list[iexc];
             size_t occ_orb = occ_list[iocc];
@@ -29,7 +48,6 @@ bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, const size_
                 (res->new_orbs)[inew] = exc_orb;
                 new_occ_list[inew_occ] = exc_orb;
                 sign *= ((inew_occ - inew) % 2 == 0) ? 1.0 : -1.0;
-                // (res->new_indices)[inew] = inew_occ;
                 iexc++;
                 inew++;
                 inew_occ++;
@@ -40,7 +58,6 @@ bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, const size_
                 }
                 (res->old_orbs)[iold] = occ_orb;
                 sign *= ((iocc - iold) % 2 == 0) ? 1.0 : -1.0;
-                // (res->old_indices)[iold] = iocc;
                 iexc++;
                 iocc++;
                 iold++;
@@ -74,8 +91,6 @@ bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, const size_
                 while (inew < exc_order) {
                     (res->new_orbs)[inew] = exc_list[iexc];
                     new_occ_list[inew_occ] = exc_list[iexc];
-                    // sign *= ((inew_occ - inew) % 2 == 0) ? 1.0 : -1.0;
-                    // (res->new_indices)[inew] = inew_occ;
                     iexc++;
                     inew++;
                     inew_occ++;
@@ -86,7 +101,18 @@ bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, const size_
         return true;
 }
 
-size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries *exc_entries, double entry_thresh, 
+/**
+ * Given a reference \f$\alpha\f$ occupancy list, outputs all \f$\alpha\alpha\rightarrow\alpha\alpha\f$
+ * excitations to \p add_list that satisfy the HCI selection criterion.
+ *
+ * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
+ * @param[in] brank Rank of associated \f$\beta\f$ string being left unchanged
+ * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored double \f$\alpha\f$ excitations
+ * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
+ * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ */
+static size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries *exc_entries, double entry_thresh, 
     Rank *add_list, const ConfigInfo *config_info) {
         size_t nelec_a = config_info->nelec_a;
         size_t iadd = 0;
@@ -95,12 +121,15 @@ size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries *exc_e
             size_t exc_aa[4];
             size_t new_occ_a[nelec_a];
             ExcResult exc_result_aa = NEW_DOUBLE_EXC_RESULT();
-
+            // Decode excitation entry
             unrank_double_exc(exc_entry_aa.rank, exc_aa, config_info);
+            // Break if excitation magnitude falls below threshold
             if (exc_entries->max_mag_aa[iexc] < entry_thresh) {
                 break;
             }
+            // If the excitation entry is a valid double excitation
             if (get_changing_orbitals(exc_aa, 2, occ_a, nelec_a, &exc_result_aa, new_occ_a)) {
+                // Get correct matrix element and compare to threshold
                 double exc_val = get_double_exc_value_from_store(&exc_entry_aa, &exc_result_aa);
                 if (fabs(exc_val) >= entry_thresh) {
                     add_list[iadd].arank = rank_occ_a(new_occ_a, config_info);
@@ -112,7 +141,18 @@ size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries *exc_e
         return iadd;
 }
 
-size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries *exc_entries, double entry_thresh, 
+/**
+ * Given a reference \f$\beta\f$ occupancy list, outputs all \f$\beta\beta\rightarrow\beta\beta\f$
+ * excitations to \p add_list that satisfy the HCI selection criterion.
+ *
+ * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
+ * @param[in] arank Rank of associated \f$\alpha\f$ string being left unchanged
+ * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored double \f$\beta\f$ excitations
+ * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
+ * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ */
+static size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries *exc_entries, double entry_thresh, 
      Rank *add_list, const ConfigInfo *config_info) {
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
@@ -122,12 +162,15 @@ size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries *exc_e
             size_t new_occ_b[nelec_b];
             ExcResult exc_result_bb = NEW_DOUBLE_EXC_RESULT();
             exc_entry_bb = exc_entries->doubles_bb[iexc];
-
+            // Decode excitation entry
             unrank_double_exc(exc_entry_bb.rank, exc_bb, config_info);
+            // Break if excitation magnitude falls below threshold
             if (exc_entries->max_mag_bb[iexc] < entry_thresh) {
                 break;
             }
+            // If the excitation entry is a valid double excitation 
             if (get_changing_orbitals(exc_bb, 2, occ_b, nelec_b, &exc_result_bb, new_occ_b)) {
+                // Get correct matrix element and compare to threshold
                 double exc_val = get_double_exc_value_from_store(&exc_entry_bb, &exc_result_bb);
                 if (fabs(exc_val) >= entry_thresh) {
                     add_list[iadd].arank = arank;
@@ -139,7 +182,18 @@ size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries *exc_e
         return iadd;
 }
 
-size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *exc_entries, double entry_thresh, 
+/**
+ * Given reference \f$\alpha\f$ and \f$\beta\f$ occupancy lists, outputs all \f$\alpha\beta\rightarrow\alpha\beta\f$
+ * excitations to \p add_list that satisfy the HCI selection criterion.
+ *
+ * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
+ * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
+ * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored mixed excitations
+ * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
+ * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ */
+static size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *exc_entries, double entry_thresh, 
      Rank *add_list, const ConfigInfo *config_info) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
@@ -151,11 +205,13 @@ size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *
             size_t new_occ_b[nelec_b];
             ExcResult single_exc_result_a = NEW_SINGLE_EXC_RESULT();
             ExcResult single_exc_result_b = NEW_SINGLE_EXC_RESULT();
-            
+            // Decode the mixed excitation
             unrank_mixed_exc(exc_entry.rank, exc_ab, config_info);
+            // Break if excitation magnitude falls below threshold
             if (exc_entries->max_mag_ab[iexc] < entry_thresh) {
                 break;
             }
+            // If the excitation entry is a valid mixed excitation
             if (get_changing_orbitals(exc_ab, 1, occ_a, nelec_a, &single_exc_result_a, new_occ_a) &&
                 get_changing_orbitals(exc_ab+2, 1, occ_b, nelec_b, &single_exc_result_b, new_occ_b)) {
                     add_list[iadd].arank = rank_occ_a(new_occ_a, config_info);
@@ -166,6 +222,16 @@ size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *
         return iadd;
 }
 
+/**
+ * Outputs all double and mixed excitations to \p add_list that satisfy the HCI selection criterion.
+ *
+ * @param[in] hcivec Pointer to a \ref HCIVec supplying configuration ranks and their coefficients
+ * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
+ * @param[in] thresh The threshold used for adding a determinant to the configuration space; compared to the magnitude of the coefficient times the excitation matrix element
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] exc_entries Pointer to desc. sorted \ref ExcEntries object providing location of stored mixed excitations
+ * @return The number of (not necessarily distinct) configurations written to \p add_list
+ */
 size_t enlarge_space_doubles(const HCIVec *hcivec, Rank *add_list, double thresh, 
     const ConfigInfo *config_info, const ExcEntries *exc_entries) {
         size_t iadd = 0;
@@ -196,11 +262,26 @@ size_t enlarge_space_doubles(const HCIVec *hcivec, Rank *add_list, double thresh
         return iadd;
 }
 
-size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const size_t *occ_b, size_t brank, 
+/**
+ * Given reference \f$\alpha\f$ and \f$\beta\f$ occupancy lists, outputs all single \f$\alpha\rightarrow\alpha\f$
+ * excitations to \p add_list that satisfy the HCI selection criterion.
+ *
+ * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
+ * @param[in] virt_a Pointer to list of virtual/unoccupied \f$\alpha\f$ orbitals
+ * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
+ * @param[in] brank Rank of associated \f$\beta\f$ string being left unchanged
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_singles
+ * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ */
+static size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const size_t *occ_b, size_t brank, 
     const HCore *h1e, const ERITensor *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info) {
         size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t iadd = 0;
+        // Try and generate all single excitations from an occupied to a virtual orbital
         for (size_t iocc=0; iocc<nelec_a; iocc++) {
             size_t occ_orb = occ_a[iocc];
             for (size_t ivirt=0; ivirt<norb-nelec_a; ivirt++) {
@@ -221,11 +302,26 @@ size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const size_t *oc
         return iadd;
 }
 
-size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *occ_a, size_t arank, 
+/**
+ * Given reference \f$\alpha\f$ and \f$\beta\f$ occupancy lists, outputs all single \f$\beta\rightarrow\beta\f$
+ * excitations to \p add_list that satisfy the HCI selection criterion.
+ *
+ * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
+ * @param[in] virt_b Pointer to list of virtual/unoccupied \f$\beta\f$ orbitals
+ * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
+ * @param[in] arank Rank of associated \f$\alpha\f$ string being left unchanged
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_singles
+ * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ */
+static size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *occ_a, size_t arank, 
     const HCore *h1e, const ERITensor *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info) {
         size_t norb = config_info->norb;
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
+        // Try and generate all single excitations from an occupied to a virtual orbital
         for (size_t iocc=0; iocc<nelec_b; iocc++) {
             size_t occ_orb = occ_b[iocc];
             for (size_t ivirt=0; ivirt<norb-nelec_b; ivirt++) {
@@ -246,6 +342,17 @@ size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *oc
         return iadd;
 }
 
+/**
+ * Outputs all single excitations to \p add_list that satisfy the HCI selection criterion.
+ *
+ * @param[in] hcivec Pointer to a \ref HCIVec supplying configuration ranks and their coefficients
+ * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
+ * @param[in] thresh The threshold used for adding a determinant to the configuration space; compared to the magnitude of the coefficient times the excitation matrix element
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The number of (not necessarily distinct) configurations written to \p add_list
+ */
 size_t enlarge_space_singles(const HCIVec *hcivec, Rank *add_list, double thresh,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t iadd = 0;

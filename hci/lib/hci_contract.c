@@ -8,6 +8,11 @@
 #include <math.h>
 #include <assert.h>
 
+/**
+ * Enum to encode number of differences between two occupancy lists; more
+ * than two differences results in a matrix element of zero because only
+ * one- and two-electron operators are involved in the Hamiltonian.
+ */
 typedef enum {
     ZERO,
     SINGLE,
@@ -15,6 +20,9 @@ typedef enum {
     THREE_PLUS
 } DiffType;
 
+/**
+ * Enum used in the determination of the correct double excitation matrix element from storage.
+ */
 typedef enum {
     IJKL,
     IJLK,
@@ -24,6 +32,14 @@ typedef enum {
     ILKJ
 } DESIGNATOR;
 
+/**
+ * Helper method to merge two sorted two-orbital lists into a sorted four-orbital list
+ * in the calculation of the rank of a double excitation.
+ *
+ * @param[out] orb_list Pointer to the sorted four-orbital list
+ * @param[in] old_orbs Pointer to the first sorted two-orbital list
+ * @param[in] new_orbs Pointer to the second sorted two-orbital list
+ */
 static void sort_changing_orbs(size_t *orb_list, const size_t *old_orbs, const size_t *new_orbs) {
     if (old_orbs[0] < new_orbs[0]) {
         orb_list[0] = old_orbs[0];
@@ -60,176 +76,8 @@ static void sort_changing_orbs(size_t *orb_list, const size_t *old_orbs, const s
     }
 }
 
-double get_diag_value(const size_t *occ_a, const size_t *occ_b, const ConfigInfo *config_info,
-    const HCore *h1e, const ERITensor *eri_mo) {
-        size_t norb = config_info->norb;
-        size_t nelec_a = config_info->nelec_a;
-        size_t nelec_b = config_info->nelec_b;
-        size_t ncols = eri_mo->ncols_aabb;
-        double sum = 0.0;
 
-        // Contribution from h1e_aa
-        for (size_t iocc=0; iocc<nelec_a; iocc++) {
-            size_t occ_orb = occ_a[iocc];
-            sum += h1e->h1e_mo_aa[(occ_orb*norb)+occ_orb];
-        }
-        // Contribution from h1e_bb
-        for (size_t iocc=0; iocc<nelec_b; iocc++) {
-            size_t occ_orb = occ_b[iocc];
-            sum += h1e->h1e_mo_bb[(occ_orb*norb)+occ_orb];
-        }
-        // Contribution from eri_aaaa_s8
-        for (size_t iocc=0; iocc<nelec_a-1; iocc++) {
-            size_t occ_orb = occ_a[iocc];
-            for (size_t jocc=iocc+1; jocc<nelec_a; jocc++) {
-                size_t occ_orb_2 = occ_a[jocc];
-                sum += eri_mo->eri_mo_aaaa_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]
-                      -eri_mo->eri_mo_aaaa_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
-            }
-        }
-        // Contribution from eri_bbbb_s8
-        for (size_t iocc=0; iocc<nelec_b-1; iocc++) {
-            size_t occ_orb = occ_b[iocc];
-            for (size_t jocc=iocc+1; jocc<nelec_b; jocc++) {
-                size_t occ_orb_2 = occ_b[jocc];
-                sum += eri_mo->eri_mo_bbbb_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]
-                      -eri_mo->eri_mo_bbbb_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
-            }
-        }
-        // Contribution from eri_aabb_s4
-        for (size_t iocc=0; iocc<nelec_a; iocc++) {
-            size_t occ_orb = occ_a[iocc];
-            double *row = eri_mo->eri_mo_aabb_s4+(index_2d(occ_orb, occ_orb)*ncols);
-            for (size_t jocc=0; jocc<nelec_b; jocc++) {
-                size_t occ_orb_2 = occ_b[jocc];
-                sum += row[index_2d(occ_orb_2, occ_orb_2)];
-            }
-        }
-        return sum;
-}
-
-double get_single_exc_value_a(const ExcResult *single_exc, const size_t *occ_a, const size_t *occ_b,
-    const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
-        size_t norb = config_info->norb;
-        size_t nelec_a = config_info->nelec_a;
-        size_t nelec_b = config_info->nelec_b;
-        size_t ncols = eri_mo->ncols_aabb;
-        size_t old_orb = single_exc->old_orbs[0];
-        size_t new_orb = single_exc->new_orbs[0];
-        double sum = 0.0;
-        double *row = eri_mo->eri_mo_aabb_s4+(index_2d(old_orb, new_orb)*ncols);
-
-        // Contribution from aaaa block
-        for (size_t iocc=0; iocc<nelec_a; iocc++) {
-            size_t occ_orb_2 = occ_a[iocc];
-            sum += eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, new_orb, occ_orb_2, occ_orb_2)]
-                  -eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
-        }
-        // Contribution from aabb block
-        for (size_t iocc=0; iocc<nelec_b; iocc++) {
-            size_t occ_orb_2 = occ_b[iocc];
-            sum += row[index_2d(occ_orb_2, occ_orb_2)];
-        }
-        // Contribution from 1e Hamiltonian
-        sum += h1e->h1e_mo_aa[(old_orb*norb)+new_orb];
-
-        return single_exc->sign*sum;
-}
-
-double get_single_exc_value_b(const ExcResult *single_exc, const size_t *occ_a, const size_t *occ_b,
-    const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
-        size_t norb = config_info->norb;
-        size_t nelec_a = config_info->nelec_a;
-        size_t nelec_b = config_info->nelec_b;
-        size_t ncols = eri_mo->ncols_aabb;
-        size_t old_orb = single_exc->old_orbs[0];
-        size_t new_orb = single_exc->new_orbs[0];
-        double sum = 0.0;
-        size_t col = index_2d(old_orb, new_orb);
-
-        // Contribution from bbbb block
-        for (size_t iocc=0; iocc<nelec_b; iocc++) {
-            size_t occ_orb_2 = occ_b[iocc];
-            sum += eri_mo->eri_mo_bbbb_s8[index_8d(old_orb, new_orb, occ_orb_2, occ_orb_2)]
-                  -eri_mo->eri_mo_bbbb_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
-        }
-        // Contribution from aabb block
-        for (size_t iocc=0; iocc<nelec_a; iocc++) {
-            size_t occ_orb_2 = occ_a[iocc];
-            sum += eri_mo->eri_mo_aabb_s4[(index_2d(occ_orb_2, occ_orb_2)*ncols)+col];
-        }
-        // Contribution from 1e Hamiltonian
-        sum += h1e->h1e_mo_bb[(old_orb*norb)+new_orb];
-
-        return single_exc->sign*sum;
-}
-
-double get_double_exc_value_aa(const ExcResult *double_exc, const ERITensor *eri_mo) {
-    size_t *old_orbs = double_exc->old_orbs;
-    size_t *new_orbs = double_exc->new_orbs;
-    return double_exc->sign*(eri_mo->eri_mo_aaaa_s8[index_8d(old_orbs[0], new_orbs[0], old_orbs[1], new_orbs[1])]
-                            -eri_mo->eri_mo_aaaa_s8[index_8d(old_orbs[0], new_orbs[1], old_orbs[1], new_orbs[0])]);
-}
-
-double get_double_exc_value_bb(const ExcResult *double_exc, const ERITensor *eri_mo) {
-    size_t *old_orbs = double_exc->old_orbs;
-    size_t *new_orbs = double_exc->new_orbs;
-    return double_exc->sign*(eri_mo->eri_mo_bbbb_s8[index_8d(old_orbs[0], new_orbs[0], old_orbs[1], new_orbs[1])]
-                            -eri_mo->eri_mo_bbbb_s8[index_8d(old_orbs[0], new_orbs[1], old_orbs[1], new_orbs[0])]);
-}
-
-double get_double_exc_value_from_store(const DoubleExcEntry *exc_entry, const ExcResult *double_exc) {
-    size_t *old_orbs = double_exc->old_orbs;
-    size_t *new_orbs = double_exc->new_orbs;
-    size_t orb_list[4];
-    uint8_t designator = 0;
-    if (old_orbs[0] <= new_orbs[0]) {
-        orb_list[0] = old_orbs[0];
-        orb_list[1] = new_orbs[0];
-        orb_list[2] = old_orbs[1];
-        orb_list[3] = new_orbs[1];
-    } else {
-        orb_list[0] = new_orbs[0];
-        orb_list[1] = old_orbs[0];
-        orb_list[2] = new_orbs[1];
-        orb_list[3] = old_orbs[1];
-    }
-    designator += (orb_list[1] > orb_list[2]) ? 2 : 0;
-    designator += (orb_list[1] > orb_list[3]) ? 2 : 0;
-    designator += (orb_list[2] > orb_list[3]) ? 1 : 0;
-    switch (designator) {
-        case IJKL:
-            return exc_entry->ijkl*double_exc->sign;
-        case IJLK:
-            return (exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
-        case IKJL:
-            return -exc_entry->iljk*double_exc->sign;
-        case IKLJ:
-            return -(exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
-        case ILJK:
-            return exc_entry->iljk*double_exc->sign;
-        case ILKJ:
-            return -exc_entry->ijkl*double_exc->sign;
-        default:
-            return nan("");
-    }
-}
-
-double get_mixed_exc_value(const ExcResult *single_exc_a, const ExcResult *single_exc_b, 
-    const ERITensor *eri_mo) {
-        double sign = single_exc_a->sign*single_exc_b->sign;
-        size_t row = index_2d(single_exc_a->old_orbs[0], single_exc_a->new_orbs[0]);
-        size_t col = index_2d(single_exc_b->old_orbs[0], single_exc_b->new_orbs[0]);
-        return sign*eri_mo->eri_mo_aabb_s4[(row*eri_mo->ncols_aabb)+col];
-}
-
-double get_mixed_exc_value_from_store(const MixedExcEntry *exc_entry, 
-    const ExcResult *single_exc_a, const ExcResult *single_exc_b) {
-        double sign = single_exc_a->sign * single_exc_b->sign;
-        return sign*exc_entry->ijkl;
-}
-
-DiffType get_diff_type(const size_t *occ_1, const size_t *occ_2, size_t nocc, ExcResult *exc_result) {
+static DiffType get_diff_type(const size_t *occ_1, const size_t *occ_2, size_t nocc, ExcResult *exc_result) {
     size_t iold = 0;
     size_t inew = 0;
     size_t iocc_1 = 0;
@@ -296,6 +144,333 @@ DiffType get_diff_type(const size_t *occ_1, const size_t *occ_2, size_t nocc, Ex
         default:
             return THREE_PLUS;
     }
+}
+
+/**
+ * Calculates the expectation value of the Hamiltonian for a given configuration (i.e. the
+ * on-diagonal element).
+ *
+ * Formula: \f{aligned}{ 
+             \langle\Psi|\Psi\rangle=&\sum\limits_a [a|h_\text{core}|a] + \dfrac{1}{2}\sum\limits_{ab} [aa|bb]-[ab|ba]&\\
+             =\,&\sum\limits_a (a|h_\text{core}|a) + \sum\limits_\bar{a} (\bar{a}|h_\text{core}|\bar{a})&\text{From $\verb|h1e_aa|$ and $\verb|h1e_bb|$}\\
+             +\,&\sum\limits_{a<b} (aa|bb)-(ab|ba)&\text{From $\verb|eri_mo_aaaa_s8|$}\\
+             +\,&\sum\limits_{\bar{a}<\bar{b}} (\bar{a}\bar{a}|\bar{b}\bar{b})-(\bar{a}\bar{b}|\bar{b}\bar{a})&\text{From $\verb|eri_mo_bbbb_s8|$}\\
+             +\,&\sum\limits_{a\bar{b}} (aa|\bar{b}\bar{b})&\text{From $\verb|eri_mo_aabb_s4|$}
+           \f}
+ * 
+ * Formula conventions:
+ * - \f$[\quad|\quad]\f$ are used for spin orbital summations, while \f$(\quad|\quad)\f$ are used for spatial orbital summations
+ * - \f$a\f$ and \f$b\f$ index occupied spin orbitals in \f$\Psi\f$ if \f$[\quad|\quad]\f$ are used and occupied spatial orbitals if \f$(\quad|\quad)\f$ are used
+ * - When summing over spatial orbitals, \f$a\f$ and \f$b\f$ are \f$\alpha\f$ MOs while \f$\bar{a}\f$ and \f$\bar{b}\f$ are \f$\beta\f$ MOs
+ *
+ * @param[in] occ_a  Pointer to the list of occupied \f$\alpha\f$ orbitals
+ * @param[in] occ_b  Pointer to the list of occupied \f$\beta\f$ orbitals
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The expectation value of the energy of the configuration
+ */
+double get_diag_value(const size_t *occ_a, const size_t *occ_b, const ConfigInfo *config_info,
+    const HCore *h1e, const ERITensor *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        size_t ncols = eri_mo->ncols_aabb;
+        double sum = 0.0;
+
+        // Contribution from h1e_aa
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb = occ_a[iocc];
+            sum += h1e->h1e_mo_aa[(occ_orb*norb)+occ_orb];
+        }
+        // Contribution from h1e_bb
+        for (size_t iocc=0; iocc<nelec_b; iocc++) {
+            size_t occ_orb = occ_b[iocc];
+            sum += h1e->h1e_mo_bb[(occ_orb*norb)+occ_orb];
+        }
+        // Contribution from eri_aaaa_s8
+        for (size_t iocc=0; iocc<nelec_a-1; iocc++) {
+            size_t occ_orb = occ_a[iocc];
+            for (size_t jocc=iocc+1; jocc<nelec_a; jocc++) {
+                size_t occ_orb_2 = occ_a[jocc];
+                sum += eri_mo->eri_mo_aaaa_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]
+                      -eri_mo->eri_mo_aaaa_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
+            }
+        }
+        // Contribution from eri_bbbb_s8
+        for (size_t iocc=0; iocc<nelec_b-1; iocc++) {
+            size_t occ_orb = occ_b[iocc];
+            for (size_t jocc=iocc+1; jocc<nelec_b; jocc++) {
+                size_t occ_orb_2 = occ_b[jocc];
+                sum += eri_mo->eri_mo_bbbb_s8[index_8d(occ_orb, occ_orb, occ_orb_2, occ_orb_2)]
+                      -eri_mo->eri_mo_bbbb_s8[index_8d(occ_orb, occ_orb_2, occ_orb_2, occ_orb)];
+            }
+        }
+        // Contribution from eri_aabb_s4
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb = occ_a[iocc];
+            double *row = eri_mo->eri_mo_aabb_s4+(index_2d(occ_orb, occ_orb)*ncols);
+            for (size_t jocc=0; jocc<nelec_b; jocc++) {
+                size_t occ_orb_2 = occ_b[jocc];
+                sum += row[index_2d(occ_orb_2, occ_orb_2)];
+            }
+        }
+        return sum;
+}
+
+/**
+ * Calculates the matrix element between configurations that differ by one \f$\alpha\f$ orbital.
+ *
+ * Formula: \f{aligned}{ 
+             \langle\Psi|\Psi_a^r\rangle=&[a|h_\text{core}|r] + \sum\limits_{b} [ar|bb]-[ab|br]&\\
+             =\,&(a|h_\text{core}|r) &\text{From $\verb|h1e_aa|$}\\
+             +\,&\sum\limits_{b} (ar|bb)-(ab|br)&\text{From $\verb|eri_mo_aaaa_s8|$}\\
+             +\,&\sum\limits_{\bar{b}} (ar|\bar{b}\bar{b})&\text{From $\verb|eri_mo_aabb_s4|$}
+           \f}
+ * 
+ * Formula conventions:
+ * - \f$[\quad|\quad]\f$ are used for spin orbital summations, while \f$(\quad|\quad)\f$ are used for spatial orbital summations
+ * - \f$\Psi_a^r\f$ differs from \f$\Psi\f$ in the substitution of \f$\alpha\f$ orbital \f$a\f$ for \f$r\f$
+ * - \f$b\f$ indexes occupied spin orbitals in \f$\Psi\f$ if \f$[\quad|\quad]\f$ is used and occupied spatial orbitals if \f$(\quad|\quad)\f$ is used
+ * - When summing over spatial orbitals, \f$b\f$ is an \f$\alpha\f$ MO while \f$\bar{b}\f$ is a \f$\beta\f$ MO
+ * - The above formula assumes the configurations are in maximum coincidence; an extra sign factor
+ * derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary,
+ * which is calculated in the computation of \p single_exc
+ *
+ * @param[in] single_exc Pointer to \ref ExcResult describing occupied and excitation orbitals
+ * @param[in] occ_a  Pointer to the list of occupied \f$\alpha\f$ orbitals
+ * @param[in] occ_b  Pointer to the list of occupied \f$\beta\f$ orbitals
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The single excitation matrix element
+ */
+double get_single_exc_value_a(const ExcResult *single_exc, const size_t *occ_a, const size_t *occ_b,
+    const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        size_t ncols = eri_mo->ncols_aabb;
+        size_t old_orb = single_exc->old_orbs[0];
+        size_t new_orb = single_exc->new_orbs[0];
+        double sum = 0.0;
+        double *row = eri_mo->eri_mo_aabb_s4+(index_2d(old_orb, new_orb)*ncols);
+
+        // Contribution from aaaa block
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb_2 = occ_a[iocc];
+            sum += eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, new_orb, occ_orb_2, occ_orb_2)]
+                  -eri_mo->eri_mo_aaaa_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
+        }
+        // Contribution from aabb block
+        for (size_t iocc=0; iocc<nelec_b; iocc++) {
+            size_t occ_orb_2 = occ_b[iocc];
+            sum += row[index_2d(occ_orb_2, occ_orb_2)];
+        }
+        // Contribution from 1e Hamiltonian
+        sum += h1e->h1e_mo_aa[(old_orb*norb)+new_orb];
+
+        return single_exc->sign*sum;
+}
+
+/**
+ * Calculates the matrix element between configurations that differ by one \f$\beta\f$ orbital.
+ *
+ * Formula: \f{aligned}{ 
+             \langle\Psi|\Psi_\bar{a}^\bar{r}\rangle=&[\bar{a}|h_\text{core}|\bar{r}] + \sum\limits_{b} [\bar{a}\bar{r}|bb]-[\bar{a}b|b\bar{r}]&\\
+             =\,&(\bar{a}|h_\text{core}|\bar{r}) &\text{From $\verb|h1e_bb|$}\\
+             +\,&\sum\limits_{\bar{b}} (\bar{a}\bar{r}|\bar{b}\bar{b})-(\bar{a}\bar{b}|\bar{b}\bar{r})&\text{From $\verb|eri_mo_bbbb_s8|$}\\
+             +\,&\sum\limits_{b} (bb|\bar{a}\bar{r})&\text{From $\verb|eri_mo_aabb_s4|$}
+           \f}
+ * 
+ * Formula conventions:
+ * - \f$[\quad|\quad]\f$ are used for spin orbital summations, while \f$(\quad|\quad)\f$ are used for spatial orbital summations
+ * - \f$\Psi_\bar{a}^\bar{r}\f$ differs from \f$\Psi\f$ in the substitution of \f$\beta\f$ orbital \f$\bar{a}\f$ for \f$\bar{r}\f$
+ * - \f$b\f$ indexes occupied spin orbitals in \f$\Psi\f$ if \f$[\quad|\quad]\f$ is used and occupied spatial orbitals if \f$(\quad|\quad)\f$ is used
+ * - When summing over spatial orbitals, \f$b\f$ is an \f$\alpha\f$ MO while \f$\bar{b}\f$ is a \f$\beta\f$ MO
+ * - The above formula assumes the configurations are in maximum coincidence; an extra sign factor
+ * derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary,
+ * which is calculated in the computation of \p single_exc
+ *
+ * @param[in] single_exc Pointer to \ref ExcResult describing occupied and excitation orbitals
+ * @param[in] occ_a  Pointer to the list of occupied \f$\alpha\f$ orbitals
+ * @param[in] occ_b  Pointer to the list of occupied \f$\beta\f$ orbitals
+ * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
+ * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The single excitation matrix element
+ */
+double get_single_exc_value_b(const ExcResult *single_exc, const size_t *occ_a, const size_t *occ_b,
+    const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
+        size_t norb = config_info->norb;
+        size_t nelec_a = config_info->nelec_a;
+        size_t nelec_b = config_info->nelec_b;
+        size_t ncols = eri_mo->ncols_aabb;
+        size_t old_orb = single_exc->old_orbs[0];
+        size_t new_orb = single_exc->new_orbs[0];
+        double sum = 0.0;
+        size_t col = index_2d(old_orb, new_orb);
+
+        // Contribution from bbbb block
+        for (size_t iocc=0; iocc<nelec_b; iocc++) {
+            size_t occ_orb_2 = occ_b[iocc];
+            sum += eri_mo->eri_mo_bbbb_s8[index_8d(old_orb, new_orb, occ_orb_2, occ_orb_2)]
+                  -eri_mo->eri_mo_bbbb_s8[index_8d(old_orb, occ_orb_2, occ_orb_2, new_orb)];
+        }
+        // Contribution from aabb block
+        for (size_t iocc=0; iocc<nelec_a; iocc++) {
+            size_t occ_orb_2 = occ_a[iocc];
+            sum += eri_mo->eri_mo_aabb_s4[(index_2d(occ_orb_2, occ_orb_2)*ncols)+col];
+        }
+        // Contribution from 1e Hamiltonian
+        sum += h1e->h1e_mo_bb[(old_orb*norb)+new_orb];
+
+        return single_exc->sign*sum;
+}
+
+/**
+ * Calculates the matrix element between configurations that differ by two \f$\alpha\f$ orbitals.
+ *
+ * Formula: \f{aligned}{ 
+             \langle\Psi|\Psi_{ab}^{rs}\rangle=&[ar|bs]-[as|br]&\\
+             =\,&(ar|bs)-(as|br) &\text{From $\verb|eri_mo_aaaa_s8|$}\\
+           \f}s
+ * 
+ * Formula conventions:
+ * - \f$[\quad|\quad]\f$ are used for spin orbitals, while \f$(\quad|\quad)\f$ are used for spatial orbitals
+ * - \f$\Psi_{ab}^{rs}\f$ differs from \f$\Psi\f$ in the substitution of \f$\alpha\f$ orbitals \f$a\f$ and \f$b\f$ for \f$r\f$ and \f$s\f$
+ * - The above formula assumes the configurations are in maximum coincidence; an extra sign factor
+ * derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary,
+ * which is calculated in the computation of \p double_exc
+ *
+ * @param[in] double_exc Pointer to \ref ExcResult describing occupied and excitation orbitals
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The double excitation matrix element
+ */
+double get_double_exc_value_aa(const ExcResult *double_exc, const ERITensor *eri_mo) {
+    size_t *old_orbs = double_exc->old_orbs;
+    size_t *new_orbs = double_exc->new_orbs;
+    return double_exc->sign*(eri_mo->eri_mo_aaaa_s8[index_8d(old_orbs[0], new_orbs[0], old_orbs[1], new_orbs[1])]
+                            -eri_mo->eri_mo_aaaa_s8[index_8d(old_orbs[0], new_orbs[1], old_orbs[1], new_orbs[0])]);
+}
+
+/**
+ * Calculates the matrix element between configurations that differ by two \f$\beta\f$ orbitals.
+ *
+ * Formula: \f{aligned}{ 
+             \langle\Psi|\Psi_{\bar{a}\bar{b}}^{\bar{r}\bar{s}}\rangle=&[\bar{a}\bar{r}|\bar{b}\bar{s}]-[\bar{a}\bar{s}|\bar{b}\bar{r}]&\\
+             =\,&(\bar{a}\bar{r}|\bar{b}\bar{s})-(\bar{a}\bar{s}|\bar{b}\bar{r}) &\text{From $\verb|eri_mo_bbbb_s8|$}\\
+           \f}
+ * 
+ * Formula conventions:
+ * - \f$[\quad|\quad]\f$ are used for spin orbitals, while \f$(\quad|\quad)\f$ are used for spatial orbitals
+ * - \f$\Psi_{\bar{a}\bar{b}}^{\bar{r}\bar{s}}\f$ differs from \f$\Psi\f$ in the substitution of \f$\beta\f$ orbitals \f$\bar{a}\f$ and \f$\bar{b}\f$ for \f$\bar{r}\f$ and \f$\bar{s}\f$
+ * - The above formula assumes the configurations are in maximum coincidence; an extra sign factor
+ * derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary,
+ * which is calculated in the computation of \p double_exc
+ *
+ * @param[in] double_exc Pointer to \ref ExcResult describing occupied and excitation orbitals
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The double excitation matrix element
+ */
+double get_double_exc_value_bb(const ExcResult *double_exc, const ERITensor *eri_mo) {
+    size_t *old_orbs = double_exc->old_orbs;
+    size_t *new_orbs = double_exc->new_orbs;
+    return double_exc->sign*(eri_mo->eri_mo_bbbb_s8[index_8d(old_orbs[0], new_orbs[0], old_orbs[1], new_orbs[1])]
+                            -eri_mo->eri_mo_bbbb_s8[index_8d(old_orbs[0], new_orbs[1], old_orbs[1], new_orbs[0])]);
+}
+
+/**
+ * Extracts a double excitation matrix element from storage in a \ref DoubleExcEntry.
+ *
+ * Given the list of occupied/old and excitation/new orbitals, first swaps the lowest-numbered
+ * orbital \f$i\f$ into position using the symmetries of the ERI tensor, then determines the ordering
+ * of the remaining orbitals \f$j\f$, \f$k\f$, and \f$l\f$, where \f$i<j<k<l\f$. Once \f$j\f$, \f$k\f$,
+ * and \f$l\f$ are located, the correct stored value can be extracted. As with \ref get_double_exc_value_aa
+ * and \ref get_double_exc_value_bb, an additional sign factor is necessary, handled in the computation of
+ * \p exc_entry.
+ *
+ * @param[in] exc_entry Pointer to \ref DoubleExcEntry storing the excitation matrix element
+ * @param[in] double_exc Pointer to \ref ExcResult describing occupied and excitation orbitals
+ * @return The stored double excitation matrix element
+ */
+double get_double_exc_value_from_store(const DoubleExcEntry *exc_entry, const ExcResult *double_exc) {
+    size_t *old_orbs = double_exc->old_orbs;
+    size_t *new_orbs = double_exc->new_orbs;
+    size_t orb_list[4];
+    uint8_t designator = 0;
+    if (old_orbs[0] <= new_orbs[0]) {
+        orb_list[0] = old_orbs[0];
+        orb_list[1] = new_orbs[0];
+        orb_list[2] = old_orbs[1];
+        orb_list[3] = new_orbs[1];
+    } else {
+        orb_list[0] = new_orbs[0];
+        orb_list[1] = old_orbs[0];
+        orb_list[2] = new_orbs[1];
+        orb_list[3] = old_orbs[1];
+    }
+    designator += (orb_list[1] > orb_list[2]) ? 2 : 0;
+    designator += (orb_list[1] > orb_list[3]) ? 2 : 0;
+    designator += (orb_list[2] > orb_list[3]) ? 1 : 0;
+    switch (designator) {
+        case IJKL:
+            return exc_entry->ijkl*double_exc->sign;
+        case IJLK:
+            return (exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
+        case IKJL:
+            return -exc_entry->iljk*double_exc->sign;
+        case IKLJ:
+            return -(exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
+        case ILJK:
+            return exc_entry->iljk*double_exc->sign;
+        case ILKJ:
+            return -exc_entry->ijkl*double_exc->sign;
+        default:
+            return nan("");
+    }
+}
+
+/**
+ * Calculates the matrix element between configurations that differ by one \f$\alpha\f$ and one \f$\beta\f$ orbital.
+ *
+ * Formula: \f{aligned}{ 
+             \langle\Psi|\Psi_{a\bar{b}}^{r\bar{s}}\rangle=&[ar|\bar{b}\bar{s}]&\\
+             =\,&(ar|\bar{b}\bar{s}) &\text{From $\verb|eri_mo_aabb_s4|$}\\
+           \f}
+ * 
+ * Formula conventions:
+ * - \f$[\quad|\quad]\f$ are used for spin orbitals, while \f$(\quad|\quad)\f$ are used for spatial orbitals
+ * - \f$\Psi_{\bar{a}\bar{b}}^{\bar{r}\bar{s}}\f$ differs from \f$\Psi\f$ in the substitution of \f$\alpha\f$ orbital \f$a\f$ for \f$r\f$ and \f$\beta\f$ orbitals \f$\bar{b}\f$ and \f$\bar{s}\f$
+ * - The above formula assumes the configurations are in maximum coincidence; an extra sign factor
+ * derived from the indices of the changing orbitals in the old and new sorted occupation lists is necessary,
+ * which is calculated in the computation of \p single_exc_a and \p single_exc_b
+ *
+ * @param[in] single_exc_a Pointer to \ref ExcResult describing occupied and excitation \f$\alpha\f$ orbitals
+ * @param[in] single_exc_b Pointer to \ref ExcResult describing occupied and excitation \f$\beta\f$ orbitals
+ * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
+ * @return The mixed excitation matrix element
+ */
+double get_mixed_exc_value(const ExcResult *single_exc_a, const ExcResult *single_exc_b, 
+    const ERITensor *eri_mo) {
+        double sign = single_exc_a->sign*single_exc_b->sign;
+        size_t row = index_2d(single_exc_a->old_orbs[0], single_exc_a->new_orbs[0]);
+        size_t col = index_2d(single_exc_b->old_orbs[0], single_exc_b->new_orbs[0]);
+        return sign*eri_mo->eri_mo_aabb_s4[(row*eri_mo->ncols_aabb)+col];
+}
+
+/**
+ * Extracts a mixed excitation matrix element from storage in a \ref MixedExcEntry.
+ *
+ * @param[in] exc_entry Pointer to \ref MixedExcEntry storing the excitation matrix element
+ * @param[in] single_exc_a Pointer to \ref ExcResult describing occupied and excitation \f$\alpha\f$ orbitals
+ * @param[in] single_exc_b Pointer to \ref ExcResult describing occupied and excitation \f$\beta\f$ orbitals
+ * @return The stored mixed excitation matrix element
+ */
+double get_mixed_exc_value_from_store(const MixedExcEntry *exc_entry, 
+    const ExcResult *single_exc_a, const ExcResult *single_exc_b) {
+        double sign = single_exc_a->sign * single_exc_b->sign;
+        return sign*exc_entry->ijkl;
 }
 
 double get_matrix_element_by_rank(Rank rank1, Rank rank2, 

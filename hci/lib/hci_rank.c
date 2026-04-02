@@ -41,7 +41,7 @@ static size_t find_row_index(uint64_t target, const uint64_t *row, size_t norb, 
  * where \f$c_i\f$ is the \f$i\f$th orbital in the occupancy list sorted in ascending order
  *
  * @param[in] occ_list Pointer to an array of length \f$N_\text{occ}\f$ specifying the zero-indexed occupied orbitals in ascending order
- * @param[in] rank_table Pointer to ranking table initialized by load_rank_table(uint64_t *table, size_t norb, size_t nocc)
+ * @param[in] rank_table Pointer to ranking table initialized by \ref load_rank_table
  * @param[in] norb Size of orbital space
  * @param[in] nocc Number of occupancies; generally equal to \f$N_\alpha\f$ or \f$N_\beta\f$
  * @return The rank of the specified occupancy list
@@ -60,13 +60,12 @@ static uint64_t rank(const size_t *occ_list, const uint64_t *rank_table, size_t 
  * Greedy unranking algorithm for computing an occupancy list given its combinatorial rank.
  *
  * Starting from the last row in the ranking table (corresponding to the highest occupied orbital),
- * uses find_row_index(uint64_t target, uint64_t *row, size_t norb, size_t nocc) to find the column
- * index of the entry that does not exceed the value of target, updates the occupancy list accordingly,
- * then subtracts off the ranking table entry from target and repeats.
+ * uses \ref find_row_index to find the column index of the entry that does not exceed the value of target,
+ * updates the occupancy list accordingly, then subtracts off the ranking table entry from target and repeats.
  *
  * @param[in] rank The rank of the occupancy list to be computed
  * @param[out] occ_list Pointer to an array of length \f$N_\text{occ}\f$ to store the occupancy list
- * @param[in] rank_table Pointer to ranking table initialized by load_rank_table(uint64_t *table, size_t norb, size_t nocc)
+ * @param[in] rank_table Pointer to ranking table initialized by \ref load_rank_table
  * @param[in] norb Size of orbital space
  * @param[in] nocc Number of occupancies; generally equal to \f$N_\alpha\f$ or \f$N_\beta\f$
  */
@@ -87,7 +86,7 @@ static void unrank(uint64_t rank, size_t *occ_list, const uint64_t *rank_table, 
  * needed to rank and unrank combinations using the combinatorial number system.
  *
  * The binomial coefficients needed for the encoding the position of the ith electron are stored in row i-1.
- * The entry in position (i, j) is nCr(i+j, i+1); when i+j < i+1 (first column), this is defined to be 0.
+ * The entry in position (i, j) is \f$\binom{i+j}{i+1}\f$; when i+j < i+1 (first column), this is defined to be 0.
  *
  * @param[out] table Pointer to the uninitialized ranking table; must accommodate \f$N_\text{occ}\cdot(N_\text{orb}-N_\text{occ}+1)\f$ entries
  * @param[in] norb Size of orbital space
@@ -118,7 +117,7 @@ void load_rank_table(uint64_t *table, size_t norb, size_t nocc) {
  * Ranks a given \f$\alpha\f$ orbital occupancy list.
  *
  * @param[in] occ_list Pointer to an array of length \f$N_\text{occ}\f$ specifying the zero-indexed occupied \f$\alpha\f$ orbitals in ascending order
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  * @return The rank of the specified \f$\alpha\f$ occupancy list
  */
 uint64_t rank_occ_a(const size_t *occ_list, const ConfigInfo *config_info) {
@@ -130,7 +129,7 @@ uint64_t rank_occ_a(const size_t *occ_list, const ConfigInfo *config_info) {
  * 
  * @param[in] arank The rank of the \f$\alpha\f$ occupancy list of interest
  * @param[out] occ_list Pointer to an array of length \f$N_\text{occ}\f$ to store the \f$\alpha\f$ occupancy list
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_occ_a(uint64_t arank, size_t *occ_list, const ConfigInfo *config_info) {
     unrank(arank, occ_list, config_info->occ_table_a, config_info->norb, config_info->nelec_a);
@@ -141,7 +140,7 @@ void unrank_occ_a(uint64_t arank, size_t *occ_list, const ConfigInfo *config_inf
  * 
  * @param[in] arank The rank of the \f$\alpha\f$ occupancy list of interest
  * @param[out] virt_list Pointer to an array of length \f$N_\text{orb}-N_\text{occ}\f$ to store the \f$\alpha\f$ virtual orbital list
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_virt_a(uint64_t arank, size_t *virt_list, const ConfigInfo *config_info) {
     unrank(config_info->combmax_a-arank-1, virt_list, 
@@ -149,10 +148,10 @@ void unrank_virt_a(uint64_t arank, size_t *virt_list, const ConfigInfo *config_i
 }
 
 /**
- * Ranks a given $\beta$ orbital occupancy list.
+ * Ranks a given \f$\beta\f$ orbital occupancy list.
  *
  * @param[in] occ_list Pointer to an array of length \f$N_\text{occ}\f$ specifying the zero-indexed occupied \f$\beta\f$ orbitals in ascending order
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  * @return The rank of the specified \f$\beta\f$ occupancy list
  */
 uint64_t rank_occ_b(const size_t *occ_list, const ConfigInfo *config_info) {
@@ -164,7 +163,7 @@ uint64_t rank_occ_b(const size_t *occ_list, const ConfigInfo *config_info) {
  * 
  * @param[in] arank The rank of the \f$\beta\f$ occupancy list of interest
  * @param[out] occ_list Pointer to an array of length \f$N_\text{occ}\f$ to store the \f$\beta\f$ occupancy list
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_info) {
     unrank(brank, occ_list, config_info->occ_table_b, config_info->norb, config_info->nelec_b);
@@ -175,7 +174,7 @@ void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_inf
  * 
  * @param[in] arank The rank of the \f$\beta\f$ occupancy list of interest
  * @param[out] virt_list Pointer to an array of length \f$N_\text{orb}-N_\text{occ}\f$ to store the \f$\beta\f$ virtual orbital list
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_virt_b(uint64_t brank, size_t *virt_list, const ConfigInfo *config_info) {
     unrank(config_info->combmax_b-brank-1, virt_list, 
@@ -186,7 +185,7 @@ void unrank_virt_b(uint64_t brank, size_t *virt_list, const ConfigInfo *config_i
  * Ranks a double excitation based on the four orbitals involved.
  *
  * @param[in] exc_list Pointer to an array of length 4 specifying the four involved orbitals in ascending order
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  * @return The rank of the specified double excitation
  */
 uint64_t rank_double_exc(size_t *exc_list, const ConfigInfo *config_info) {
@@ -198,7 +197,7 @@ uint64_t rank_double_exc(size_t *exc_list, const ConfigInfo *config_info) {
  * 
  * @param[in] exc_rank The rank of the double excitation of interest
  * @param[out] exc_list Pointer to an array of length 4 to store the excitation orbital list
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_double_exc(uint64_t exc_rank, size_t *exc_list, const ConfigInfo *config_info) {
     unrank(exc_rank, exc_list, config_info->exc_table_4o, config_info->norb, 4);
@@ -209,7 +208,7 @@ void unrank_double_exc(uint64_t exc_rank, size_t *exc_list, const ConfigInfo *co
  *
  * @param[in] exc_list Pointer to an array of the four involved orbitals
  * The first two are \f$\alpha\f$ orbitals (in ascending order) and the second two are \f$\beta\f$ orbitals (also in ascending order)
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  * @return The rank of the specified mixed excitation
  */
 uint64_t rank_mixed_exc(size_t *exc_list, const ConfigInfo *config_info) {
@@ -223,7 +222,7 @@ uint64_t rank_mixed_exc(size_t *exc_list, const ConfigInfo *config_info) {
  * 
  * @param[in] exc_rank_ab The rank of the mixed excitation
  * @param[out] exc_list Pointer to an array of length 4 to store the excitation orbital list
- * @param[in] config_info Pointer to a ConfigInfo struct storing the location of the necessary tables
+ * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_mixed_exc(uint64_t exc_rank_ab, size_t *exc_list, const ConfigInfo *config_info) {
     uint64_t ncols = config_info->ncols_mixed;

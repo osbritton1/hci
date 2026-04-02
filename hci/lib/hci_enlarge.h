@@ -10,51 +10,66 @@
 #include "hci_store.h"
 #include <stdbool.h>
 
+/**
+ * Given a reference configuration and an excited configuration,
+ * stores which orbitals are being substituted for new orbitals
+ * and the sign of the resulting excitation
+ */
 typedef struct {
-    size_t *old_orbs;
-    size_t *new_orbs;
-    double sign;
+    size_t *old_orbs; /**< Pointer to list of orbitals present in the reference but not the excited determinant */
+    size_t *new_orbs; /**< Pointer to list of orbitals present in the excited determinant but not the reference */
+    double sign; /**< The sign of the excitation, computed from indices in the old and new orbital lists */
 } ExcResult;
 
+/**
+ * Lightweight tuple-like struct for storing associated \f$\alpha\f$ and \f$\beta\f$ ranks.
+ */
 typedef struct {
     uint64_t arank;
     uint64_t brank;
 } Rank;
 
+/**
+ * Struct representing a weighted sum of configurations.
+ *
+ * Implemented as a structure of arrays to make interoperability
+ * with \c NumPy and \c PySCF easier.
+ */
 typedef struct {
-    Rank *ranks;
-    double *coeffs;
-    size_t len;
+    Rank *ranks; /**< Pointer to list of ranks specifying the configurations */
+    double *coeffs; /**< Pointer to list of coefficients of the corresponding ranks */
+    size_t len; /**< Length of the vector */
 } HCIVec;
 
+/**
+ * Macro to initialize an empty \ref ExcResult using compound literals capable of storing
+ * double excitations (or single excitations).
+ */
 #define NEW_DOUBLE_EXC_RESULT() \
     {(size_t[2]){}, (size_t[2]){}, 1.0}
 
+/**
+ * Macro to initialize an empty \ref ExcResult using compound literals capable of storing
+ * single excitations.
+ */
 #define NEW_SINGLE_EXC_RESULT() \
     {(size_t[1]){}, (size_t[1]){}, 1.0}
 
+/**
+ * Macro to initialize a single \ref ExcResult with specified old and new orbitals.
+ */
 #define SINGLE_EXC_RESULT_NOSIGN(old_orb, new_orb) \
     {(size_t[1]){old_orb}, (size_t[1]){new_orb}, 1.0}
 
+/**
+ * Macro to return a pointer to a sorted list of the two input orbitals.
+ */
 #define SORTED(occ_orb, virt_orb) \
     (occ_orb) < (virt_orb) ? (size_t[2]){(occ_orb), (virt_orb)} : (size_t[2]){(virt_orb), (occ_orb)}
 
-bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, const size_t *occ_list, size_t nocc,
-    ExcResult *res, size_t *new_occ_list);
-
-size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries *exc_entries, double entry_thresh, 
-     Rank *add_list, const ConfigInfo *config_info);
-size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries *exc_entries, double entry_thresh, 
-     Rank *add_list, const ConfigInfo *config_info);
-size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *exc_entries, double entry_thresh, 
-     Rank *add_list, const ConfigInfo *config_info);
 size_t enlarge_space_doubles(const HCIVec *hcivec, Rank *add_list, double thresh, 
     const ConfigInfo *config_info, const ExcEntries *exc_entries);
 
-size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const size_t *occ_b, size_t brank, 
-    const HCore *h1e, const ERITensor *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info);
-size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *occ_a, size_t arank, 
-    const HCore *h1e, const ERITensor *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info);
 size_t enlarge_space_singles(const HCIVec *hcivec, Rank *add_list, double thresh,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo);
 

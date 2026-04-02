@@ -59,11 +59,10 @@ typedef struct {
  *
  * [ik|lj]-[ij|lk] may be recovered by computing negative the sum of ijkl and iljk;
  * all double excitation matrix elements involving these four orbitals may be mapped
- * to one of these three values up to a sign (see 
- * get_double_exc_value_from_store(const DoubleExcEntry *exc_entry, const ExcResult *double_exc)).
+ * to one of these three values up to a sign (see \ref get_double_exc_value_from_store).
  */
 typedef struct {
-    uint64_t rank; /**< The combinatorial rank of the list of four changing orbitals; see rank_double_exc(size_t *exc_list, const ConfigInfo *config_info) */
+    uint64_t rank; /**< The combinatorial rank of the list of four changing orbitals; see \ref rank_double_exc */
     double ijkl; /**< [ij|kl]-[il|kj] in chemist's notation */
     double iljk; /**< [il|jk]-[ik|jl] in chemist's notation */
 } DoubleExcEntry;
@@ -77,8 +76,8 @@ typedef struct {
  * \f$l\f$ index \f$\beta\f$ MOs.
  */
 typedef struct {
-    uint64_t rank; /**< The rank of the mixed excitation; see rank_mixed(size_t *occ_list, const uint64_t *exc_table_2o, size_t norb) */
-    double ijkl; /**< [ij|kl] in chemist's notation; i and j are alpha orbitals, while k and l are beta orbitals */
+    uint64_t rank; /**< The rank of the mixed excitation; see \ref rank_mixed */
+    double ijkl; /**< [ij|kl] in chemist's notation; i and j are \f$\alpha\f$ orbitals, while k and l are \f$\beta\f$ orbitals */
 } MixedExcEntry;
 
 /**
