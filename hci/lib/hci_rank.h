@@ -34,7 +34,7 @@ typedef struct {
      * Pointer to the ranking table for organizing mixed excitations of \f$\alpha\beta\rightarrow\alpha\beta\f$ type
     */
     uint64_t *exc_table_2o;
-    uint64_t ncols_mixed; /**< \f$\binom{N_\text{orb}}{2}\f$, used for ranking and unranking mixed excitations*/
+    uint64_t ncols_mixed; /**< \f$\binom{N_\text{orb}}{2}\f$, used for ranking and unranking mixed excitations */
 } ConfigInfo;
 
 void load_rank_table(uint64_t *table, size_t norb, size_t nocc);

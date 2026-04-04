@@ -1,0 +1,38 @@
+[build-system]
+requires = [
+    "setuptools>=61.0",
+    "wheel",
+    "cmake<4.0",
+    "scikit-build>=0.13",
+    "ninja"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "HCI for PySCF"
+version = "0.1.0"
+authors = [
+  { name="Simon Britton", email="obritton2022@gmail.com" },
+]
+description = "An inefficient implementation of the HCI selection algorithm for PySCF"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C",
+    "Operating System :: OS Independent",
+    "Private :: Do Not Upload"
+]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = [
+    "pyscf",
+    "numpy",
+    "sphinx",
+    "sphinx_rtd_theme",
+    "breathe",
+]
+
+[project.urls]
+Homepage = "https://osbritton1.github.io/hci/"
+Issues = "https://github.com/osbritton1/hci/issues"

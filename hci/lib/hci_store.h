@@ -27,30 +27,12 @@
 #define MAX3(a, b, c) ((a) > (b) ? ((a) > (c) ? (a) : (c)) : ((b) > (c) ? (b) : (c)))
 
 /**
- * A structure that holds pointers to the core Hamiltonian
- * in both the \f$\alpha\f$ MO and \f$\beta\f$ MO bases.
- *
- * Neither array is expected to be compressed (i.e. both must
- * have all \f$N_\text{orb}^2\f$ entries).
+ * Lightweight tuple-like struct for storing associated \f$\alpha\f$ and \f$\beta\f$ ranks.
  */
 typedef struct {
-    double *h1e_mo_aa; /**< Pointer to the core Hamiltonian in the \f$\alpha\f$ MO basis */
-    double *h1e_mo_bb; /**< Pointer to the core Hamiltonian in the \f$\beta\f$ MO basis */
-} HCore;
-
-/**
- * A structure that holds pointers to the electron repulsion integrals in
- * the \f$\alpha\f$ MO and \f$\beta\f$ MO bases (in chemist's notation).
- *
- * The tag at the end of each field name indicates the expected degree of compression
- * (see https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html).
- */
-typedef struct {
-    double *eri_mo_aaaa_s8; /**< Pointer to the eightfold compressed ERI tensor in the \f$\alpha\f$ MO basis */
-    double *eri_mo_bbbb_s8; /**< Pointer to the eightfold compressed ERI tensor in the \f$\beta\f$ MO basis */
-    double *eri_mo_aabb_s4; /**< Pointer to the fourfold compressed ERI tensor in the mixed MO basis */
-    uint64_t ncols_aabb; /**< \f$\binom{N_\text{orb}+1}{2}\f$, i.e. the number of entries in the mixed ERI tensor associated with a single pair of \f$\alpha\f$ orbitals */
-} ERITensor;
+    uint64_t arank; /**< The rank of the \f$\alpha\f$ occupancy list of the associated configuration */
+    uint64_t brank; /**< The rank of the \f$\beta\f$ occupancy list of the associated configuration */
+} Rank;
 
 /**
  * A struct that stores the minimal amount of information necessary
@@ -81,22 +63,60 @@ typedef struct {
 } MixedExcEntry;
 
 /**
+ * A structure that holds pointers to the core Hamiltonian
+ * in both the \f$\alpha\f$ MO and \f$\beta\f$ MO bases.
+ *
+ * Neither array is expected to be compressed (i.e. both must
+ * have all \f$N_\text{orb}^2\f$ entries).
+ */
+typedef struct {
+    double *h1e_mo_aa; /**< Pointer to the core Hamiltonian in the \f$\alpha\f$ MO basis */
+    double *h1e_mo_bb; /**< Pointer to the core Hamiltonian in the \f$\beta\f$ MO basis */
+} HCore;
+
+/**
+ * A structure that holds pointers to the electron repulsion integrals in
+ * the \f$\alpha\f$ MO and \f$\beta\f$ MO bases (in chemist's notation).
+ *
+ * The tag at the end of each field name indicates the expected degree of compression
+ * (see https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html).
+ */
+typedef struct {
+    double *eri_mo_aaaa_s8; /**< Pointer to the eightfold compressed ERI tensor in the \f$\alpha\f$ MO basis */
+    double *eri_mo_bbbb_s8; /**< Pointer to the eightfold compressed ERI tensor in the \f$\beta\f$ MO basis */
+    double *eri_mo_aabb_s4; /**< Pointer to the fourfold compressed ERI tensor in the mixed MO basis */
+    uint64_t ncols_aabb; /**< \f$\binom{N_\text{orb}+1}{2}\f$, i.e. the number of entries in the mixed ERI tensor associated with a single pair of \f$\alpha\f$ orbitals */
+} ERITensor;
+
+/**
  * A struct that organizes information about stored double excitation
  * matrix elements.
  *
  * Used to enlarge the configuration space according to the HCI algorithm.
  */
 typedef struct {
-    DoubleExcEntry *doubles_aa; /**< Pointer to the stored double \f$\alpha\f$ matrix elements */
+    DoubleExcEntry *doubles_aa; /**< Pointer to the stored double \f$\alpha\f$ excitation matrix elements */
     double *max_mag_aa; /**< Pointer to an array specifying the max. magnitude of all matrix elements associated with a given doubles_aa entry*/
     size_t ndoubles_aa; /**< \f$\binom{N_\text{orb}}{4}\f$, the number of double \f$\alpha\f$ excitations */
-    DoubleExcEntry *doubles_bb;/**< Pointer to the stored double \f$\beta\f$ matrix elements */
+    DoubleExcEntry *doubles_bb;/**< Pointer to the stored double \f$\beta\f$ excitation matrix elements */
     double *max_mag_bb; /**< Pointer to an array specifying the max. magnitude of all matrix elements associated with a given doubles_bb entry*/
     size_t ndoubles_bb; /**< \f$\binom{N_\text{orb}}{4}\f$, the number of double \f$\beta\f$ excitations */
     MixedExcEntry *mixed_ab; /**< Pointer to the stored mixed excitation matrix elements */
     double *max_mag_ab; /**< Pointer to an array specying the magnitude of the mixed_ab entries */
     size_t nmixed_ab; /**< \f$\binom{N_\text{orb}}{2}^2\f$, the number of mixed excitations */
 } ExcEntries;
+
+/**
+ * Struct representing a weighted sum of configurations.
+ *
+ * Implemented as a structure of arrays to make interoperability
+ * with \c NumPy and \c PySCF easier.
+ */
+typedef struct {
+    Rank *ranks; /**< Pointer to list of ranks specifying the configurations */
+    double *coeffs; /**< Pointer to list of coefficients of the corresponding ranks */
+    size_t len; /**< Length of the vector */
+} HCIVec;
 
 size_t index_2d(size_t i, size_t j);
 size_t index_4d(size_t i, size_t j, size_t k, size_t l, size_t ncols);

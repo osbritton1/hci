@@ -117,7 +117,7 @@ void load_rank_table(uint64_t *table, size_t norb, size_t nocc) {
 /**
  * Ranks a given \f$\alpha\f$ orbital occupancy list.
  *
- * @param[in] occ_list Pointer to an array of length \f$N_\text{occ}\f$ specifying the zero-indexed occupied \f$\alpha\f$ orbitals in ascending order
+ * @param[in] occ_list Pointer to an array of length \f$N_\alpha\f$ specifying the zero-indexed occupied \f$\alpha\f$ orbitals in ascending order
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  * @return The rank of the specified \f$\alpha\f$ occupancy list
  */
@@ -126,10 +126,10 @@ uint64_t rank_occ_a(const size_t *occ_list, const ConfigInfo *config_info) {
 }
 
 /**
- * Unranks a given \f$\alpha\f$ orbital occupancy list.
+ * Determines which orbitals are in an \f$\alpha\f$ occupancy list of given rank.
  * 
  * @param[in] arank The rank of the \f$\alpha\f$ occupancy list of interest
- * @param[out] occ_list Pointer to an array of length \f$N_\text{occ}\f$ to store the \f$\alpha\f$ occupancy list
+ * @param[out] occ_list Pointer to an array of length \f$N_\alpha\f$ to store the \f$\alpha\f$ occupancy list
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_occ_a(uint64_t arank, size_t *occ_list, const ConfigInfo *config_info) {
@@ -140,7 +140,7 @@ void unrank_occ_a(uint64_t arank, size_t *occ_list, const ConfigInfo *config_inf
  * Determines all orbitals in the complement of a \f$\alpha\f$ occupancy list with given rank.
  * 
  * @param[in] arank The rank of the \f$\alpha\f$ occupancy list of interest
- * @param[out] virt_list Pointer to an array of length \f$N_\text{orb}-N_\text{occ}\f$ to store the \f$\alpha\f$ virtual orbital list
+ * @param[out] virt_list Pointer to an array of length \f$N_\text{orb}-N_\alpha\f$ to store the \f$\alpha\f$ virtual orbital list
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_virt_a(uint64_t arank, size_t *virt_list, const ConfigInfo *config_info) {
@@ -151,7 +151,7 @@ void unrank_virt_a(uint64_t arank, size_t *virt_list, const ConfigInfo *config_i
 /**
  * Ranks a given \f$\beta\f$ orbital occupancy list.
  *
- * @param[in] occ_list Pointer to an array of length \f$N_\text{occ}\f$ specifying the zero-indexed occupied \f$\beta\f$ orbitals in ascending order
+ * @param[in] occ_list Pointer to an array of length \f$N_\beta\f$ specifying the zero-indexed occupied \f$\beta\f$ orbitals in ascending order
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  * @return The rank of the specified \f$\beta\f$ occupancy list
  */
@@ -160,10 +160,10 @@ uint64_t rank_occ_b(const size_t *occ_list, const ConfigInfo *config_info) {
 }
 
 /**
- * Unranks a given \f$\beta\f$ orbital occupancy list.
+ * Determines which orbitals are in a \f$\beta\f$ occupancy list of given rank.
  * 
  * @param[in] brank The rank of the \f$\beta\f$ occupancy list of interest
- * @param[out] occ_list Pointer to an array of length \f$N_\text{occ}\f$ to store the \f$\beta\f$ occupancy list
+ * @param[out] occ_list Pointer to an array of length \f$N_\beta\f$ to store the \f$\beta\f$ occupancy list
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_info) {
@@ -174,7 +174,7 @@ void unrank_occ_b(uint64_t brank, size_t *occ_list, const ConfigInfo *config_inf
  * Determines all orbitals in the complement of a \f$\beta\f$ occupancy list with given rank.
  * 
  * @param[in] brank The rank of the \f$\beta\f$ occupancy list of interest
- * @param[out] virt_list Pointer to an array of length \f$N_\text{orb}-N_\text{occ}\f$ to store the \f$\beta\f$ virtual orbital list
+ * @param[out] virt_list Pointer to an array of length \f$N_\text{orb}-N_\beta\f$ to store the \f$\beta\f$ virtual orbital list
  * @param[in] config_info Pointer to a \ref ConfigInfo struct storing the location of the necessary tables
  */
 void unrank_virt_b(uint64_t brank, size_t *virt_list, const ConfigInfo *config_info) {

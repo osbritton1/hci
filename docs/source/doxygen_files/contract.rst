@@ -1,3 +1,5 @@
+.. _c-contract:
+
 Matrix elements and contractions
 ================================
 

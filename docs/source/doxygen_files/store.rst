@@ -1,3 +1,5 @@
+.. _c-store:
+
 Excitation storage
 ==================
 

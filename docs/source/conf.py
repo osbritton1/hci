@@ -37,10 +37,10 @@ intersphinx_mapping = {
 autodoc_mock_imports = ["pyscf"]
 autodoc_default_options = {
     'members': True,
-    'show-inheritance': True,
-    'special-members': '__init__'
+    'show-inheritance': True
 }
 autodoc_typehints = 'description'
+autoclass_content = 'both'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

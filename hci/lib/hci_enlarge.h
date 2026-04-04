@@ -22,26 +22,6 @@ typedef struct {
 } ExcResult;
 
 /**
- * Lightweight tuple-like struct for storing associated \f$\alpha\f$ and \f$\beta\f$ ranks.
- */
-typedef struct {
-    uint64_t arank; /**< The rank of the \f$\alpha\f$ occupancy list of the associated configuration */
-    uint64_t brank; /**< The rank of the \f$\beta\f$ occupancy list of the associated configuration */
-} Rank;
-
-/**
- * Struct representing a weighted sum of configurations.
- *
- * Implemented as a structure of arrays to make interoperability
- * with \c NumPy and \c PySCF easier.
- */
-typedef struct {
-    Rank *ranks; /**< Pointer to list of ranks specifying the configurations */
-    double *coeffs; /**< Pointer to list of coefficients of the corresponding ranks */
-    size_t len; /**< Length of the vector */
-} HCIVec;
-
-/**
  * Macro to initialize an empty \ref ExcResult using compound literals capable of storing
  * double excitations (or single excitations).
  */
