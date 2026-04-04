@@ -1,7 +1,7 @@
 import sys
 parent_module = sys.modules['.'.join(__name__.split('.')[:-1]) or '__main__']
 if __name__ == '__main__' or parent_module.__name__ == '__main__':
-    import lib as hcilib
+    import lib as hcilib # type: ignore[import-not-found]
     from lib import HCore, ERITensor, ConfigInfo, ExcEntries, HCIVec
 else:
     import hci.lib as hcilib

@@ -20,7 +20,7 @@ hci.lib.libhci module
    :show-inheritance:
    :undoc-members:
 
-:ref:`See C library <C lib>`
+Serves as the entry point for the :ref:`C library <C lib>`.
 
 Module contents
 ---------------

@@ -22,16 +22,25 @@ release = '0.1.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "breathe", "sphinx.ext.mathjax", "sphinx.ext.intersphinx"]
+extensions = ["sphinx.ext.autodoc", 
+              "breathe", 
+              "sphinx.ext.mathjax", 
+              "sphinx.ext.intersphinx", 
+              "sphinx.ext.napoleon"]
 
 templates_path = ['_templates']
-exclude_patterns = []
+# exclude_patterns = []
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'numpy': ('https://numpy.org/doc/stable/', None)
 }
 autodoc_mock_imports = ["pyscf"]
-
+autodoc_default_options = {
+    'members': True,
+    'show-inheritance': True,
+    'special-members': '__init__'
+}
+autodoc_typehints = 'description'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
