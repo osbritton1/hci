@@ -27,12 +27,12 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 dependencies = [
     "pyscf",
-    "numpy",
-    "sphinx",
-    "sphinx_rtd_theme",
-    "breathe",
+    "numpy"
 ]
 
 [project.urls]
 Homepage = "https://osbritton1.github.io/hci/"
 Issues = "https://github.com/osbritton1/hci/issues"
+
+[project.optional-dependencies]
+docs = ["sphinx", "sphinx_rtd_theme", "breathe"]

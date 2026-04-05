@@ -16,7 +16,6 @@ def load_library(libname: str, loader_path: Path):
         OSError: If the library was not found or is defective.
     """    
     try:
-        print(loader_path)
         return np.ctypeslib.load_library(libname, loader_path)
     except OSError:
         print(f'Failed to load library with name {libname}.')
