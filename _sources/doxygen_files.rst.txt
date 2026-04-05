@@ -1,7 +1,7 @@
 .. _C lib:
 
-C Library Documentation
-=======================
+C Library
+=========
 
 .. toctree::
    :maxdepth: 2

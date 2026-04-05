@@ -5,7 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
    hci.lib
 
@@ -17,6 +17,14 @@ hci.hci\_uhf module
 
 .. automodule:: hci.hci_uhf
    :members:
+   :undoc-members:
+   :show-inheritance:
+
+hci.exceptions module
+---------------------
+
+.. automodule:: hci.exceptions
+   :members:
    :show-inheritance:
    :undoc-members:
 
@@ -25,5 +33,5 @@ Module contents
 
 .. automodule:: hci
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:

@@ -1,3 +1,5 @@
+.. _c-enlarge:
+
 Subspace enlargement
 ====================
 

@@ -1,3 +1,5 @@
+.. _c-rank:
+
 Combinadic ranking
 ==================
 

@@ -46,7 +46,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">hci</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../doxygen_files.html">C Library Documentation</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../doxygen_files.html">C Library</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="rank.html">Combinadic ranking</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Excitation storage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#c.MAX"><code class="docutils literal notranslate"><span class="pre">MAX</span></code></a></li>
@@ -60,16 +60,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv421load_doubles_from_eriP14DoubleExcEntryPKdPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">load_doubles_from_eri()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv419load_mixed_from_eriP13MixedExcEntryPKdPK10ConfigInfo6size_t"><code class="docutils literal notranslate"><span class="pre">load_mixed_from_eri()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv425load_exc_entries_from_eriP10ExcEntriesPK9ERITensorPK10ConfigInfo"><code class="docutils literal notranslate"><span class="pre">load_exc_entries_from_eri()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv45HCore"><code class="docutils literal notranslate"><span class="pre">HCore</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N5HCore9h1e_mo_aaE"><code class="docutils literal notranslate"><span class="pre">h1e_mo_aa</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N5HCore9h1e_mo_bbE"><code class="docutils literal notranslate"><span class="pre">h1e_mo_bb</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv49ERITensor"><code class="docutils literal notranslate"><span class="pre">ERITensor</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor14eri_mo_aaaa_s8E"><code class="docutils literal notranslate"><span class="pre">eri_mo_aaaa_s8</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor14eri_mo_bbbb_s8E"><code class="docutils literal notranslate"><span class="pre">eri_mo_bbbb_s8</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor14eri_mo_aabb_s4E"><code class="docutils literal notranslate"><span class="pre">eri_mo_aabb_s4</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor10ncols_aabbE"><code class="docutils literal notranslate"><span class="pre">ncols_aabb</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv44Rank"><code class="docutils literal notranslate"><span class="pre">Rank</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4Rank5arankE"><code class="docutils literal notranslate"><span class="pre">arank</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4Rank5brankE"><code class="docutils literal notranslate"><span class="pre">brank</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv414DoubleExcEntry"><code class="docutils literal notranslate"><span class="pre">DoubleExcEntry</span></code></a><ul>
@@ -83,6 +76,18 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N13MixedExcEntry4ijklE"><code class="docutils literal notranslate"><span class="pre">ijkl</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv45HCore"><code class="docutils literal notranslate"><span class="pre">HCore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N5HCore9h1e_mo_aaE"><code class="docutils literal notranslate"><span class="pre">h1e_mo_aa</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N5HCore9h1e_mo_bbE"><code class="docutils literal notranslate"><span class="pre">h1e_mo_bb</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv49ERITensor"><code class="docutils literal notranslate"><span class="pre">ERITensor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor14eri_mo_aaaa_s8E"><code class="docutils literal notranslate"><span class="pre">eri_mo_aaaa_s8</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor14eri_mo_bbbb_s8E"><code class="docutils literal notranslate"><span class="pre">eri_mo_bbbb_s8</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor14eri_mo_aabb_s4E"><code class="docutils literal notranslate"><span class="pre">eri_mo_aabb_s4</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N9ERITensor10ncols_aabbE"><code class="docutils literal notranslate"><span class="pre">ncols_aabb</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv410ExcEntries"><code class="docutils literal notranslate"><span class="pre">ExcEntries</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ExcEntries10doubles_aaE"><code class="docutils literal notranslate"><span class="pre">doubles_aa</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ExcEntries10max_mag_aaE"><code class="docutils literal notranslate"><span class="pre">max_mag_aa</span></code></a></li>
@@ -93,6 +98,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ExcEntries8mixed_abE"><code class="docutils literal notranslate"><span class="pre">mixed_ab</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ExcEntries10max_mag_abE"><code class="docutils literal notranslate"><span class="pre">max_mag_ab</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N10ExcEntries9nmixed_abE"><code class="docutils literal notranslate"><span class="pre">nmixed_ab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv46HCIVec"><code class="docutils literal notranslate"><span class="pre">HCIVec</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N6HCIVec5ranksE"><code class="docutils literal notranslate"><span class="pre">ranks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N6HCIVec6coeffsE"><code class="docutils literal notranslate"><span class="pre">coeffs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N6HCIVec3lenE"><code class="docutils literal notranslate"><span class="pre">len</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -117,7 +128,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../doxygen_files.html">C Library Documentation</a></li>
+          <li class="breadcrumb-item"><a href="../doxygen_files.html">C Library</a></li>
       <li class="breadcrumb-item active">Excitation storage</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/doxygen_files/store.rst.txt" rel="nofollow"> View page source</a>
@@ -129,7 +140,7 @@
            <div itemprop="articleBody">
              
   <section id="excitation-storage">
-<h1>Excitation storage<a class="headerlink" href="#excitation-storage" title="Link to this heading"></a></h1>
+<span id="c-store"></span><h1>Excitation storage<a class="headerlink" href="#excitation-storage" title="Link to this heading"></a></h1>
 <dl>
 <dt class="sig sig-object cpp">
 <span class="target" id="group__store"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Excitation</span> <span class="pre">storage</span></span></dt>
@@ -323,60 +334,23 @@
 
 </div>
 <dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv45HCore">
-<span id="_CPPv35HCore"></span><span id="_CPPv25HCore"></span><span id="HCore"></span><span class="target" id="structHCore"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HCore</span></span></span><a class="headerlink" href="#_CPPv45HCore" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv44Rank">
+<span id="_CPPv34Rank"></span><span id="_CPPv24Rank"></span><span id="Rank"></span><span class="target" id="structRank"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rank</span></span></span><a class="headerlink" href="#_CPPv44Rank" title="Link to this definition"></a><br /></dt>
 <dd><div class="docutils container">
 <em>#include &lt;hci_store.h&gt;</em></div>
-<p>A structure that holds pointers to the core Hamiltonian in both the <span class="math notranslate nohighlight">\(\alpha\)</span> MO and <span class="math notranslate nohighlight">\(\beta\)</span> MO bases.</p>
-<p>Neither array is expected to be compressed (i.e. both must have all <span class="math notranslate nohighlight">\(N_\text{orb}^2\)</span> entries). </p>
+<p>Lightweight tuple-like struct for storing associated <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> ranks. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5HCore9h1e_mo_aaE">
-<span id="_CPPv3N5HCore9h1e_mo_aaE"></span><span id="_CPPv2N5HCore9h1e_mo_aaE"></span><span id="HCore::h1e_mo_aa__doubleP"></span><span class="target" id="structHCore_1ad28c69b66ad610c75a5c58e043f6190f"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">h1e_mo_aa</span></span></span><a class="headerlink" href="#_CPPv4N5HCore9h1e_mo_aaE" title="Link to this definition"></a><br /></dt>
-<dd><p>Pointer to the core Hamiltonian in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO basis </p>
+<dt class="sig sig-object cpp" id="_CPPv4N4Rank5arankE">
+<span id="_CPPv3N4Rank5arankE"></span><span id="_CPPv2N4Rank5arankE"></span><span id="Rank::arank__uint64_t"></span><span class="target" id="structRank_1a76b46d529663fe91f71ec2af81ef2c47"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arank</span></span></span><a class="headerlink" href="#_CPPv4N4Rank5arankE" title="Link to this definition"></a><br /></dt>
+<dd><p>The rank of the <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list of the associated configuration </p>
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N5HCore9h1e_mo_bbE">
-<span id="_CPPv3N5HCore9h1e_mo_bbE"></span><span id="_CPPv2N5HCore9h1e_mo_bbE"></span><span id="HCore::h1e_mo_bb__doubleP"></span><span class="target" id="structHCore_1aac6ec20864e7dac7f2fd454c00d525af"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">h1e_mo_bb</span></span></span><a class="headerlink" href="#_CPPv4N5HCore9h1e_mo_bbE" title="Link to this definition"></a><br /></dt>
-<dd><p>Pointer to the core Hamiltonian in the <span class="math notranslate nohighlight">\(\beta\)</span> MO basis </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv49ERITensor">
-<span id="_CPPv39ERITensor"></span><span id="_CPPv29ERITensor"></span><span id="ERITensor"></span><span class="target" id="structERITensor"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ERITensor</span></span></span><a class="headerlink" href="#_CPPv49ERITensor" title="Link to this definition"></a><br /></dt>
-<dd><div class="docutils container">
-<em>#include &lt;hci_store.h&gt;</em></div>
-<p>A structure that holds pointers to the electron repulsion integrals in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO and <span class="math notranslate nohighlight">\(\beta\)</span> MO bases (in chemist’s notation).</p>
-<p>The tag at the end of each field name indicates the expected degree of compression (see <a class="reference external" href="https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html">https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html</a>). </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor14eri_mo_aaaa_s8E">
-<span id="_CPPv3N9ERITensor14eri_mo_aaaa_s8E"></span><span id="_CPPv2N9ERITensor14eri_mo_aaaa_s8E"></span><span id="ERITensor::eri_mo_aaaa_s8__doubleP"></span><span class="target" id="structERITensor_1a0968509743b1186831b4bf65c2cb5ed1"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">eri_mo_aaaa_s8</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor14eri_mo_aaaa_s8E" title="Link to this definition"></a><br /></dt>
-<dd><p>Pointer to the eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO basis </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor14eri_mo_bbbb_s8E">
-<span id="_CPPv3N9ERITensor14eri_mo_bbbb_s8E"></span><span id="_CPPv2N9ERITensor14eri_mo_bbbb_s8E"></span><span id="ERITensor::eri_mo_bbbb_s8__doubleP"></span><span class="target" id="structERITensor_1a79854fee01fc29046a2c697cfe26f5fe"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">eri_mo_bbbb_s8</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor14eri_mo_bbbb_s8E" title="Link to this definition"></a><br /></dt>
-<dd><p>Pointer to the eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\beta\)</span> MO basis </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor14eri_mo_aabb_s4E">
-<span id="_CPPv3N9ERITensor14eri_mo_aabb_s4E"></span><span id="_CPPv2N9ERITensor14eri_mo_aabb_s4E"></span><span id="ERITensor::eri_mo_aabb_s4__doubleP"></span><span class="target" id="structERITensor_1a0d6b70b920db9b4601d5f32d31c759d1"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">eri_mo_aabb_s4</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor14eri_mo_aabb_s4E" title="Link to this definition"></a><br /></dt>
-<dd><p>Pointer to the fourfold compressed ERI tensor in the mixed MO basis </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor10ncols_aabbE">
-<span id="_CPPv3N9ERITensor10ncols_aabbE"></span><span id="_CPPv2N9ERITensor10ncols_aabbE"></span><span id="ERITensor::ncols_aabb__uint64_t"></span><span class="target" id="structERITensor_1a0d623c7dc4ae114c377293987633c2ef"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ncols_aabb</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor10ncols_aabbE" title="Link to this definition"></a><br /></dt>
-<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}+1}{2}\)</span>, i.e. the number of entries in the mixed ERI tensor associated with a single pair of <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p>
+<dt class="sig sig-object cpp" id="_CPPv4N4Rank5brankE">
+<span id="_CPPv3N4Rank5brankE"></span><span id="_CPPv2N4Rank5brankE"></span><span id="Rank::brank__uint64_t"></span><span class="target" id="structRank_1a6c0445a17650add09aeda9b2d3fa0990"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">brank</span></span></span><a class="headerlink" href="#_CPPv4N4Rank5brankE" title="Link to this definition"></a><br /></dt>
+<dd><p>The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of the associated configuration </p>
 </dd></dl>
 
 </div>
@@ -437,6 +411,66 @@
 </dd></dl>
 
 <dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv45HCore">
+<span id="_CPPv35HCore"></span><span id="_CPPv25HCore"></span><span id="HCore"></span><span class="target" id="structHCore"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HCore</span></span></span><a class="headerlink" href="#_CPPv45HCore" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>A structure that holds pointers to the core Hamiltonian in both the <span class="math notranslate nohighlight">\(\alpha\)</span> MO and <span class="math notranslate nohighlight">\(\beta\)</span> MO bases.</p>
+<p>Neither array is expected to be compressed (i.e. both must have all <span class="math notranslate nohighlight">\(N_\text{orb}^2\)</span> entries). </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5HCore9h1e_mo_aaE">
+<span id="_CPPv3N5HCore9h1e_mo_aaE"></span><span id="_CPPv2N5HCore9h1e_mo_aaE"></span><span id="HCore::h1e_mo_aa__doubleP"></span><span class="target" id="structHCore_1ad28c69b66ad610c75a5c58e043f6190f"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">h1e_mo_aa</span></span></span><a class="headerlink" href="#_CPPv4N5HCore9h1e_mo_aaE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the core Hamiltonian in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO basis </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5HCore9h1e_mo_bbE">
+<span id="_CPPv3N5HCore9h1e_mo_bbE"></span><span id="_CPPv2N5HCore9h1e_mo_bbE"></span><span id="HCore::h1e_mo_bb__doubleP"></span><span class="target" id="structHCore_1aac6ec20864e7dac7f2fd454c00d525af"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">h1e_mo_bb</span></span></span><a class="headerlink" href="#_CPPv4N5HCore9h1e_mo_bbE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the core Hamiltonian in the <span class="math notranslate nohighlight">\(\beta\)</span> MO basis </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv49ERITensor">
+<span id="_CPPv39ERITensor"></span><span id="_CPPv29ERITensor"></span><span id="ERITensor"></span><span class="target" id="structERITensor"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ERITensor</span></span></span><a class="headerlink" href="#_CPPv49ERITensor" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>A structure that holds pointers to the electron repulsion integrals in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO and <span class="math notranslate nohighlight">\(\beta\)</span> MO bases (in chemist’s notation).</p>
+<p>The tag at the end of each field name indicates the expected degree of compression (see <a class="reference external" href="https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html">https://pyscf.org/pyscf_api_docs/pyscf.ao2mo.html</a>). </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor14eri_mo_aaaa_s8E">
+<span id="_CPPv3N9ERITensor14eri_mo_aaaa_s8E"></span><span id="_CPPv2N9ERITensor14eri_mo_aaaa_s8E"></span><span id="ERITensor::eri_mo_aaaa_s8__doubleP"></span><span class="target" id="structERITensor_1a0968509743b1186831b4bf65c2cb5ed1"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">eri_mo_aaaa_s8</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor14eri_mo_aaaa_s8E" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO basis </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor14eri_mo_bbbb_s8E">
+<span id="_CPPv3N9ERITensor14eri_mo_bbbb_s8E"></span><span id="_CPPv2N9ERITensor14eri_mo_bbbb_s8E"></span><span id="ERITensor::eri_mo_bbbb_s8__doubleP"></span><span class="target" id="structERITensor_1a79854fee01fc29046a2c697cfe26f5fe"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">eri_mo_bbbb_s8</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor14eri_mo_bbbb_s8E" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\beta\)</span> MO basis </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor14eri_mo_aabb_s4E">
+<span id="_CPPv3N9ERITensor14eri_mo_aabb_s4E"></span><span id="_CPPv2N9ERITensor14eri_mo_aabb_s4E"></span><span id="ERITensor::eri_mo_aabb_s4__doubleP"></span><span class="target" id="structERITensor_1a0d6b70b920db9b4601d5f32d31c759d1"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">eri_mo_aabb_s4</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor14eri_mo_aabb_s4E" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to the fourfold compressed ERI tensor in the mixed MO basis </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ERITensor10ncols_aabbE">
+<span id="_CPPv3N9ERITensor10ncols_aabbE"></span><span id="_CPPv2N9ERITensor10ncols_aabbE"></span><span id="ERITensor::ncols_aabb__uint64_t"></span><span class="target" id="structERITensor_1a0d623c7dc4ae114c377293987633c2ef"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ncols_aabb</span></span></span><a class="headerlink" href="#_CPPv4N9ERITensor10ncols_aabbE" title="Link to this definition"></a><br /></dt>
+<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}+1}{2}\)</span>, i.e. the number of entries in the mixed ERI tensor associated with a single pair of <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv410ExcEntries">
 <span id="_CPPv310ExcEntries"></span><span id="_CPPv210ExcEntries"></span><span id="ExcEntries"></span><span class="target" id="structExcEntries"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExcEntries</span></span></span><a class="headerlink" href="#_CPPv410ExcEntries" title="Link to this definition"></a><br /></dt>
 <dd><div class="docutils container">
@@ -448,7 +482,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10ExcEntries10doubles_aaE">
 <span id="_CPPv3N10ExcEntries10doubles_aaE"></span><span id="_CPPv2N10ExcEntries10doubles_aaE"></span><span id="ExcEntries::doubles_aa__DoubleExcEntryP"></span><span class="target" id="structExcEntries_1a5d13b5f4ec02dafd829347b5dedb413d"></span><a class="reference internal" href="#_CPPv414DoubleExcEntry" title="DoubleExcEntry"><span class="n"><span class="pre">DoubleExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">doubles_aa</span></span></span><a class="headerlink" href="#_CPPv4N10ExcEntries10doubles_aaE" title="Link to this definition"></a><br /></dt>
-<dd><p>Pointer to the stored double <span class="math notranslate nohighlight">\(\alpha\)</span> matrix elements </p>
+<dd><p>Pointer to the stored double <span class="math notranslate nohighlight">\(\alpha\)</span> excitation matrix elements </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -466,7 +500,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10ExcEntries10doubles_bbE">
 <span id="_CPPv3N10ExcEntries10doubles_bbE"></span><span id="_CPPv2N10ExcEntries10doubles_bbE"></span><span id="ExcEntries::doubles_bb__DoubleExcEntryP"></span><span class="target" id="structExcEntries_1a22f21245c882052e5e30409da114f634"></span><a class="reference internal" href="#_CPPv414DoubleExcEntry" title="DoubleExcEntry"><span class="n"><span class="pre">DoubleExcEntry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">doubles_bb</span></span></span><a class="headerlink" href="#_CPPv4N10ExcEntries10doubles_bbE" title="Link to this definition"></a><br /></dt>
-<dd><p>Pointer to the stored double <span class="math notranslate nohighlight">\(\beta\)</span> matrix elements </p>
+<dd><p>Pointer to the stored double <span class="math notranslate nohighlight">\(\beta\)</span> excitation matrix elements </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -497,6 +531,36 @@
 <dt class="sig sig-object cpp" id="_CPPv4N10ExcEntries9nmixed_abE">
 <span id="_CPPv3N10ExcEntries9nmixed_abE"></span><span id="_CPPv2N10ExcEntries9nmixed_abE"></span><span id="ExcEntries::nmixed_ab__s"></span><span class="target" id="structExcEntries_1a9b7c46c988c029cf65b92ba62c3857d7"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nmixed_ab</span></span></span><a class="headerlink" href="#_CPPv4N10ExcEntries9nmixed_abE" title="Link to this definition"></a><br /></dt>
 <dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{2}^2\)</span>, the number of mixed excitations </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv46HCIVec">
+<span id="_CPPv36HCIVec"></span><span id="_CPPv26HCIVec"></span><span id="HCIVec"></span><span class="target" id="structHCIVec"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HCIVec</span></span></span><a class="headerlink" href="#_CPPv46HCIVec" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;hci_store.h&gt;</em></div>
+<p>Struct representing a weighted sum of configurations.</p>
+<p>Implemented as a structure of arrays to make interoperability with <code class="docutils literal notranslate"><span class="pre">NumPy</span></code> and <code class="docutils literal notranslate"><span class="pre">PySCF</span></code> easier. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6HCIVec5ranksE">
+<span id="_CPPv3N6HCIVec5ranksE"></span><span id="_CPPv2N6HCIVec5ranksE"></span><span id="HCIVec::ranks__RankP"></span><span class="target" id="structHCIVec_1a9bece7300db2990c31d29ae42cfe1b44"></span><a class="reference internal" href="#_CPPv44Rank" title="Rank"><span class="n"><span class="pre">Rank</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">ranks</span></span></span><a class="headerlink" href="#_CPPv4N6HCIVec5ranksE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to list of ranks specifying the configurations </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6HCIVec6coeffsE">
+<span id="_CPPv3N6HCIVec6coeffsE"></span><span id="_CPPv2N6HCIVec6coeffsE"></span><span id="HCIVec::coeffs__doubleP"></span><span class="target" id="structHCIVec_1aaf6aa987cc2ef76435f15f3e063a8e79"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">coeffs</span></span></span><a class="headerlink" href="#_CPPv4N6HCIVec6coeffsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to list of coefficients of the corresponding ranks </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6HCIVec3lenE">
+<span id="_CPPv3N6HCIVec3lenE"></span><span id="_CPPv2N6HCIVec3lenE"></span><span id="HCIVec::len__s"></span><span class="target" id="structHCIVec_1a0c82a55e249c48f282238cf0b6c143e6"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">len</span></span></span><a class="headerlink" href="#_CPPv4N6HCIVec3lenE" title="Link to this definition"></a><br /></dt>
+<dd><p>Length of the vector </p>
 </dd></dl>
 
 </div>
