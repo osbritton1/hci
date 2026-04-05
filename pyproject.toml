@@ -1,6 +1,5 @@
 [build-system]
 requires = [
-    "ninja',
     "scikit-build-core"
 ]
 build-backend = "scikit_build_core.build"
@@ -35,4 +34,5 @@ Issues = "https://github.com/osbritton1/hci/issues"
 docs = ["sphinx", "sphinx_rtd_theme", "breathe"]
 
 [tool.scikit-build]
+cmake.args = ["-GUnix Makefiles"]
 wheel.install-dir = "build"
