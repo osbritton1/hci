@@ -1,12 +1,9 @@
 [build-system]
 requires = [
-    "setuptools>=61.0",
-    "wheel",
     "cmake<4.0",
-    "scikit-build>=0.13",
-    "ninja"
+    "scikit-build-core"
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "scikit_build_core.build"
 
 [project]
 name = "hci"
@@ -38,4 +35,4 @@ Issues = "https://github.com/osbritton1/hci/issues"
 docs = ["sphinx", "sphinx_rtd_theme", "breathe"]
 
 [tool.scikit-build]
-build-dir = "build"
+wheel.install-dir = "build"
