@@ -47,6 +47,11 @@ hci.lib.hci\_utils module
 hci.lib.libhci module
 ---------------------
 
+.. automodule:: hci.lib.libhci
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Serves as the entry point for the :ref:`C library <C lib>`.
 
 Module contents
