@@ -44,7 +44,7 @@ PROJECT_NUMBER         = 0.1.0
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = "A crude implementation of the HCI search algorithm for PySCF"
+PROJECT_BRIEF          = A crude implementation of the HCI search algorithm for PySCF
 
 # With the PROJECT_LOGO tag one can specify a logo or an icon that is included
 # in the documentation. The maximum height of the logo should not exceed 55
@@ -895,7 +895,7 @@ INPUT_ENCODING         = UTF-8
 
 FILE_PATTERNS          = *.c \
                          *.h \
-                         *.dox
+                         *.dox \
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
