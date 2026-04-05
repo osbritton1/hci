@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hci.hci_uhf &mdash; HCI for PySCF 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            HCI for PySCF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">hci</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen_files.html">C Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">HCI for PySCF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hci.hci_uhf</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hci.hci_uhf</h1><div class="highlight"><pre>
+<span></span><span class="c1"># type: ignore</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hci.lib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hcilib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hci.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">HCore</span><span class="p">,</span> <span class="n">ERITensor</span><span class="p">,</span> <span class="n">ConfigInfo</span><span class="p">,</span> <span class="n">ExcEntries</span><span class="p">,</span> <span class="n">HCIVec</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf</span><span class="w"> </span><span class="kn">import</span> <span class="n">ao2mo</span><span class="p">,</span> <span class="n">__config__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf</span><span class="w"> </span><span class="kn">import</span> <span class="n">lib</span> <span class="k">as</span> <span class="n">pyscflib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyscf.fci</span><span class="w"> </span><span class="kn">import</span> <span class="n">direct_spin1</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<div class="viewcode-block" id="HeatBathCI">
+<a class="viewcode-back" href="../../hci.html#hci.hci_uhf.HeatBathCI">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HeatBathCI</span><span class="p">(</span><span class="n">direct_spin1</span><span class="o">.</span><span class="n">FCISolver</span><span class="p">):</span>
+    <span class="n">add_thresh</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">__config__</span><span class="p">,</span> <span class="s1">&#39;fci_selected_ci_SCI_select_cutoff&#39;</span><span class="p">,</span> <span class="mf">.5e-3</span><span class="p">)</span>
+    <span class="n">conv_tol</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">__config__</span><span class="p">,</span> <span class="s1">&#39;fci_selected_ci_SCI_conv_tol&#39;</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">)</span>
+    <span class="n">start_tol</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">__config__</span><span class="p">,</span> <span class="s1">&#39;fci_selected_ci_SCI_start_tol&#39;</span><span class="p">,</span> <span class="mf">3e-4</span><span class="p">)</span>
+    <span class="n">tol_decay_rate</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">__config__</span><span class="p">,</span> <span class="s1">&#39;fci_selected_ci_SCI_tol_decay_rate&#39;</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">_keys</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;add_thresh&#39;</span><span class="p">,</span> <span class="s1">&#39;conv_tol&#39;</span><span class="p">,</span> <span class="s1">&#39;start_tol&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tol_decay_rate&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">direct_spin1</span><span class="o">.</span><span class="n">FCISolver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mol</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HeatBathCI.dump_flags">
+<a class="viewcode-back" href="../../hci.html#hci.hci_uhf.HeatBathCI.dump_flags">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">direct_spin1</span><span class="o">.</span><span class="n">FCISolver</span><span class="o">.</span><span class="n">dump_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;add_thresh </span><span class="si">%g</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_thresh</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">This is an inefficient dialect of heat-bath CI written as a senior thesis project. </span>
+<span class="s1">For an efficient heat-bath CI program, use the Dice program (https://github.com/sanshar/Dice.git).&#39;&#39;&#39;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="HeatBathCI.enlarge_space">
+<a class="viewcode-back" href="../../hci.html#hci.hci_uhf.HeatBathCI.enlarge_space">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enlarge_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hcivecs</span><span class="p">,</span> <span class="n">add_thresh</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">excitation_entries</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">):</span>
+        <span class="n">add_list_doubles</span> <span class="o">=</span> <span class="n">hcilib</span><span class="o">.</span><span class="n">enlarge_space_doubles</span><span class="p">(</span><span class="n">hcivecs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">add_thresh</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">excitation_entries</span><span class="p">)</span>
+        <span class="n">add_list_singles</span> <span class="o">=</span> <span class="n">hcilib</span><span class="o">.</span><span class="n">enlarge_space_singles</span><span class="p">(</span><span class="n">hcivecs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">add_thresh</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span>
+        <span class="n">add_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">add_list_doubles</span><span class="p">,</span> <span class="n">add_list_singles</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">exc_vec</span> <span class="ow">in</span> <span class="n">hcivecs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">add_list_doubles_exc</span> <span class="o">=</span> <span class="n">hcilib</span><span class="o">.</span><span class="n">enlarge_space_doubles</span><span class="p">(</span><span class="n">exc_vec</span><span class="p">,</span> <span class="n">add_thresh</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">excitation_entries</span><span class="p">)</span>
+            <span class="n">add_list_singles_exc</span> <span class="o">=</span> <span class="n">hcilib</span><span class="o">.</span><span class="n">enlarge_space_singles</span><span class="p">(</span><span class="n">exc_vec</span><span class="p">,</span> <span class="n">add_thresh</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span>
+            <span class="n">add_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">add_list</span><span class="p">,</span> <span class="n">add_list_doubles_exc</span><span class="p">,</span> <span class="n">add_list_singles_exc</span><span class="p">]))</span>
+        
+        <span class="n">total_ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">hcivecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ranks</span><span class="p">,</span> <span class="n">add_list</span><span class="p">])</span>
+        <span class="n">ranks_new</span><span class="p">,</span> <span class="n">unique_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">total_ranks</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ndets_new</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks_new</span><span class="p">)</span>
+        <span class="n">hcivecs_new</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">hcivec_old</span> <span class="ow">in</span> <span class="n">hcivecs</span><span class="p">:</span>
+            <span class="n">hcivec_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">hcivec_old</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ndets_new</span><span class="p">)])</span>
+            <span class="n">hcivec_new</span> <span class="o">=</span> <span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">hcivec_total</span><span class="p">[</span><span class="n">unique_rows</span><span class="p">],</span> <span class="n">ranks_new</span><span class="p">)</span>
+            <span class="n">hcivecs_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hcivec_new</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">hcivecs_new</span></div>
+
+    
+<div class="viewcode-block" id="HeatBathCI.kernel">
+<a class="viewcode-back" href="../../hci.html#hci.hci_uhf.HeatBathCI.kernel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hcore</span><span class="p">,</span> <span class="n">eri_ao</span><span class="p">,</span> <span class="n">mo</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="n">add_thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ci0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lindep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_cycle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+           <span class="n">nroots</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_memory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecore</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    
+        <span class="c1"># Flags and logging</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">new_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">add_thresh</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">add_thresh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_thresh</span>
+        <span class="k">if</span> <span class="n">tol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">tol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_tol</span>
+        <span class="k">if</span> <span class="n">lindep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">lindep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lindep</span>
+        <span class="k">if</span> <span class="n">max_cycle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">max_cycle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_cycle</span>
+        <span class="k">if</span> <span class="n">max_space</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">max_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_space</span>
+        <span class="k">if</span> <span class="n">max_memory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">max_memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_memory</span>
+        <span class="k">if</span> <span class="n">nroots</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">nroots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nroots</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="n">logger</span><span class="o">.</span><span class="n">WARN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_sanity</span><span class="p">()</span>
+
+        <span class="c1"># Build ranking table</span>
+        <span class="n">config_info</span> <span class="o">=</span> <span class="n">ConfigInfo</span><span class="p">(</span><span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">)</span>
+
+        <span class="c1"># AO to MO transformations</span>
+        <span class="n">mo_a</span><span class="p">,</span> <span class="n">mo_b</span> <span class="o">=</span> <span class="n">mo</span>
+        <span class="n">h1e_mo_aa</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">,</span> <span class="p">(</span><span class="n">mo_a</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">hcore</span><span class="p">,</span> <span class="n">mo_a</span><span class="p">))</span>
+        <span class="n">h1e_mo_bb</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">,</span> <span class="p">(</span><span class="n">mo_b</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">hcore</span><span class="p">,</span> <span class="n">mo_b</span><span class="p">))</span>
+        <span class="n">h1e</span> <span class="o">=</span> <span class="n">HCore</span><span class="p">(</span><span class="n">h1e_mo_aa</span><span class="p">,</span> <span class="n">h1e_mo_bb</span><span class="p">)</span>
+        <span class="n">eri_mo_aaaa_s8</span> <span class="o">=</span> <span class="n">ao2mo</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="s1">&#39;s8&#39;</span><span class="p">,</span> <span class="n">ao2mo</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">eri_ao</span><span class="p">,</span> <span class="n">mo_a</span><span class="p">),</span> <span class="n">norb</span><span class="p">)</span>
+        <span class="n">eri_mo_bbbb_s8</span> <span class="o">=</span> <span class="n">ao2mo</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="s1">&#39;s8&#39;</span><span class="p">,</span> <span class="n">ao2mo</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">eri_ao</span><span class="p">,</span> <span class="n">mo_b</span><span class="p">),</span> <span class="n">norb</span><span class="p">)</span>
+        <span class="n">eri_mo_aabb_s4</span> <span class="o">=</span> <span class="n">ao2mo</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="s1">&#39;s4&#39;</span><span class="p">,</span> <span class="n">ao2mo</span><span class="o">.</span><span class="n">general</span><span class="p">(</span><span class="n">eri_ao</span><span class="p">,</span> <span class="p">[</span><span class="n">mo_a</span><span class="p">,</span> <span class="n">mo_a</span><span class="p">,</span> <span class="n">mo_b</span><span class="p">,</span> <span class="n">mo_b</span><span class="p">]),</span> <span class="n">norb</span><span class="p">)</span>
+        <span class="n">eri_mo</span> <span class="o">=</span> <span class="n">ERITensor</span><span class="p">(</span><span class="n">eri_mo_aaaa_s8</span><span class="p">,</span> <span class="n">eri_mo_bbbb_s8</span><span class="p">,</span> <span class="n">eri_mo_aabb_s4</span><span class="p">,</span> <span class="n">config_info</span><span class="p">)</span>
+
+        <span class="c1"># Build and sort excitation lists</span>
+        <span class="n">excitation_entries</span> <span class="o">=</span> <span class="n">ExcEntries</span><span class="p">(</span><span class="n">eri_mo</span><span class="p">,</span> <span class="n">config_info</span><span class="p">)</span>
+        <span class="n">excitation_entries</span><span class="o">.</span><span class="n">sort_desc_by_mag</span><span class="p">()</span>
+
+        <span class="c1">#Initialize HCI vector</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ci0</span><span class="p">,</span> <span class="n">HCIVec</span><span class="p">):</span>
+            <span class="n">ranks</span> <span class="o">=</span> <span class="n">ci0</span><span class="o">.</span><span class="n">ranks</span>
+            <span class="k">if</span> <span class="n">ci0</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">):</span>
+                <span class="n">ci0</span> <span class="o">=</span> <span class="p">[</span><span class="n">ci0</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ci0</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ci0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ci0</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ci0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">HCIVec</span><span class="p">):</span>
+            <span class="n">ranks</span> <span class="o">=</span> <span class="n">ci0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ranks</span>
+            <span class="n">ci0</span> <span class="o">=</span> <span class="p">[</span><span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec_if_not</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">ranks</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ci0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">ci0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">hcilib</span><span class="o">.</span><span class="n">rank_entry</span><span class="p">)</span>
+            <span class="n">hf_gnd</span> <span class="o">=</span> <span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">ranks</span><span class="p">)</span>
+            <span class="n">ci0</span> <span class="o">=</span> <span class="p">[</span><span class="n">hf_gnd</span><span class="p">]</span>
+            <span class="n">ci0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enlarge_space</span><span class="p">(</span><span class="n">ci0</span><span class="p">,</span> <span class="n">add_thresh</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">excitation_entries</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span>
+            <span class="n">ranks</span> <span class="o">=</span> <span class="n">ci0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ranks</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">nroots</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    HCI space generated from HF ground state via single and double excitations is too small</span>
+<span class="s1">    for calculating </span><span class="si">{</span><span class="n">nroots</span><span class="si">}</span><span class="s1"> states.</span><span class="se">\n</span><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ci0</span><span class="p">)</span><span class="si">}</span><span class="s1"> for initial HCI seed ci0.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Define Hamiltonian-vector contraction and preconditioner for use in Davidson algorithm</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">hop</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="n">hc</span> <span class="o">=</span> <span class="n">hcilib</span><span class="o">.</span><span class="n">contract_hamiltonian_hcivec_slow</span><span class="p">(</span><span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ranks</span><span class="p">),</span> <span class="n">hdiag</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span> 
+            <span class="k">return</span> <span class="n">hc</span>
+        <span class="n">precond</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">x</span><span class="o">/</span><span class="p">(</span><span class="n">hdiag</span><span class="o">-</span><span class="n">e</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">level_shift</span><span class="p">)</span>
+
+        <span class="c1"># Set convergence parameters</span>
+        <span class="n">max_len</span> <span class="o">=</span> <span class="n">config_info</span><span class="o">.</span><span class="n">combmax_a</span><span class="o">*</span><span class="n">config_info</span><span class="o">.</span><span class="n">combmax_b</span>
+        <span class="n">e_last</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">float_tol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tol</span>
+        <span class="n">tol_decay_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tol_decay_rate</span>
+
+        <span class="c1"># Begin HCI loop</span>
+        <span class="k">for</span> <span class="n">icycle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">norb</span><span class="p">):</span>
+            <span class="n">float_tol</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">float_tol</span><span class="o">*</span><span class="n">tol_decay_rate</span><span class="p">,</span> <span class="n">tol</span><span class="o">*</span><span class="mf">1e2</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI begin cycle </span><span class="si">%d</span><span class="s1">  ndets </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">  float_tol </span><span class="si">%g</span><span class="s1">&#39;</span><span class="p">,</span>
+                    <span class="n">icycle</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">),</span> <span class="n">max_len</span><span class="p">,</span> <span class="n">float_tol</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI begin davidson&#39;</span><span class="p">)</span>
+            <span class="n">hdiag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_hdiag_slow</span><span class="p">(</span><span class="n">ci0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">ci0</span> <span class="o">=</span> <span class="n">pyscflib</span><span class="o">.</span><span class="n">davidson</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">ci0</span><span class="p">,</span> <span class="n">precond</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">float_tol</span><span class="p">,</span> <span class="n">lindep</span><span class="o">=</span><span class="n">lindep</span><span class="p">,</span>
+                                    <span class="n">max_cycle</span><span class="o">=</span><span class="n">max_cycle</span><span class="p">,</span> <span class="n">max_space</span><span class="o">=</span><span class="n">max_space</span><span class="p">,</span> <span class="n">nroots</span><span class="o">=</span><span class="n">nroots</span><span class="p">,</span>
+                                    <span class="n">max_memory</span><span class="o">=</span><span class="n">max_memory</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">log</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nroots</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">ci0</span> <span class="o">=</span> <span class="p">[</span><span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ranks</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ci0</span><span class="p">]</span>
+                <span class="n">de</span><span class="p">,</span> <span class="n">e_last</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">-</span><span class="n">e_last</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI end davidson  E = </span><span class="si">%s</span><span class="s1">  dE_gnd = </span><span class="si">%.8g</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">+</span><span class="n">ecore</span><span class="p">,</span> <span class="n">de</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ci0</span> <span class="o">=</span> <span class="p">[</span><span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">ci0</span><span class="p">,</span> <span class="n">ranks</span><span class="p">)]</span>
+                <span class="n">de</span><span class="p">,</span> <span class="n">e_last</span> <span class="o">=</span> <span class="n">e</span><span class="o">-</span><span class="n">e_last</span><span class="p">,</span> <span class="n">e</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI end davidson  E = </span><span class="si">%.15g</span><span class="s1">  dE_gnd = </span><span class="si">%.8g</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">+</span><span class="n">ecore</span><span class="p">,</span> <span class="n">de</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">)</span> <span class="o">==</span> <span class="n">max_len</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI converged to FCI ndets </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">),</span> <span class="n">max_len</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">de</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="o">*</span><span class="mf">1e3</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI converged energy |dE_gnd| = </span><span class="si">%.8g</span><span class="s1"> &lt; </span><span class="si">%.8g</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">de</span><span class="p">),</span> <span class="n">tol</span><span class="o">*</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="n">old_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">)</span>
+            <span class="n">ci0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enlarge_space</span><span class="p">(</span><span class="n">ci0</span><span class="p">,</span> <span class="n">add_thresh</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">excitation_entries</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span>
+            <span class="n">ranks</span> <span class="o">=</span> <span class="n">ci0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ranks</span>
+            <span class="n">new_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI enlarge nadd </span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">new_length</span><span class="o">-</span><span class="n">old_length</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_length</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">old_length</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.01</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI converged enlargement ratio </span><span class="si">%.3g</span><span class="s1"> &lt; 1.01&#39;</span><span class="p">,</span> <span class="n">new_length</span><span class="o">/</span><span class="n">old_length</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI end cycle </span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">icycle</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI final diagonalization ndets </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">),</span> <span class="n">max_len</span><span class="p">)</span>
+        <span class="n">hdiag</span> <span class="o">=</span> <span class="n">HeatBathCI</span><span class="o">.</span><span class="n">make_hdiag_slow</span><span class="p">(</span><span class="n">ci0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span>
+        <span class="n">e</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pyscflib</span><span class="o">.</span><span class="n">davidson</span><span class="p">(</span><span class="n">hop</span><span class="p">,</span> <span class="n">ci0</span><span class="p">,</span> <span class="n">precond</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">float_tol</span><span class="p">,</span> <span class="n">lindep</span><span class="o">=</span><span class="n">lindep</span><span class="p">,</span>
+                                <span class="n">max_cycle</span><span class="o">=</span><span class="n">max_cycle</span><span class="p">,</span> <span class="n">max_space</span><span class="o">=</span><span class="n">max_space</span><span class="p">,</span> <span class="n">nroots</span><span class="o">=</span><span class="n">nroots</span><span class="p">,</span>
+                                <span class="n">max_memory</span><span class="o">=</span><span class="n">max_memory</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">log</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nroots</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI ndets = </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">),</span> <span class="n">max_len</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ei</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">e</span><span class="o">+</span><span class="n">ecore</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI state </span><span class="si">%d</span><span class="s1">  E = </span><span class="si">%.15g</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">ei</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">e</span><span class="o">+</span><span class="n">ecore</span><span class="p">,</span> <span class="p">[</span><span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">ranks</span><span class="p">)</span> <span class="k">for</span> <span class="n">ci</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;HCI  E = </span><span class="si">%.15g</span><span class="s1">  ndets = </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">+</span><span class="n">ecore</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranks</span><span class="p">),</span> <span class="n">max_len</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">e</span><span class="o">+</span><span class="n">ecore</span><span class="p">,</span> <span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ranks</span><span class="p">)</span></div>
+
+
+    <span class="n">make_hdiag_slow</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">hcilib</span><span class="o">.</span><span class="n">make_hdiag_slow</span><span class="p">)</span></div>
+
+
+<span class="n">HCI</span> <span class="o">=</span> <span class="n">HeatBathCI</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Simon Britton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

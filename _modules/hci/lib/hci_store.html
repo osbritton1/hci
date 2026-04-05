@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hci.lib.hci_store &mdash; HCI for PySCF 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            HCI for PySCF
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">hci</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doxygen_files.html">C Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">HCI for PySCF</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hci.lib.hci_store</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hci.lib.hci_store</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Pythonic interface for :ref:`c-store` part of the :ref:`C lib`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">npt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ctypes</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hci.lib.hci_rank</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigInfo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hci.lib.hci_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">libhci</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hci.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">HCIError</span>
+
+<span class="n">rank_entry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;arank&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;brank&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)])</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. _numpy-rank:</span>
+
+<span class="sd">A :py:class:`numpy.dtype` representing a configuration via the </span>
+<span class="sd">ranks of its :math:`\alpha` and :math:`\beta` occupancy lists.</span>
+<span class="sd">Directly mirrors the :ref:`C lib`&#39;s :cpp:struct:`Rank`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Rank">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.Rank">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Rank</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The equivalent of the :ref:`C lib`&#39;s :cpp:struct:`Rank`.</span>
+<span class="sd">    Used for passing individual ranks to the :ref:`C lib` directly (as</span>
+<span class="sd">    opposed to passing in a structured :py:mod:`numpy` array).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;arank&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;brank&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">)]</span>
+    
+<div class="viewcode-block" id="Rank.from_rank_entry">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.Rank.from_rank_entry">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_rank_entry</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rank_entry</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Rank&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a compatible structured scalar to a :py:class:`Rank`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rank_entry (np.void): structured scalar produced by indexing a</span>
+<span class="sd">                :py:class:`numpy.ndarray` of dtype :ref:`rank_entry &lt;numpy-rank&gt;`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new :py:class:`Rank` containing the information from the structured scalar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">rank_entry</span><span class="p">[</span><span class="s1">&#39;arank&#39;</span><span class="p">],</span> <span class="n">rank_entry</span><span class="p">[</span><span class="s1">&#39;brank&#39;</span><span class="p">])</span></div>
+</div>
+
+
+<span class="n">double_exc_entry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;rank&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ijkl&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;iljk&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)])</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A :py:class:`numpy.dtype` containing the minimal information</span>
+<span class="sd">necessary for computing any double excitation matrix element</span>
+<span class="sd">involving the same four changing orbitals. Directly mirrors</span>
+<span class="sd">the :ref:`C lib`&#39;s :cpp:struct:`DoubleExcEntry`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">mixed_exc_entry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;rank&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ijkl&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)])</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A :py:class:`numpy.dtype` representing a mixed excitation.</span>
+<span class="sd">Directly mirrors the :ref:`C lib`&#39;s :cpp:struct:`MixedExcEntry`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="HCore">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.HCore">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HCore</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Class storing the core Hamiltonian in both the :math:`\alpha` and :math:`\beta`</span>
+<span class="sd">    MO bases for ease of manipulation. When passed as an argument to a :py:mod:`ctypes` function, </span>
+<span class="sd">    yields a reference to a struct compatible with the :ref:`C lib`&#39;s :cpp:struct:`HCore`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1e_mo_aa</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span> <span class="n">h1e_mo_bb</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            h1e_mo_aa: The core Hamiltonian in the :math:`\alpha` MO basis. Should be of shape :math:`(N_\text{orb}, N_\text{orb})`.</span>
+<span class="sd">            h1e_mo_bb: The core Hamiltonian in the :math:`\beta` MO basis. Should be of shape :math:`(N_\text{orb}, N_\text{orb})`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">h1e_mo_aa</span> <span class="o">=</span> <span class="n">h1e_mo_aa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h1e_mo_bb</span> <span class="o">=</span> <span class="n">h1e_mo_bb</span>
+        
+    <span class="k">class</span><span class="w"> </span><span class="nc">_HCorePtrs</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal class to manage :py:mod:`ctypes` interoperability.&quot;&quot;&quot;</span> 
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;h1e_mo_aa&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;h1e_mo_bb&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">)]</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_parameter_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a reference to a struct of pointers to the class&#39;s data.&quot;&quot;&quot;</span> 
+        <span class="n">ptrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_HCorePtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h1e_mo_aa</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">h1e_mo_bb</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ct</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ptrs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ERITensor">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.ERITensor">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ERITensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Class storing the electron repulsion integrals. For a UHF starting point, </span>
+<span class="sd">    three MO transformed tensors are needed of :math:`[\alpha\alpha|\alpha\alpha]`,</span>
+<span class="sd">    :math:`[\alpha\alpha|\beta\beta]`, and :math:`[\beta\beta|\beta\beta]` type.</span>
+<span class="sd">    When passed as an argument to a :py:mod:`ctypes` function, yields a reference to </span>
+<span class="sd">    a struct compatible with the :ref:`C lib`&#39;s :cpp:struct:`ERITensor`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eri_mo_aaaa_s8</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                 <span class="n">eri_mo_bbbb_s8</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span> 
+                 <span class="n">eri_mo_aabb_s4</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span> 
+                 <span class="n">config_info</span><span class="p">:</span> <span class="n">ConfigInfo</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            eri_mo_aaaa_s8: Eightfold compressed ERI tensor in the :math:`\alpha` MO basis</span>
+<span class="sd">            eri_mo_bbbb_s8: Eightfold compressed ERI tensor in the :math:`\beta` MO basis</span>
+<span class="sd">            eri_mo_aabb_s4: Fourfold compressed ERI tensor in the mixed MO basis</span>
+<span class="sd">            config_info: :py:class:`ConfigInfo` instance supplying ranking tables and key parameters of the system</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">eri_mo_aaaa_s8</span> <span class="o">=</span> <span class="n">eri_mo_aaaa_s8</span> <span class="c1">#: Eightfold compressed ERI tensor in the :math:`\alpha` MO basis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eri_mo_bbbb_s8</span> <span class="o">=</span> <span class="n">eri_mo_bbbb_s8</span> <span class="c1">#: Eightfold compressed ERI tensor in the :math:`\beta` MO basis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eri_mo_aabb_s4</span> <span class="o">=</span> <span class="n">eri_mo_aabb_s4</span> <span class="c1">#: Fourfold compressed ERI tensor in the mixed MO basis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncols_aabb</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">config_info</span><span class="o">.</span><span class="n">norb</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> 
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;:math:`\binom{N_\text{orb}+1}{2}`, i.e. the number of entries in the mixed ERI tensor associated </span>
+<span class="sd">        with a single pair of :math:`\alpha` orbitals; needed for looping constructs&quot;&quot;&quot;</span>
+        
+    <span class="k">class</span><span class="w"> </span><span class="nc">_ERITensorPtrs</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal class to manage :py:mod:`ctypes` interoperability.&quot;&quot;&quot;</span> 
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;eri_mo_aaaa_s8&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;eri_mo_bbbb_s8&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;eri_mo_aabb_s4&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;ncols_aabb&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">)]</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_parameter_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a reference to a struct of pointers to the class&#39;s data.&quot;&quot;&quot;</span> 
+        <span class="n">ptrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ERITensorPtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eri_mo_aaaa_s8</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">eri_mo_bbbb_s8</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">eri_mo_aabb_s4</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                   <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncols_aabb</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ct</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ptrs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ExcEntries">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.ExcEntries">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExcEntries</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class that stores all the double excitation matrix elements needed for carrying</span>
+<span class="sd">    out the HCI algorithm. When passed as an argument to a :py:mod:`ctypes` function, yields </span>
+<span class="sd">    a reference to a struct compatible with the :ref:`C lib`&#39;s :cpp:struct:`ExcEntries`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span> <span class="n">config_info</span><span class="p">:</span> <span class="n">ConfigInfo</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            eri_mo: :py:class:`ERITensor` instance from which to calculate the double excitation matrix elements</span>
+<span class="sd">            config_info: :py:class:`ConfigInfo` instance supplying ranking tables and key parameters of the system</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_aa</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">config_info</span><span class="o">.</span><span class="n">norb</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">#: :math:`\binom{N_\text{orb}}{4}`, the number of double :math:`\alpha` excitations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doubles_aa</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_aa</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">double_exc_entry</span><span class="p">)</span> <span class="c1">#: The stored double :math:`\alpha` excitation matrix elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_aa</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_aa</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Array specifying the max. magnitude of all double :math:`\alpha` matrix elements associated with the same four orbitals&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_bb</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">config_info</span><span class="o">.</span><span class="n">norb</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">#: :math:`\binom{N_\text{orb}}{4}`, the number of double :math:`\beta` excitations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doubles_bb</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_bb</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">double_exc_entry</span><span class="p">)</span>  <span class="c1">#: The stored double :math:`\beta` excitation matrix elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_bb</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_bb</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Array specifying the max. magnitude of all double :math:`\beta` matrix elements associated with the same four orbitals&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nmixed_ab</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">config_info</span><span class="o">.</span><span class="n">norb</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="c1">#: :math:`\binom{N_\text{orb}}{2}^2`, the number of mixed excitations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixed_ab</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmixed_ab</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">mixed_exc_entry</span><span class="p">)</span> <span class="c1">#: The stores mixed excitation matrix elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_ab</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmixed_ab</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="c1">#: Array containing the magnitudes of the mixed excitation matrix elements</span>
+
+        <span class="n">libhci</span><span class="o">.</span><span class="n">load_exc_entries_from_eri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">,</span> <span class="n">config_info</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_type</span><span class="p">:</span> <span class="n">ExcEntries</span><span class="o">.</span><span class="n">SortType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SortType</span><span class="o">.</span><span class="n">INC_BY_RANK</span> <span class="c1">#: All excitations are initially computed in order of increasing rank</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">_ExcEntriesPtrs</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal class to manage :py:mod:`ctypes` interoperability.&quot;&quot;&quot;</span> 
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;doubles_aa&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;max_mag_aa&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;ndoubles_aa&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;doubles_bb&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;max_mag_bb&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;ndoubles_bb&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;mixed_ab&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;max_mag_ab&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;nmixed_ab&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">)]</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_parameter_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a reference to a struct of pointers to the class&#39;s data.&quot;&quot;&quot;</span> 
+        <span class="n">ptrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ExcEntriesPtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doubles_aa</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_aa</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_aa</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">doubles_bb</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_bb</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndoubles_bb</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">mixed_ab</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_ab</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmixed_ab</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ct</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ptrs</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="ExcEntries.SortType">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.ExcEntries.SortType">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">SortType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Flag enum to indicate how the excitations are sorted.&quot;&quot;&quot;</span>        
+        <span class="n">INC_BY_RANK</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">DESC_BY_MAG</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="ExcEntries.SortTypeError">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.ExcEntries.SortTypeError">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">SortTypeError</span><span class="p">(</span><span class="n">HCIError</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error raised if the :py:class:`ExcEntries.SortType` is incorrect.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ExcEntries.sort_desc_by_mag">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.ExcEntries.sort_desc_by_mag">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sort_desc_by_mag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sorts the excitation lists in order of decreasing magnitude&quot;&quot;&quot;</span>        
+        <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_mag_aa</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doubles_aa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doubles_aa</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_aa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_aa</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_mag_bb</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doubles_bb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doubles_bb</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_bb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_bb</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_mag_ab</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixed_ab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_ab</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_ab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_ab</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SortType</span><span class="o">.</span><span class="n">DESC_BY_MAG</span></div>
+
+    
+<div class="viewcode-block" id="ExcEntries.sort_inc_by_rank">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.ExcEntries.sort_inc_by_rank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sort_inc_by_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sorts the excitation lists in order of decreasing magnitude&quot;&quot;&quot;</span> 
+        <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doubles_aa</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;rank&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doubles_aa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doubles_aa</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_aa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_aa</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doubles_bb</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;rank&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doubles_bb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doubles_bb</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_bb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_bb</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixed_ab</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;rank&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixed_ab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_ab</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_ab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_mag_ab</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SortType</span><span class="o">.</span><span class="n">INC_BY_RANK</span></div>
+</div>
+
+
+<div class="viewcode-block" id="HCIVec">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.HCIVec">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HCIVec</span><span class="p">(</span><span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">Any</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subclass of :py:mod:`numpy.ndarray` tagged by a list of ranks. When passed as </span>
+<span class="sd">    an argument to a :py:mod:`ctypes` function, yields a reference to a struct compatible </span>
+<span class="sd">    with the :ref:`C lib`&#39;s :cpp:struct:`HCIVec`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_array</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">ranks</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">hcivec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_array</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">hcivec</span><span class="o">.</span><span class="n">ranks</span> <span class="o">=</span> <span class="n">ranks</span>
+        <span class="k">return</span> <span class="n">hcivec</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__array_finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranks</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;ranks&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Special cases for ndarray when the array was modified (through ufunc)</span>
+    <span class="c1"># def __array_wrap__(self, out, context=None, return_scalar=False):</span>
+    <span class="c1">#     if out.shape == self.shape:</span>
+    <span class="c1">#         return out</span>
+    <span class="c1">#     elif out.shape == ():  # if ufunc returns a scalar</span>
+    <span class="c1">#         return out[()]</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         return out.view(np.ndarray)</span>
+
+<div class="viewcode-block" id="HCIVec.as_HCIVec">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.HCIVec.as_HCIVec">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_HCIVec</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="s1">&#39;HCIVec&#39;</span><span class="p">],</span> <span class="n">coeffs</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span> <span class="n">ranks</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;HCIVec&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Factory method to tag a preexisting list of coefficients with their ranks.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            coeffs: The coefficients of the :py:class:`HCIVec`</span>
+<span class="sd">            ranks: The rank list to use for tagging</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The :py:class:`HCIVec` formed by tagging the coefficient list with the ranks list</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">hcivec</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">HCIVec</span><span class="p">)</span>
+        <span class="n">hcivec</span><span class="o">.</span><span class="n">ranks</span> <span class="o">=</span> <span class="n">ranks</span>
+        <span class="k">return</span> <span class="n">hcivec</span></div>
+
+    
+<div class="viewcode-block" id="HCIVec.as_HCIVec_if_not">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.HCIVec.as_HCIVec_if_not">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_HCIVec_if_not</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="s1">&#39;HCIVec&#39;</span><span class="p">],</span> <span class="n">vec</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">ranks</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;HCIVec&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Factory method to tag an array with associated ranks if they are not already set.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vec: Input array that may or may not have ranks associated with it</span>
+<span class="sd">            ranks: The rank list to use for tagging</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The :py:class:`HCIVec` formed by tagging the input array with the ranks list if no</span>
+<span class="sd">            preexisting ranks were found</span>
+<span class="sd">        &quot;&quot;&quot;</span>  
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="s1">&#39;ranks&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="n">HCIVec</span><span class="o">.</span><span class="n">as_HCIVec</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">ranks</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vec</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">HCIVec</span><span class="p">)</span></div>
+
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">_HCIVecPtrs</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal class to manage :py:mod:`ctypes` interoperability.&quot;&quot;&quot;</span> 
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;ranks&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;coeffs&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;len&#39;</span><span class="p">,</span> <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_parameter_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a reference to a struct of pointers to the class&#39;s data.&quot;&quot;&quot;</span> 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ptrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_HCIVecPtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="n">ct</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ptrs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ptrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_HCIVecPtrs</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">),</span>
+                                    <span class="n">ct</span><span class="o">.</span><span class="n">c_size_t</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="n">ct</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ptrs</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="HCIVec.RankNotSetError">
+<a class="viewcode-back" href="../../../hci.lib.html#hci.lib.hci_store.HCIVec.RankNotSetError">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">RankNotSetError</span><span class="p">(</span><span class="n">HCIError</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Error type indicating the rank attribute hasn&#39;t been set.&quot;&quot;&quot;</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Simon Britton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
