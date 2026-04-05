@@ -36,3 +36,6 @@ Issues = "https://github.com/osbritton1/hci/issues"
 
 [project.optional-dependencies]
 docs = ["sphinx", "sphinx_rtd_theme", "breathe"]
+
+[tool.scikit-build]
+build-dir = "build"
