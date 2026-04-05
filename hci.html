@@ -51,7 +51,11 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hci-hci-uhf-module">hci.hci_uhf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-hci.hci_uhf">hci.hci_uhf module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hci.hci_uhf.HCI"><code class="docutils literal notranslate"><span class="pre">HCI</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hci.hci_uhf.HeatBathCI"><code class="docutils literal notranslate"><span class="pre">HeatBathCI</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-hci.exceptions">hci.exceptions module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#hci.exceptions.HCIError"><code class="docutils literal notranslate"><span class="pre">HCIError</span></code></a></li>
 </ul>
@@ -97,13 +101,95 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="hci.lib.html">hci.lib package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="hci.lib.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#hci-lib-hci-rank-module">hci.lib.hci_rank module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#hci-lib-hci-store-module">hci.lib.hci_store module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#hci-lib-hci-enlarge-module">hci.lib.hci_enlarge module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#hci-lib-hci-contract-module">hci.lib.hci_contract module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#hci-lib-hci-utils-module">hci.lib.hci_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#module-hci.lib.hci_rank">hci.lib.hci_rank module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo"><code class="docutils literal notranslate"><span class="pre">ConfigInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.combmax_a"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.combmax_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.combmax_b"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.combmax_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.exc_table_2o"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.exc_table_2o</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.exc_table_4o"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.exc_table_4o</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.ncols_mixed"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.ncols_mixed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.nelec_a"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.nelec_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.nelec_b"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.nelec_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.norb"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.norb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.occ_table_a"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.occ_table_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.occ_table_b"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.occ_table_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.rank_double_exc"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.rank_double_exc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.rank_mixed_exc"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.rank_mixed_exc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.rank_occ_a"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.rank_occ_a()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.rank_occ_b"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.rank_occ_b()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.unrank_double_exc"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.unrank_double_exc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.unrank_mixed_exc"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.unrank_mixed_exc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.unrank_occ_a"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.unrank_occ_a()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.unrank_occ_b"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.unrank_occ_b()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.unrank_virt_a"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.unrank_virt_a()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.unrank_virt_b"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.unrank_virt_b()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.virt_table_a"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.virt_table_a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo.virt_table_b"><code class="docutils literal notranslate"><span class="pre">ConfigInfo.virt_table_b</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#module-hci.lib.hci_store">hci.lib.hci_store module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ERITensor"><code class="docutils literal notranslate"><span class="pre">ERITensor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ERITensor.eri_mo_aaaa_s8"><code class="docutils literal notranslate"><span class="pre">ERITensor.eri_mo_aaaa_s8</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ERITensor.eri_mo_aabb_s4"><code class="docutils literal notranslate"><span class="pre">ERITensor.eri_mo_aabb_s4</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ERITensor.eri_mo_bbbb_s8"><code class="docutils literal notranslate"><span class="pre">ERITensor.eri_mo_bbbb_s8</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ERITensor.ncols_aabb"><code class="docutils literal notranslate"><span class="pre">ERITensor.ncols_aabb</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries"><code class="docutils literal notranslate"><span class="pre">ExcEntries</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.SortType"><code class="docutils literal notranslate"><span class="pre">ExcEntries.SortType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.SortTypeError"><code class="docutils literal notranslate"><span class="pre">ExcEntries.SortTypeError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.doubles_aa"><code class="docutils literal notranslate"><span class="pre">ExcEntries.doubles_aa</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.doubles_bb"><code class="docutils literal notranslate"><span class="pre">ExcEntries.doubles_bb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.max_mag_aa"><code class="docutils literal notranslate"><span class="pre">ExcEntries.max_mag_aa</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.max_mag_ab"><code class="docutils literal notranslate"><span class="pre">ExcEntries.max_mag_ab</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.max_mag_bb"><code class="docutils literal notranslate"><span class="pre">ExcEntries.max_mag_bb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.mixed_ab"><code class="docutils literal notranslate"><span class="pre">ExcEntries.mixed_ab</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.ndoubles_aa"><code class="docutils literal notranslate"><span class="pre">ExcEntries.ndoubles_aa</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.ndoubles_bb"><code class="docutils literal notranslate"><span class="pre">ExcEntries.ndoubles_bb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.nmixed_ab"><code class="docutils literal notranslate"><span class="pre">ExcEntries.nmixed_ab</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.sort_desc_by_mag"><code class="docutils literal notranslate"><span class="pre">ExcEntries.sort_desc_by_mag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.sort_inc_by_rank"><code class="docutils literal notranslate"><span class="pre">ExcEntries.sort_inc_by_rank()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ExcEntries.sort_type"><code class="docutils literal notranslate"><span class="pre">ExcEntries.sort_type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCIVec"><code class="docutils literal notranslate"><span class="pre">HCIVec</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCIVec.RankNotSetError"><code class="docutils literal notranslate"><span class="pre">HCIVec.RankNotSetError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCIVec.as_HCIVec"><code class="docutils literal notranslate"><span class="pre">HCIVec.as_HCIVec()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCIVec.as_HCIVec_if_not"><code class="docutils literal notranslate"><span class="pre">HCIVec.as_HCIVec_if_not()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCore"><code class="docutils literal notranslate"><span class="pre">HCore</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.Rank"><code class="docutils literal notranslate"><span class="pre">Rank</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.Rank.arank"><code class="docutils literal notranslate"><span class="pre">Rank.arank</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.Rank.brank"><code class="docutils literal notranslate"><span class="pre">Rank.brank</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.Rank.from_rank_entry"><code class="docutils literal notranslate"><span class="pre">Rank.from_rank_entry()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.double_exc_entry"><code class="docutils literal notranslate"><span class="pre">double_exc_entry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.mixed_exc_entry"><code class="docutils literal notranslate"><span class="pre">mixed_exc_entry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.rank_entry"><code class="docutils literal notranslate"><span class="pre">rank_entry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#module-hci.lib.hci_enlarge">hci.lib.hci_enlarge module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_enlarge.enlarge_space_doubles"><code class="docutils literal notranslate"><span class="pre">enlarge_space_doubles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_enlarge.enlarge_space_singles"><code class="docutils literal notranslate"><span class="pre">enlarge_space_singles()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#module-hci.lib.hci_contract">hci.lib.hci_contract module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_contract.contract_hamiltonian_hcivec_slow"><code class="docutils literal notranslate"><span class="pre">contract_hamiltonian_hcivec_slow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_contract.get_matrix_element_by_rank"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_contract.get_matrix_element_by_rank_test_storage"><code class="docutils literal notranslate"><span class="pre">get_matrix_element_by_rank_test_storage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_contract.make_hdiag_slow"><code class="docutils literal notranslate"><span class="pre">make_hdiag_slow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#module-hci.lib.hci_utils">hci.lib.hci_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hci.lib.html#hci.lib.hci_utils.load_library"><code class="docutils literal notranslate"><span class="pre">load_library()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="hci.lib.html#hci-lib-libhci-module">hci.lib.libhci module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hci.lib.html#module-hci.lib">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -112,8 +198,62 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="hci-hci-uhf-module">
-<h2>hci.hci_uhf module<a class="headerlink" href="#hci-hci-uhf-module" title="Link to this heading"></a></h2>
+<section id="module-hci.hci_uhf">
+<span id="hci-hci-uhf-module"></span><h2>hci.hci_uhf module<a class="headerlink" href="#module-hci.hci_uhf" title="Link to this heading"></a></h2>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.hci_uhf.HCI">
+<span class="sig-prename descclassname"><span class="pre">hci.hci_uhf.</span></span><span class="sig-name descname"><span class="pre">HCI</span></span><a class="headerlink" href="#hci.hci_uhf.HCI" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#hci.hci_uhf.HeatBathCI" title="hci.hci_uhf.HeatBathCI"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeatBathCI</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.hci_uhf.HeatBathCI">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hci.hci_uhf.</span></span><span class="sig-name descname"><span class="pre">HeatBathCI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.hci_uhf.HeatBathCI" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FCISolver</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.hci_uhf.HeatBathCI.dump_flags">
+<span class="sig-name descname"><span class="pre">dump_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.hci_uhf.HeatBathCI.dump_flags" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.hci_uhf.HeatBathCI.enlarge_space">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">enlarge_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_thresh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitation_entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.hci_uhf.HeatBathCI.enlarge_space" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.hci_uhf.HeatBathCI.kernel">
+<span class="sig-name descname"><span class="pre">kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcore</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_ao</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nelec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lindep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cycle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.hci_uhf.HeatBathCI.kernel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.hci_uhf.HeatBathCI.make_hdiag_slow">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">make_hdiag_slow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.hci_uhf.HeatBathCI.make_hdiag_slow" title="Link to this definition"></a></dt>
+<dd><p>Assembles all diagonal matrix elements for configurations contained in <strong>hcivec</strong>; used for the Davidson preconditioner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hcivec</strong> (<a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><em>HCIVec</em></a>) – Reference <code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code> tagged with list of ranks describing
+the current configuration space</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="hci.lib.html#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+<li><p><strong>h1e</strong> (<a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCore" title="hci.lib.hci_store.HCore"><em>HCore</em></a>) – The core Hamiltonian in the MO bases</p></li>
+<li><p><strong>eri_mo</strong> (<a class="reference internal" href="hci.lib.html#hci.lib.hci_store.ERITensor" title="hci.lib.hci_store.ERITensor"><em>ERITensor</em></a>) – The electron repulsion integrals in the MO bases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="hci.lib.html#hci.lib.hci_store.HCIVec.RankNotSetError" title="hci.lib.hci_store.HCIVec.RankNotSetError"><strong>HCIVec.RankNotSetError</strong></a> – rank attribute of <strong>hcivec</strong> is missing, which is needed to define the current
+    configuration space.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The diagonal matrix elements of the Hamiltonian in the subspace defined by <strong>hcivec</strong>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>npt.NDArray[np.float64]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-hci.exceptions">
 <span id="hci-exceptions-module"></span><h2>hci.exceptions module<a class="headerlink" href="#module-hci.exceptions" title="Link to this heading"></a></h2>

@@ -16,6 +16,7 @@
       <script src="_static/documentation_options.js?v=01f34227"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -51,7 +52,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="hci.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="hci.html#hci-hci-uhf-module">hci.hci_uhf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hci.html#module-hci.hci_uhf">hci.hci_uhf module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hci.html#module-hci.exceptions">hci.exceptions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hci.html#module-hci">Module contents</a></li>
 </ul>
@@ -92,27 +93,800 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="hci-lib-hci-rank-module">
-<h2>hci.lib.hci_rank module<a class="headerlink" href="#hci-lib-hci-rank-module" title="Link to this heading"></a></h2>
+<section id="module-hci.lib.hci_rank">
+<span id="hci-lib-hci-rank-module"></span><h2>hci.lib.hci_rank module<a class="headerlink" href="#module-hci.lib.hci_rank" title="Link to this heading"></a></h2>
+<p>Pythonic interface for <a class="reference internal" href="doxygen_files/rank.html#c-rank"><span class="std std-ref">Combinadic ranking</span></a> part of the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hci.lib.hci_rank.</span></span><span class="sig-name descname"><span class="pre">ConfigInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">norb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nelec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Manages the ranking tables needed for encoding and decoding occupancy and excitation lists.
+When passed as an argument to a <a class="reference external" href="https://docs.python.org/3/library/ctypes.html#module-ctypes" title="(in Python v3.14)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a> function, yields a reference to a struct
+compatible with the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/rank.html#_CPPv410ConfigInfo" title="ConfigInfo"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">ConfigInfo</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>norb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Size of the orbital space</p></li>
+<li><p><strong>nelec</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em>) – A tuple <span class="math notranslate nohighlight">\((N_\alpha, N_\beta)\)</span></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.combmax_a">
+<span class="sig-name descname"><span class="pre">combmax_a</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.combmax_a" title="Link to this definition"></a></dt>
+<dd><p>Total number of <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy lists, <span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{N_\alpha}\)</span></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.combmax_b">
+<span class="sig-name descname"><span class="pre">combmax_b</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.combmax_b" title="Link to this definition"></a></dt>
+<dd><p>Total number of <span class="math notranslate nohighlight">\(\beta\)</span> occupancy lists, <span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{N_\beta}\)</span></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.exc_table_2o">
+<span class="sig-name descname"><span class="pre">exc_table_2o</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.exc_table_2o" title="Link to this definition"></a></dt>
+<dd><p>Pointer to the ranking table for organizing mixed excitations of <span class="math notranslate nohighlight">\(\alpha\beta\rightarrow\alpha\beta\)</span> type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.exc_table_4o">
+<span class="sig-name descname"><span class="pre">exc_table_4o</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.exc_table_4o" title="Link to this definition"></a></dt>
+<dd><p>Ranking table for organizing double excitations of <span class="math notranslate nohighlight">\(\alpha\alpha\rightarrow\alpha\alpha\)</span> or
+<span class="math notranslate nohighlight">\(\beta\beta\rightarrow\beta\beta\)</span> type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.ncols_mixed">
+<span class="sig-name descname"><span class="pre">ncols_mixed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.ncols_mixed" title="Link to this definition"></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{2}\)</span>, used for ranking and unranking mixed excitations</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.nelec_a">
+<span class="sig-name descname"><span class="pre">nelec_a</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.nelec_a" title="Link to this definition"></a></dt>
+<dd><p>Number of <span class="math notranslate nohighlight">\(\alpha\)</span> electrons <span class="math notranslate nohighlight">\(N_\alpha\)</span></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.nelec_b">
+<span class="sig-name descname"><span class="pre">nelec_b</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.nelec_b" title="Link to this definition"></a></dt>
+<dd><p>Number of <span class="math notranslate nohighlight">\(\beta\)</span> electrons <span class="math notranslate nohighlight">\(N_\beta\)</span></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.norb">
+<span class="sig-name descname"><span class="pre">norb</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.norb" title="Link to this definition"></a></dt>
+<dd><p>Total size of input orbital space <span class="math notranslate nohighlight">\(N_\text{orb}\)</span></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.occ_table_a">
+<span class="sig-name descname"><span class="pre">occ_table_a</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.occ_table_a" title="Link to this definition"></a></dt>
+<dd><p>Ranking table for determining occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.occ_table_b">
+<span class="sig-name descname"><span class="pre">occ_table_b</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.occ_table_b" title="Link to this definition"></a></dt>
+<dd><p>Ranking table for determining occupied <span class="math notranslate nohighlight">\(\beta\)</span> orbitals</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.rank_double_exc">
+<span class="sig-name descname"><span class="pre">rank_double_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.rank_double_exc" title="Link to this definition"></a></dt>
+<dd><p>Ranks a double excitation based on the four orbitals involved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exc_list</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>uint64</em><em>]</em><em>]</em>) – <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of length 4 specifying the four involved orbitals in ascending order</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified double excitation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.rank_mixed_exc">
+<span class="sig-name descname"><span class="pre">rank_mixed_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.rank_mixed_exc" title="Link to this definition"></a></dt>
+<dd><p>Calculates the rank of a mixed <span class="math notranslate nohighlight">\(\alpha\beta\rightarrow\alpha\beta\)</span> excitation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exc_list</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>uint64</em><em>]</em><em>]</em>) – <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> specifying the four involved orbitals;
+the first two are f$alphaf$ orbitals (in ascending order) and the second two are f$betaf$ orbitals (also in ascending order)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified mixed excitation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.rank_occ_a">
+<span class="sig-name descname"><span class="pre">rank_occ_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occ_list_a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.rank_occ_a" title="Link to this definition"></a></dt>
+<dd><p>Ranks a given <span class="math notranslate nohighlight">\(\alpha\)</span> orbital occupancy list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>occ_list_a</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>uint64</em><em>]</em><em>]</em>) – <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of length <span class="math notranslate nohighlight">\(N_\alpha\)</span>
+specifying the zero-indexed occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals in ascending order</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.rank_occ_b">
+<span class="sig-name descname"><span class="pre">rank_occ_b</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occ_list_b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.rank_occ_b" title="Link to this definition"></a></dt>
+<dd><p>Ranks a given <span class="math notranslate nohighlight">\(\beta\)</span> orbital occupancy list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>occ_list_b</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>uint64</em><em>]</em><em>]</em>) – <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of length <span class="math notranslate nohighlight">\(N_\beta\)</span>
+specifying the zero-indexed occupied <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals in ascending order</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rank of the specified <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.unrank_double_exc">
+<span class="sig-name descname"><span class="pre">unrank_double_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_rank</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.unrank_double_exc" title="Link to this definition"></a></dt>
+<dd><p>Determines the four orbitals involved in a double excitation of given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interest</strong> (<em>The rank</em><em> of </em><em>the double excitation of</em>)</p></li>
+<li><p><strong>exc_rank</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of four orbitals involved in the double excitation (in ascending order)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<em>uint64</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.unrank_mixed_exc">
+<span class="sig-name descname"><span class="pre">unrank_mixed_exc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_rank_ab</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.unrank_mixed_exc" title="Link to this definition"></a></dt>
+<dd><p>Determines the occupancy list corresponding to a mixed excitation with given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exc_rank_ab</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The rank of the mixed excitation</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>The list of the four involved orbitals;</dt><dd><p>the first two are <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals (in ascending order) and the second two are <span class="math notranslate nohighlight">\(\beta\)</span> orbitals (also in ascending order)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<em>uint64</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.unrank_occ_a">
+<span class="sig-name descname"><span class="pre">unrank_occ_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arank</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.unrank_occ_a" title="Link to this definition"></a></dt>
+<dd><p>Determines which orbitals are in an <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list of given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arank</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The rank of the <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list of interest</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list (length <span class="math notranslate nohighlight">\(N_\alpha\)</span>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<em>uint64</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.unrank_occ_b">
+<span class="sig-name descname"><span class="pre">unrank_occ_b</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">brank</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.unrank_occ_b" title="Link to this definition"></a></dt>
+<dd><p>Determines which orbitals are in an <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>brank</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list (length <span class="math notranslate nohighlight">\(N_\beta\)</span>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<em>uint64</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.unrank_virt_a">
+<span class="sig-name descname"><span class="pre">unrank_virt_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arank</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.unrank_virt_a" title="Link to this definition"></a></dt>
+<dd><p>Determines all orbitals in the complement of a <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list with given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arank</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The rank of the <span class="math notranslate nohighlight">\(\alpha\)</span> occupancy list of interest</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <span class="math notranslate nohighlight">\(\alpha\)</span> virtual orbital list (length <span class="math notranslate nohighlight">\(N_\text{orb}-N_\alpha\)</span>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<em>uint64</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.unrank_virt_b">
+<span class="sig-name descname"><span class="pre">unrank_virt_b</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">brank</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.unrank_virt_b" title="Link to this definition"></a></dt>
+<dd><p>Determines all orbitals in the complement of a <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list with given rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>brank</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The rank of the <span class="math notranslate nohighlight">\(\beta\)</span> occupancy list of interest</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <span class="math notranslate nohighlight">\(\beta\)</span> virtual orbital list (length <span class="math notranslate nohighlight">\(N_\text{orb}-N_\beta\)</span>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<em>uint64</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.virt_table_a">
+<span class="sig-name descname"><span class="pre">virt_table_a</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.virt_table_a" title="Link to this definition"></a></dt>
+<dd><p>Ranking table for determining virtual <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_rank.ConfigInfo.virt_table_b">
+<span class="sig-name descname"><span class="pre">virt_table_b</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_rank.ConfigInfo.virt_table_b" title="Link to this definition"></a></dt>
+<dd><p>Ranking table for determining virtual <span class="math notranslate nohighlight">\(\beta\)</span> orbitals</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="hci-lib-hci-store-module">
-<h2>hci.lib.hci_store module<a class="headerlink" href="#hci-lib-hci-store-module" title="Link to this heading"></a></h2>
+<section id="module-hci.lib.hci_store">
+<span id="hci-lib-hci-store-module"></span><h2>hci.lib.hci_store module<a class="headerlink" href="#module-hci.lib.hci_store" title="Link to this heading"></a></h2>
+<p>Pythonic interface for <a class="reference internal" href="doxygen_files/store.html#c-store"><span class="std std-ref">Excitation storage</span></a> part of the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ERITensor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">ERITensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo_aaaa_s8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo_bbbb_s8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo_aabb_s4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.ERITensor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class storing the electron repulsion integrals. For a UHF starting point,
+three MO transformed tensors are needed of <span class="math notranslate nohighlight">\([\alpha\alpha|\alpha\alpha]\)</span>,
+<span class="math notranslate nohighlight">\([\alpha\alpha|\beta\beta]\)</span>, and <span class="math notranslate nohighlight">\([\beta\beta|\beta\beta]\)</span> type.
+When passed as an argument to a <a class="reference external" href="https://docs.python.org/3/library/ctypes.html#module-ctypes" title="(in Python v3.14)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a> function, yields a reference to
+a struct compatible with the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv49ERITensor" title="ERITensor"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">ERITensor</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eri_mo_aaaa_s8</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – Eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO basis</p></li>
+<li><p><strong>eri_mo_bbbb_s8</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – Eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\beta\)</span> MO basis</p></li>
+<li><p><strong>eri_mo_aabb_s4</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – Fourfold compressed ERI tensor in the mixed MO basis</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ERITensor.eri_mo_aaaa_s8">
+<span class="sig-name descname"><span class="pre">eri_mo_aaaa_s8</span></span><a class="headerlink" href="#hci.lib.hci_store.ERITensor.eri_mo_aaaa_s8" title="Link to this definition"></a></dt>
+<dd><p>Eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO basis</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ERITensor.eri_mo_aabb_s4">
+<span class="sig-name descname"><span class="pre">eri_mo_aabb_s4</span></span><a class="headerlink" href="#hci.lib.hci_store.ERITensor.eri_mo_aabb_s4" title="Link to this definition"></a></dt>
+<dd><p>Fourfold compressed ERI tensor in the mixed MO basis</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ERITensor.eri_mo_bbbb_s8">
+<span class="sig-name descname"><span class="pre">eri_mo_bbbb_s8</span></span><a class="headerlink" href="#hci.lib.hci_store.ERITensor.eri_mo_bbbb_s8" title="Link to this definition"></a></dt>
+<dd><p>Eightfold compressed ERI tensor in the <span class="math notranslate nohighlight">\(\beta\)</span> MO basis</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ERITensor.ncols_aabb">
+<span class="sig-name descname"><span class="pre">ncols_aabb</span></span><a class="headerlink" href="#hci.lib.hci_store.ERITensor.ncols_aabb" title="Link to this definition"></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}+1}{2}\)</span>, i.e. the number of entries in the mixed ERI tensor associated
+with a single pair of <span class="math notranslate nohighlight">\(\alpha\)</span> orbitals; needed for looping constructs</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">ExcEntries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class that stores all the double excitation matrix elements needed for carrying
+out the HCI algorithm. When passed as an argument to a <a class="reference external" href="https://docs.python.org/3/library/ctypes.html#module-ctypes" title="(in Python v3.14)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a> function, yields
+a reference to a struct compatible with the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv410ExcEntries" title="ExcEntries"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">ExcEntries</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eri_mo</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – <a class="reference internal" href="#hci.lib.hci_store.ERITensor" title="hci.lib.hci_store.ERITensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ERITensor</span></code></a> instance from which to calculate the double excitation matrix elements</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.SortType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">SortType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.SortType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<p>Flag enum to indicate how the excitations are sorted.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.SortType.DESC_BY_MAG">
+<span class="sig-name descname"><span class="pre">DESC_BY_MAG</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.SortType.DESC_BY_MAG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.SortType.INC_BY_RANK">
+<span class="sig-name descname"><span class="pre">INC_BY_RANK</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.SortType.INC_BY_RANK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.SortTypeError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">SortTypeError</span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.SortTypeError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="hci.html#hci.exceptions.HCIError" title="hci.exceptions.HCIError"><code class="xref py py-class docutils literal notranslate"><span class="pre">HCIError</span></code></a></p>
+<p>Error raised if the <a class="reference internal" href="#hci.lib.hci_store.ExcEntries.SortType" title="hci.lib.hci_store.ExcEntries.SortType"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExcEntries.SortType</span></code></a> is incorrect.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.doubles_aa">
+<span class="sig-name descname"><span class="pre">doubles_aa</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><span class="pre">void</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.doubles_aa" title="Link to this definition"></a></dt>
+<dd><p>The stored double <span class="math notranslate nohighlight">\(\alpha\)</span> excitation matrix elements</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.doubles_bb">
+<span class="sig-name descname"><span class="pre">doubles_bb</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><span class="pre">void</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.doubles_bb" title="Link to this definition"></a></dt>
+<dd><p>The stored double <span class="math notranslate nohighlight">\(\beta\)</span> excitation matrix elements</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.max_mag_aa">
+<span class="sig-name descname"><span class="pre">max_mag_aa</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.max_mag_aa" title="Link to this definition"></a></dt>
+<dd><p>Array specifying the max. magnitude of all double <span class="math notranslate nohighlight">\(\alpha\)</span> matrix elements associated with the same four orbitals</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.max_mag_ab">
+<span class="sig-name descname"><span class="pre">max_mag_ab</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.max_mag_ab" title="Link to this definition"></a></dt>
+<dd><p>Array containing the magnitudes of the mixed excitation matrix elements</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.max_mag_bb">
+<span class="sig-name descname"><span class="pre">max_mag_bb</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.max_mag_bb" title="Link to this definition"></a></dt>
+<dd><p>Array specifying the max. magnitude of all double <span class="math notranslate nohighlight">\(\beta\)</span> matrix elements associated with the same four orbitals</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.mixed_ab">
+<span class="sig-name descname"><span class="pre">mixed_ab</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><span class="pre">dtype</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><span class="pre">void</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.mixed_ab" title="Link to this definition"></a></dt>
+<dd><p>The stores mixed excitation matrix elements</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.ndoubles_aa">
+<span class="sig-name descname"><span class="pre">ndoubles_aa</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.ndoubles_aa" title="Link to this definition"></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{4}\)</span>, the number of double <span class="math notranslate nohighlight">\(\alpha\)</span> excitations</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.ndoubles_bb">
+<span class="sig-name descname"><span class="pre">ndoubles_bb</span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.ndoubles_bb" title="Link to this definition"></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{4}\)</span>, the number of double <span class="math notranslate nohighlight">\(\beta\)</span> excitations</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.nmixed_ab">
+<span class="sig-name descname"><span class="pre">nmixed_ab</span></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.nmixed_ab" title="Link to this definition"></a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\binom{N_\text{orb}}{2}^2\)</span>, the number of mixed excitations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.sort_desc_by_mag">
+<span class="sig-name descname"><span class="pre">sort_desc_by_mag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.sort_desc_by_mag" title="Link to this definition"></a></dt>
+<dd><p>Sorts the excitation lists in order of decreasing magnitude</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.sort_inc_by_rank">
+<span class="sig-name descname"><span class="pre">sort_inc_by_rank</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.sort_inc_by_rank" title="Link to this definition"></a></dt>
+<dd><p>Sorts the excitation lists in order of decreasing magnitude</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.ExcEntries.sort_type">
+<span class="sig-name descname"><span class="pre">sort_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hci.lib.hci_store.ExcEntries.SortType" title="hci.lib.hci_store.ExcEntries.SortType"><span class="pre">SortType</span></a></span><a class="headerlink" href="#hci.lib.hci_store.ExcEntries.sort_type" title="Link to this definition"></a></dt>
+<dd><p>All excitations are initially computed in order of increasing rank</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.lib.hci_store.HCIVec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">HCIVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.HCIVec" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dtype</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code></a>]]</p>
+<p>Subclass of <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> tagged by a list of ranks. When passed as
+an argument to a <a class="reference external" href="https://docs.python.org/3/library/ctypes.html#module-ctypes" title="(in Python v3.14)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a> function, yields a reference to a struct compatible
+with the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv46HCIVec" title="HCIVec"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">HCIVec</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
+<li><p><strong>ranks</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><em>void</em></a><em>]</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py exception">
+<dt class="sig sig-object py" id="hci.lib.hci_store.HCIVec.RankNotSetError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RankNotSetError</span></span><a class="headerlink" href="#hci.lib.hci_store.HCIVec.RankNotSetError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="hci.html#hci.exceptions.HCIError" title="hci.exceptions.HCIError"><code class="xref py py-class docutils literal notranslate"><span class="pre">HCIError</span></code></a></p>
+<p>Error type indicating the rank attribute hasn’t been set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_store.HCIVec.as_HCIVec">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">as_HCIVec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.HCIVec.as_HCIVec" title="Link to this definition"></a></dt>
+<dd><p>Factory method to tag a preexisting list of coefficients with their ranks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coeffs</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – The coefficients of the <a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code></a></p></li>
+<li><p><strong>ranks</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><em>void</em></a><em>]</em><em>]</em>) – The rank list to use for tagging</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code></a> formed by tagging the coefficient list with the ranks list</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><em>HCIVec</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_store.HCIVec.as_HCIVec_if_not">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">as_HCIVec_if_not</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.HCIVec.as_HCIVec_if_not" title="Link to this definition"></a></dt>
+<dd><p>Factory method to tag an array with associated ranks if they are not already set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em><em>]</em>) – Input array that may or may not have ranks associated with it</p></li>
+<li><p><strong>ranks</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><em>void</em></a><em>]</em><em>]</em>) – The rank list to use for tagging</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code></a> formed by tagging the input array with the ranks list if no
+preexisting ranks were found</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><em>HCIVec</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.lib.hci_store.HCore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">HCore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h1e_mo_aa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e_mo_bb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.HCore" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class storing the core Hamiltonian in both the <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>
+MO bases for ease of manipulation. When passed as an argument to a <a class="reference external" href="https://docs.python.org/3/library/ctypes.html#module-ctypes" title="(in Python v3.14)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a> function,
+yields a reference to a struct compatible with the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv45HCore" title="HCore"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">HCore</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h1e_mo_aa</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – The core Hamiltonian in the <span class="math notranslate nohighlight">\(\alpha\)</span> MO basis. Should be of shape <span class="math notranslate nohighlight">\((N_\text{orb}, N_\text{orb})\)</span>.</p></li>
+<li><p><strong>h1e_mo_bb</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – The core Hamiltonian in the <span class="math notranslate nohighlight">\(\beta\)</span> MO basis. Should be of shape <span class="math notranslate nohighlight">\((N_\text{orb}, N_\text{orb})\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hci.lib.hci_store.Rank">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">Rank</span></span><a class="headerlink" href="#hci.lib.hci_store.Rank" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ctypes.html#ctypes.Structure" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Structure</span></code></a></p>
+<p>The equivalent of the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv44Rank" title="Rank"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">Rank</span></code></a>.
+Used for passing individual ranks to the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a> directly (as
+opposed to passing in a structured <a class="reference external" href="https://numpy.org/doc/stable/reference/index.html#module-numpy" title="(in NumPy v2.4)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code></a> array).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.Rank.arank">
+<span class="sig-name descname"><span class="pre">arank</span></span><a class="headerlink" href="#hci.lib.hci_store.Rank.arank" title="Link to this definition"></a></dt>
+<dd><p>Structure/Union member</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hci.lib.hci_store.Rank.brank">
+<span class="sig-name descname"><span class="pre">brank</span></span><a class="headerlink" href="#hci.lib.hci_store.Rank.brank" title="Link to this definition"></a></dt>
+<dd><p>Structure/Union member</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hci.lib.hci_store.Rank.from_rank_entry">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_rank_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank_entry</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_store.Rank.from_rank_entry" title="Link to this definition"></a></dt>
+<dd><p>Converts a compatible structured scalar to a <a class="reference internal" href="#hci.lib.hci_store.Rank" title="hci.lib.hci_store.Rank"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rank</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rank_entry</strong> (<em>np.void</em>) – structured scalar produced by indexing a
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of dtype <a class="reference internal" href="#numpy-rank"><span class="std std-ref">rank_entry</span></a>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new <a class="reference internal" href="#hci.lib.hci_store.Rank" title="hci.lib.hci_store.Rank"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rank</span></code></a> containing the information from the structured scalar.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#hci.lib.hci_store.Rank" title="hci.lib.hci_store.Rank"><em>Rank</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="hci.lib.hci_store.double_exc_entry">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">double_exc_entry</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">dtype([('rank',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('ijkl',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('iljk',</span> <span class="pre">'&lt;f8')])</span></span><a class="headerlink" href="#hci.lib.hci_store.double_exc_entry" title="Link to this definition"></a></dt>
+<dd><p>A <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> containing the minimal information
+necessary for computing any double excitation matrix element
+involving the same four changing orbitals. Directly mirrors
+the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv414DoubleExcEntry" title="DoubleExcEntry"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">DoubleExcEntry</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="hci.lib.hci_store.mixed_exc_entry">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">mixed_exc_entry</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">dtype([('rank',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('ijkl',</span> <span class="pre">'&lt;f8')])</span></span><a class="headerlink" href="#hci.lib.hci_store.mixed_exc_entry" title="Link to this definition"></a></dt>
+<dd><p>A <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> representing a mixed excitation.
+Directly mirrors the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv413MixedExcEntry" title="MixedExcEntry"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">MixedExcEntry</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="hci.lib.hci_store.rank_entry">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_store.</span></span><span class="sig-name descname"><span class="pre">rank_entry</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">dtype([('arank',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('brank',</span> <span class="pre">'&lt;u8')])</span></span><a class="headerlink" href="#hci.lib.hci_store.rank_entry" title="Link to this definition"></a></dt>
+<dd><p id="numpy-rank">A <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> representing a configuration via the
+ranks of its <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> occupancy lists.
+Directly mirrors the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>’s <a class="reference internal" href="doxygen_files/store.html#_CPPv44Rank" title="Rank"><code class="xref cpp cpp-struct docutils literal notranslate"><span class="pre">Rank</span></code></a>.</p>
+</dd></dl>
+
 </section>
-<section id="hci-lib-hci-enlarge-module">
-<h2>hci.lib.hci_enlarge module<a class="headerlink" href="#hci-lib-hci-enlarge-module" title="Link to this heading"></a></h2>
+<section id="module-hci.lib.hci_enlarge">
+<span id="hci-lib-hci-enlarge-module"></span><h2>hci.lib.hci_enlarge module<a class="headerlink" href="#module-hci.lib.hci_enlarge" title="Link to this heading"></a></h2>
+<p>Pythonic interface for <a class="reference internal" href="doxygen_files/enlarge.html#c-enlarge"><span class="std std-ref">Subspace enlargement</span></a> part of the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_enlarge.enlarge_space_doubles">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_enlarge.</span></span><span class="sig-name descname"><span class="pre">enlarge_space_doubles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_thresh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_entries</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_enlarge.enlarge_space_doubles" title="Link to this definition"></a></dt>
+<dd><p>Given a reference <code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code>, uses the HCI selection algorithm
+to generate a list of doubly excited deterinants to add to the configuration space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hcivec</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><em>HCIVec</em></a>) – Reference <code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code> tagged with list of ranks describing
+the current configuration space</p></li>
+<li><p><strong>add_thresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Selection threshold for adding a new determinant. A candidate determinant is added
+if the magnitude of its matrix element with a determinant from <strong>hcivec</strong> times the
+coefficient of that  determinant exceeds <strong>add_thresh</strong>.</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+<li><p><strong>exc_entries</strong> (<a class="reference internal" href="#hci.lib.hci_store.ExcEntries" title="hci.lib.hci_store.ExcEntries"><em>ExcEntries</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ExcEntries</span></code> object storing double excitations sorted desc. by magnitude</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>HCIVec.RankNotFoundError</strong> – rank attribute of <strong>hcivec</strong> is missing, which is needed to define the current
+    configuration space.</p></li>
+<li><p><a class="reference internal" href="#hci.lib.hci_store.ExcEntries.SortTypeError" title="hci.lib.hci_store.ExcEntries.SortTypeError"><strong>ExcEntries.SortTypeError</strong></a> – <strong>exc_entries</strong> has not been sorted in descending order by magnitude.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of ranks corresponding to configurations that passed the selection threshold</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><em>void</em></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_enlarge.enlarge_space_singles">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_enlarge.</span></span><span class="sig-name descname"><span class="pre">enlarge_space_singles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_thresh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_enlarge.enlarge_space_singles" title="Link to this definition"></a></dt>
+<dd><p>Given a reference <code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code>, uses the HCI selection algorithm
+to generate a list of singly excited deterinants to add to the configuration space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hcivec</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><em>HCIVec</em></a>) – Reference <code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code> tagged with list of ranks describing
+the current configuration space</p></li>
+<li><p><strong>add_thresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Selection threshold for adding a new determinant. A candidate determinant is added
+if the magnitude of its matrix element with a determinant from <strong>hcivec</strong> times the
+coefficient of that  determinant exceeds <strong>add_thresh</strong>.</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+<li><p><strong>h1e</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCore" title="hci.lib.hci_store.HCore"><em>HCore</em></a>) – The core Hamiltonian in the MO bases</p></li>
+<li><p><strong>eri_mo</strong> (<a class="reference internal" href="#hci.lib.hci_store.ERITensor" title="hci.lib.hci_store.ERITensor"><em>ERITensor</em></a>) – The electron repulsion integrals in the MO bases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#hci.lib.hci_store.HCIVec.RankNotSetError" title="hci.lib.hci_store.HCIVec.RankNotSetError"><strong>HCIVec.RankNotSetError</strong></a> – rank attribute of <strong>hcivec</strong> is missing, which is needed to define the current
+    configuration space.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of ranks corresponding to configurations that passed the selection threshold</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a>[<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.void" title="(in NumPy v2.4)"><em>void</em></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="hci-lib-hci-contract-module">
-<h2>hci.lib.hci_contract module<a class="headerlink" href="#hci-lib-hci-contract-module" title="Link to this heading"></a></h2>
+<section id="module-hci.lib.hci_contract">
+<span id="hci-lib-hci-contract-module"></span><h2>hci.lib.hci_contract module<a class="headerlink" href="#module-hci.lib.hci_contract" title="Link to this heading"></a></h2>
+<p>Pythonic interface for <a class="reference internal" href="doxygen_files/contract.html#c-contract"><span class="std std-ref">Matrix elements and contractions</span></a> part of the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C Library</span></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_contract.contract_hamiltonian_hcivec_slow">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_contract.</span></span><span class="sig-name descname"><span class="pre">contract_hamiltonian_hcivec_slow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdiag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_contract.contract_hamiltonian_hcivec_slow" title="Link to this definition"></a></dt>
+<dd><p>Contracts <strong>hcivec_old</strong> with the Hamiltonian in the current configuration space
+in a naive fashion, outputting the new coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hcivec_old</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><em>HCIVec</em></a>) – Reference <code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code> tagged with list of ranks describing
+the current configuration space</p></li>
+<li><p><strong>hdiag</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>, </em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.4)"><em>dtype</em></a><em>[</em><em>float64</em><em>]</em><em>]</em>) – The diagonal matrix elements of the Hamiltonian in the subspace defined by <strong>hcivec_old</strong></p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+<li><p><strong>h1e</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCore" title="hci.lib.hci_store.HCore"><em>HCore</em></a>) – The core Hamiltonian in the MO bases</p></li>
+<li><p><strong>eri_mo</strong> (<a class="reference internal" href="#hci.lib.hci_store.ERITensor" title="hci.lib.hci_store.ERITensor"><em>ERITensor</em></a>) – The electron repulsion integrals in the MO bases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#hci.lib.hci_store.HCIVec.RankNotSetError" title="hci.lib.hci_store.HCIVec.RankNotSetError"><strong>HCIVec.RankNotSetError</strong></a> – rank attribute of <strong>hcivec_old</strong> is missing, which is needed to define the current
+    configuration space.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The coefficients after contraction with the Hamiltonian</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>npt.NDArray[np.float64]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_contract.get_matrix_element_by_rank">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_contract.</span></span><span class="sig-name descname"><span class="pre">get_matrix_element_by_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_contract.get_matrix_element_by_rank" title="Link to this definition"></a></dt>
+<dd><p>Given the ranks of two configurations, calculates the matrix element between them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rank1</strong> (<a class="reference internal" href="#hci.lib.hci_store.Rank" title="hci.lib.hci_store.Rank"><em>Rank</em></a>) – Rank specifying the <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> string of the first configuration</p></li>
+<li><p><strong>rank2</strong> (<a class="reference internal" href="#hci.lib.hci_store.Rank" title="hci.lib.hci_store.Rank"><em>Rank</em></a>) – Rank specifying the <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> string of the second configuration</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+<li><p><strong>h1e</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCore" title="hci.lib.hci_store.HCore"><em>HCore</em></a>) – The core Hamiltonian in the MO bases</p></li>
+<li><p><strong>eri_mo</strong> (<a class="reference internal" href="#hci.lib.hci_store.ERITensor" title="hci.lib.hci_store.ERITensor"><em>ERITensor</em></a>) – The electron repulsion integrals in the MO bases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matrix element between the configurations specified</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_contract.get_matrix_element_by_rank_test_storage">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_contract.</span></span><span class="sig-name descname"><span class="pre">get_matrix_element_by_rank_test_storage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_contract.get_matrix_element_by_rank_test_storage" title="Link to this definition"></a></dt>
+<dd><p>Given the ranks of two configurations, calculates the matrix element between them.
+For double excitations, uses the values stored in <strong>exc_entries</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rank1</strong> (<a class="reference internal" href="#hci.lib.hci_store.Rank" title="hci.lib.hci_store.Rank"><em>Rank</em></a>) – Rank specifying the <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> string of the first configuration</p></li>
+<li><p><strong>rank2</strong> (<a class="reference internal" href="#hci.lib.hci_store.Rank" title="hci.lib.hci_store.Rank"><em>Rank</em></a>) – Rank specifying the <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> string of the second configuration</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+<li><p><strong>exc_entries</strong> (<a class="reference internal" href="#hci.lib.hci_store.ExcEntries" title="hci.lib.hci_store.ExcEntries"><em>ExcEntries</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ExcEntries</span></code> object storing double excitations sorted inc. by rank</p></li>
+<li><p><strong>h1e</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCore" title="hci.lib.hci_store.HCore"><em>HCore</em></a>) – The core Hamiltonian in the MO bases</p></li>
+<li><p><strong>eri_mo</strong> (<a class="reference internal" href="#hci.lib.hci_store.ERITensor" title="hci.lib.hci_store.ERITensor"><em>ERITensor</em></a>) – The electron repulsion integrals in the MO bases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#hci.lib.hci_store.ExcEntries.SortTypeError" title="hci.lib.hci_store.ExcEntries.SortTypeError"><strong>ExcEntries.SortTypeError</strong></a> – <strong>exc_entries</strong> has not been sorted in increasing order by rank.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The matrix element between the configurations specified</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_contract.make_hdiag_slow">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_contract.</span></span><span class="sig-name descname"><span class="pre">make_hdiag_slow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hcivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h1e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eri_mo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_contract.make_hdiag_slow" title="Link to this definition"></a></dt>
+<dd><p>Assembles all diagonal matrix elements for configurations contained in <strong>hcivec</strong>; used for the Davidson preconditioner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hcivec</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCIVec" title="hci.lib.hci_store.HCIVec"><em>HCIVec</em></a>) – Reference <code class="xref py py-class docutils literal notranslate"><span class="pre">HCIVec</span></code> tagged with list of ranks describing
+the current configuration space</p></li>
+<li><p><strong>config_info</strong> (<a class="reference internal" href="#hci.lib.hci_rank.ConfigInfo" title="hci.lib.hci_rank.ConfigInfo"><em>ConfigInfo</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigInfo</span></code> instance supplying ranking tables and key parameters of the system</p></li>
+<li><p><strong>h1e</strong> (<a class="reference internal" href="#hci.lib.hci_store.HCore" title="hci.lib.hci_store.HCore"><em>HCore</em></a>) – The core Hamiltonian in the MO bases</p></li>
+<li><p><strong>eri_mo</strong> (<a class="reference internal" href="#hci.lib.hci_store.ERITensor" title="hci.lib.hci_store.ERITensor"><em>ERITensor</em></a>) – The electron repulsion integrals in the MO bases</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#hci.lib.hci_store.HCIVec.RankNotSetError" title="hci.lib.hci_store.HCIVec.RankNotSetError"><strong>HCIVec.RankNotSetError</strong></a> – rank attribute of <strong>hcivec</strong> is missing, which is needed to define the current
+    configuration space.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The diagonal matrix elements of the Hamiltonian in the subspace defined by <strong>hcivec</strong>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>npt.NDArray[np.float64]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="hci-lib-hci-utils-module">
-<h2>hci.lib.hci_utils module<a class="headerlink" href="#hci-lib-hci-utils-module" title="Link to this heading"></a></h2>
+<section id="module-hci.lib.hci_utils">
+<span id="hci-lib-hci-utils-module"></span><h2>hci.lib.hci_utils module<a class="headerlink" href="#module-hci.lib.hci_utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hci.lib.hci_utils.load_library">
+<span class="sig-prename descclassname"><span class="pre">hci.lib.hci_utils.</span></span><span class="sig-name descname"><span class="pre">load_library</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">libname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hci.lib.hci_utils.load_library" title="Link to this definition"></a></dt>
+<dd><p>Wrapper function around <a class="reference external" href="https://numpy.org/doc/stable/reference/routines.ctypeslib.html#numpy.ctypeslib.load_library" title="(in NumPy v2.4)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.ctypeslib.load_library()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>libname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name of the library being loaded. May have ‘lib’ as a prefix,
+but do not include an extension as that is platform-dependent.</p></li>
+<li><p><strong>loader_path</strong> (<em>Path</em>) – Path to the library</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A ctypes library object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/ctypes.html#ctypes.CDLL" title="(in Python v3.14)">ctypes.CDLL</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.14)"><strong>OSError</strong></a> – If the library was not found or is defective.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="hci-lib-libhci-module">
 <h2>hci.lib.libhci module<a class="headerlink" href="#hci-lib-libhci-module" title="Link to this heading"></a></h2>
 <p>Serves as the entry point for the <a class="reference internal" href="doxygen_files.html#c-lib"><span class="std std-ref">C library</span></a>.</p>
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="module-hci.lib">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hci.lib" title="Link to this heading"></a></h2>
 </section>
 </section>
 
