@@ -21,7 +21,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: python3 -m pip install -e ".[docs]"
+        run: python3 -m pip install -r ./requirements.txt
 
       - name: Build Sphinx
         run: |

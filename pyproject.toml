@@ -9,7 +9,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "HCI for PySCF"
+name = "hci"
 version = "0.1.0"
 authors = [
   { name="Simon Britton", email="obritton2022@gmail.com" },
