@@ -35,4 +35,4 @@ docs = ["sphinx", "sphinx_rtd_theme", "breathe"]
 
 [tool.scikit-build]
 cmake.args = ["-GUnix Makefiles"]
-wheel.install-dir = "build"
+build-dir = "build"
