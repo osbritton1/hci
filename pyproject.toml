@@ -1,5 +1,6 @@
 [build-system]
 requires = [
+    "ninja',
     "scikit-build-core"
 ]
 build-backend = "scikit_build_core.build"
