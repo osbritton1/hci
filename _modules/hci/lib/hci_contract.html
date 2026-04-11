@@ -100,7 +100,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        float: The matrix element between the configurations specified</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
-    <span class="k">return</span> <span class="n">libhci</span><span class="o">.</span><span class="n">get_matrix_element_by_rank</span><span class="p">(</span><span class="n">rank1</span><span class="p">,</span> <span class="n">rank2</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span><span class="o">.</span><span class="n">value</span></div>
+    <span class="k">return</span> <span class="n">libhci</span><span class="o">.</span><span class="n">get_matrix_element_by_rank</span><span class="p">(</span><span class="n">rank1</span><span class="p">,</span> <span class="n">rank2</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span></div>
 
     
 <div class="viewcode-block" id="get_matrix_element_by_rank_test_storage">
@@ -126,7 +126,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">exc_entries</span><span class="o">.</span><span class="n">sort_type</span> <span class="o">!=</span> <span class="n">ExcEntries</span><span class="o">.</span><span class="n">SortType</span><span class="o">.</span><span class="n">INC_BY_RANK</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">ExcEntries</span><span class="o">.</span><span class="n">SortTypeError</span><span class="p">(</span><span class="s2">&quot;Calling this method requires the excitation entries to be sorted increasing by rank.&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">libhci</span><span class="o">.</span><span class="n">get_matrix_element_by_rank_test_storage</span><span class="p">(</span><span class="n">rank1</span><span class="p">,</span> <span class="n">rank2</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">exc_entries</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span><span class="o">.</span><span class="n">value</span></div>
+    <span class="k">return</span> <span class="n">libhci</span><span class="o">.</span><span class="n">get_matrix_element_by_rank_test_storage</span><span class="p">(</span><span class="n">rank1</span><span class="p">,</span> <span class="n">rank2</span><span class="p">,</span> <span class="n">config_info</span><span class="p">,</span> <span class="n">exc_entries</span><span class="p">,</span> <span class="n">h1e</span><span class="p">,</span> <span class="n">eri_mo</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="make_hdiag_slow">
