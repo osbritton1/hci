@@ -26,7 +26,7 @@ def get_matrix_element_by_rank(rank1: Rank, rank2: Rank, config_info: ConfigInfo
     Returns:
         float: The matrix element between the configurations specified
     """    
-    return libhci.get_matrix_element_by_rank(rank1, rank2, config_info, h1e, eri_mo).value
+    return libhci.get_matrix_element_by_rank(rank1, rank2, config_info, h1e, eri_mo)
     
 def get_matrix_element_by_rank_test_storage(rank1: Rank, rank2: Rank, config_info: ConfigInfo, 
                                             exc_entries: ExcEntries, h1e: HCore, eri_mo: ERITensor) -> float:
@@ -49,7 +49,7 @@ def get_matrix_element_by_rank_test_storage(rank1: Rank, rank2: Rank, config_inf
     """
     if exc_entries.sort_type != ExcEntries.SortType.INC_BY_RANK:
         raise ExcEntries.SortTypeError("Calling this method requires the excitation entries to be sorted increasing by rank.")
-    return libhci.get_matrix_element_by_rank_test_storage(rank1, rank2, config_info, exc_entries, h1e, eri_mo).value
+    return libhci.get_matrix_element_by_rank_test_storage(rank1, rank2, config_info, exc_entries, h1e, eri_mo)
 
 def make_hdiag_slow(hcivec: HCIVec, config_info: ConfigInfo, h1e: HCore, eri_mo: ERITensor) -> npt.NDArray[np.float64]:
     """Assembles all diagonal matrix elements for configurations contained in **hcivec**; used for the Davidson preconditioner.

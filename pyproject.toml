@@ -34,5 +34,11 @@ Issues = "https://github.com/osbritton1/hci/issues"
 docs = ["sphinx", "sphinx_rtd_theme", "breathe"]
 
 [tool.scikit-build]
+editable.mode = "inplace"
 cmake.args = ["-GUnix Makefiles"]
 build-dir = "build"
+wheel.install-dir = "hci"
+build.verbose = true
+
+[tool.pyright]
+exclude = ["**/*ipynb", "**/node_modules", "**/__pycache__", "**/.*"]

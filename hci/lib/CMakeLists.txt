@@ -1,1 +1,1 @@
-add_library(hci SHARED "hci_rank.c" "hci_rank.h" "hci_store.c" "hci_store.h" "hci_enlarge.c" "hci_enlarge.h" "hci_contract.c" "hci_contract.h")
+add_library(${SKBUILD_PROJECT_NAME} SHARED "hci_rank.c" "hci_rank.h" "hci_store.c" "hci_store.h" "hci_enlarge.c" "hci_enlarge.h" "hci_contract.c" "hci_contract.h")

@@ -21,7 +21,7 @@ def load_library(libname: str, loader_path: Path):
         print(f'Failed to load library with name {libname}.')
         raise
 
-libhci = load_library("libhci", Path(__file__).parent.parent.parent / 'build/hci/lib/')
+libhci = load_library("libhci", Path(__file__).parent)
 
 # def occslst2strs(occslst):
 #     occslst = np.asarray(occslst)

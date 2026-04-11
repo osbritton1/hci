@@ -96,7 +96,7 @@ class ConfigInfo:
         Returns:
             int: The rank of the specified :math:`\alpha` occupancy list
         """        
-        return libhci.rank_occ_a(occ_list_a.ctypes, self).value
+        return libhci.rank_occ_a(occ_list_a.ctypes, self)
     
     def unrank_occ_a(self, arank: int) -> npt.NDArray[np.uintp]:
         r"""Determines which orbitals are in an :math:`\alpha` occupancy list of given rank.
@@ -134,7 +134,7 @@ class ConfigInfo:
         Returns:
             The rank of the specified :math:`\beta` occupancy list
         """        
-        return libhci.rank_occ_b(occ_list_b.ctypes, self).value
+        return libhci.rank_occ_b(occ_list_b.ctypes, self)
     
     def unrank_occ_b(self, brank: int) -> npt.NDArray[np.uintp]:
         r"""Determines which orbitals are in an :math:`\beta` occupancy list of given rank.
@@ -171,7 +171,7 @@ class ConfigInfo:
         Returns:
             The rank of the specified double excitation
         """        
-        return libhci.rank_double_exc(exc_list.ctypes, self).value
+        return libhci.rank_double_exc(exc_list.ctypes, self)
     
     def unrank_double_exc(self, exc_rank: int) -> npt.NDArray[np.uintp]:
         """Determines the four orbitals involved in a double excitation of given rank.
@@ -196,7 +196,7 @@ class ConfigInfo:
         Returns:
             The rank of the specified mixed excitation
         """        
-        return libhci.rank_mixed_exc(exc_list.ctypes, self).value
+        return libhci.rank_mixed_exc(exc_list.ctypes, self)
     
     def unrank_mixed_exc(self, exc_rank_ab: int) -> npt.NDArray[np.uintp]:
         r"""Determines the occupancy list corresponding to a mixed excitation with given rank.

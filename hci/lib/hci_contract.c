@@ -7,6 +7,7 @@
 #include "hci_contract.h"
 #include <math.h>
 #include <assert.h>
+#include <stdlib.h>
 
 /**
  * Enum to encode number of differences between two occupancy lists; more
@@ -26,10 +27,7 @@ typedef enum {
 typedef enum {
     IJKL,
     IJLK,
-    IKJL,
-    IKLJ,
-    ILJK,
-    ILKJ
+    IKJL
 } DESIGNATOR;
 
 /**
@@ -411,37 +409,24 @@ double get_double_exc_value_bb(const ExcResult *double_exc, const ERITensor *eri
 double get_double_exc_value_from_store(const DoubleExcEntry *exc_entry, const ExcResult *double_exc) {
     size_t *old_orbs = double_exc->old_orbs;
     size_t *new_orbs = double_exc->new_orbs;
-    size_t orb_list[4];
-    uint8_t designator = 0;
-    if (old_orbs[0] <= new_orbs[0]) {
-        orb_list[0] = old_orbs[0];
-        orb_list[1] = new_orbs[0];
-        orb_list[2] = old_orbs[1];
-        orb_list[3] = new_orbs[1];
+    size_t r = 0;
+    size_t b = 0;
+    size_t s = 0;
+    if (old_orbs[0] < new_orbs[0]) {
+        r = new_orbs[0];
+        b = old_orbs[1];
+        s = new_orbs[1];
     } else {
-        orb_list[0] = new_orbs[0];
-        orb_list[1] = old_orbs[0];
-        orb_list[2] = new_orbs[1];
-        orb_list[3] = old_orbs[1];
+        r = old_orbs[0];
+        b = new_orbs[1];
+        s = old_orbs[1];
     }
-    designator += (orb_list[1] > orb_list[2]) ? 2 : 0;
-    designator += (orb_list[1] > orb_list[3]) ? 2 : 0;
-    designator += (orb_list[2] > orb_list[3]) ? 1 : 0;
-    switch (designator) {
-        case IJKL:
-            return exc_entry->ijkl*double_exc->sign;
-        case IJLK:
-            return (exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
-        case IKJL:
-            return -exc_entry->iljk*double_exc->sign;
-        case IKLJ:
-            return -(exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
-        case ILJK:
-            return exc_entry->iljk*double_exc->sign;
-        case ILKJ:
-            return -exc_entry->ijkl*double_exc->sign;
-        default:
-            return nan("");
+    if (r > b) {
+        return -exc_entry->iljk*double_exc->sign;
+    } else if (b > s) {
+        return (exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
+    } else {
+        return exc_entry->ijkl*double_exc->sign;
     }
 }
 
@@ -501,7 +486,6 @@ double get_matrix_element_by_rank(Rank rank1, Rank rank2,
     const ConfigInfo *config_info, const HCore *h1e, const ERITensor *eri_mo) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
-
         size_t occ_a_1[nelec_a];
         size_t occ_a_2[nelec_a];
         unrank_occ_a(rank1.arank, occ_a_1, config_info);

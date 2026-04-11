@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(hci VERSION 0.1.0 DESCRIPTION "HCI implementation for PySCF")
+project(${SKBUILD_PROJECT_NAME} VERSION 0.1.0 DESCRIPTION "HCI implementation for PySCF")
 
-add_subdirectory(hci/lib)
+add_subdirectory(${SKBUILD_PROJECT_NAME}/lib)
+
+install(TARGETS ${SKBUILD_PROJECT_NAME} DESTINATION "lib")
