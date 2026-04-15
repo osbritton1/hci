@@ -31,7 +31,7 @@ This is an inefficient dialect of heat-bath CI written as a senior thesis projec
 For an efficient heat-bath CI program, use the Dice program (https://github.com/sanshar/Dice.git).''')
     
     @classmethod
-    def enlarge_space(self, hcivecs, add_thresh, config_info, excitation_entries, h1e, eri_mo):
+    def enlarge_space(cls, hcivecs, add_thresh, config_info, excitation_entries, h1e, eri_mo):
         add_list_doubles = hcilib.enlarge_space_doubles(hcivecs[0], add_thresh, config_info, excitation_entries)
         add_list_singles = hcilib.enlarge_space_singles(hcivecs[0], add_thresh, config_info, h1e, eri_mo)
         add_list = np.unique(np.concatenate([add_list_doubles, add_list_singles]))

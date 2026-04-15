@@ -421,12 +421,12 @@ double get_double_exc_value_from_store(const DoubleExcEntry *exc_entry, const Ex
         b = new_orbs[1];
         s = old_orbs[1];
     }
-    if (r > b) {
+    if (b < r) {
         return -exc_entry->iljk*double_exc->sign;
-    } else if (b > s) {
-        return (exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
-    } else {
+    } else if (b < s) {
         return exc_entry->ijkl*double_exc->sign;
+    } else {
+        return (exc_entry->ijkl+exc_entry->iljk)*double_exc->sign;
     }
 }
 

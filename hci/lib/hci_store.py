@@ -127,7 +127,7 @@ class ExcEntries:
     out the HCI algorithm. When passed as an argument to a :py:mod:`ctypes` function, yields 
     a reference to a struct compatible with the :ref:`C lib`'s :cpp:struct:`ExcEntries`.
     """
-    def __init__(self, eri_mo: npt.NDArray[np.float64], config_info: ConfigInfo):
+    def __init__(self, eri_mo: ERITensor, config_info: ConfigInfo):
         """
         Args:
             eri_mo: :py:class:`ERITensor` instance from which to calculate the double excitation matrix elements

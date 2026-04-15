@@ -108,12 +108,13 @@ static bool get_changing_orbitals(const size_t *exc_list, size_t exc_order, cons
  * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
  * @param[in] brank Rank of associated \f$\beta\f$ string being left unchanged
  * @param[in] exc_entries Pointer to \ref ExcEntries object  sorted desc. by magnitude providing location of stored double \f$\alpha\f$ excitations
- * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
+ * @param[in] thresh Selection threshold
+ * @param[in] coeff Coefficient of configuration handed in from outer loop in \ref enlarge_space_doubles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
  */
-static size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries *exc_entries, double entry_thresh, 
-    Rank *add_list, const ConfigInfo *config_info) {
+static size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries *exc_entries, double thresh, 
+    double coeff, Rank *add_list, const ConfigInfo *config_info) {
         size_t nelec_a = config_info->nelec_a;
         size_t iadd = 0;
         for (size_t iexc=0; iexc<exc_entries->ndoubles_aa; iexc++) {
@@ -124,14 +125,14 @@ static size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries
             // Decode excitation entry
             unrank_double_exc(exc_entry_aa.rank, exc_aa, config_info);
             // Break if excitation magnitude falls below threshold
-            if (exc_entries->max_mag_aa[iexc] < entry_thresh) {
+            if (fabs(coeff*exc_entries->max_mag_aa[iexc]) < thresh) {
                 break;
             }
             // If the excitation entry is a valid double excitation
             if (get_changing_orbitals(exc_aa, 2, occ_a, nelec_a, &exc_result_aa, new_occ_a)) {
                 // Get correct matrix element and compare to threshold
                 double exc_val = get_double_exc_value_from_store(&exc_entry_aa, &exc_result_aa);
-                if (fabs(exc_val) >= entry_thresh) {
+                if (fabs(coeff*exc_val) >= thresh) {
                     add_list[iadd].arank = rank_occ_a(new_occ_a, config_info);
                     add_list[iadd].brank = brank;
                     iadd++;
@@ -148,12 +149,13 @@ static size_t add_doubles_aa(const size_t *occ_a, size_t brank, const ExcEntries
  * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
  * @param[in] arank Rank of associated \f$\alpha\f$ string being left unchanged
  * @param[in] exc_entries Pointer to \ref ExcEntries object  sorted desc. by magnitude providing location of stored double \f$\beta\f$ excitations
- * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
+ * @param[in] thresh Selection threshold
+ * @param[in] coeff Coefficient of configuration handed in from outer loop in \ref enlarge_space_doubles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
  */
-static size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries *exc_entries, double entry_thresh, 
-     Rank *add_list, const ConfigInfo *config_info) {
+static size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries *exc_entries, double thresh, 
+    double coeff, Rank *add_list, const ConfigInfo *config_info) {
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
         for (size_t iexc=0; iexc<exc_entries->ndoubles_bb; iexc++) {
@@ -165,14 +167,14 @@ static size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries
             // Decode excitation entry
             unrank_double_exc(exc_entry_bb.rank, exc_bb, config_info);
             // Break if excitation magnitude falls below threshold
-            if (exc_entries->max_mag_bb[iexc] < entry_thresh) {
+            if (fabs(coeff*exc_entries->max_mag_bb[iexc]) < thresh) {
                 break;
             }
             // If the excitation entry is a valid double excitation 
             if (get_changing_orbitals(exc_bb, 2, occ_b, nelec_b, &exc_result_bb, new_occ_b)) {
                 // Get correct matrix element and compare to threshold
                 double exc_val = get_double_exc_value_from_store(&exc_entry_bb, &exc_result_bb);
-                if (fabs(exc_val) >= entry_thresh) {
+                if (fabs(coeff*exc_val) >= thresh) {
                     add_list[iadd].arank = arank;
                     add_list[iadd].brank = rank_occ_b(new_occ_b, config_info);
                     iadd++;
@@ -189,12 +191,13 @@ static size_t add_doubles_bb(const size_t *occ_b, size_t arank, const ExcEntries
  * @param[in] occ_a Pointer to list of occupied \f$\alpha\f$ orbitals
  * @param[in] occ_b Pointer to list of occupied \f$\beta\f$ orbitals
  * @param[in] exc_entries Pointer to \ref ExcEntries object  sorted desc. by magnitude providing location of stored mixed excitations
- * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_doubles
+ * @param[in] thresh Selection threshold
+ * @param[in] coeff Coefficient of configuration handed in from outer loop in \ref enlarge_space_doubles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
  */
-static size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *exc_entries, double entry_thresh, 
-     Rank *add_list, const ConfigInfo *config_info) {
+static size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEntries *exc_entries,  double thresh, 
+    double coeff, Rank *add_list, const ConfigInfo *config_info) {
         size_t nelec_a = config_info->nelec_a;
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
@@ -208,7 +211,7 @@ static size_t add_mixed_ab(const size_t *occ_a, const size_t *occ_b, const ExcEn
             // Decode the mixed excitation
             unrank_mixed_exc(exc_entry.rank, exc_ab, config_info);
             // Break if excitation magnitude falls below threshold
-            if (exc_entries->max_mag_ab[iexc] < entry_thresh) {
+            if (fabs(coeff*exc_entries->max_mag_ab[iexc]) < thresh) {
                 break;
             }
             // If the excitation entry is a valid mixed excitation
@@ -243,20 +246,19 @@ size_t enlarge_space_doubles(const HCIVec *hcivec, Rank *add_list, double thresh
             double coeff = hcivec->coeffs[iconfig];
             uint64_t arank = hcivec->ranks[iconfig].arank;
             uint64_t brank = hcivec->ranks[iconfig].brank;
-            double entry_thresh = fabs(coeff*thresh);
 
             // aa excitations
             unrank_occ_a(arank, occ_a, config_info);
-            size_t nadd_aa = add_doubles_aa(occ_a, brank, exc_entries, entry_thresh, add_list+iadd, config_info);
+            size_t nadd_aa = add_doubles_aa(occ_a, brank, exc_entries, thresh, coeff, add_list+iadd, config_info);
             iadd += nadd_aa;
 
             // bb excitations
             unrank_occ_b(brank, occ_b, config_info);
-            size_t nadd_bb = add_doubles_bb(occ_b, arank, exc_entries, entry_thresh, add_list+iadd, config_info);
+            size_t nadd_bb = add_doubles_bb(occ_b, arank, exc_entries, thresh, coeff, add_list+iadd, config_info);
             iadd += nadd_bb;
 
             // Mixed excitations
-            size_t nadd_ab = add_mixed_ab(occ_a, occ_b, exc_entries, entry_thresh, add_list+iadd, config_info);
+            size_t nadd_ab = add_mixed_ab(occ_a, occ_b, exc_entries, thresh, coeff, add_list+iadd, config_info);
             iadd += nadd_ab;
         }
         return iadd;
@@ -272,12 +274,13 @@ size_t enlarge_space_doubles(const HCIVec *hcivec, Rank *add_list, double thresh
  * @param[in] brank Rank of associated \f$\beta\f$ string being left unchanged
  * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
  * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
- * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_singles
+ * @param[in] thresh Selection threshold
+ * @param[in] coeff Coefficient of configuration handed in from outer loop in \ref enlarge_space_singles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
  */
 static size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const size_t *occ_b, size_t brank, 
-    const HCore *h1e, const ERITensor *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info) {
+    const HCore *h1e, const ERITensor *eri_mo, double thresh, double coeff, Rank *add_list, const ConfigInfo *config_info) {
         size_t norb = config_info->norb;
         size_t nelec_a = config_info->nelec_a;
         size_t iadd = 0;
@@ -289,7 +292,7 @@ static size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const siz
                 ExcResult single_exc_a = SINGLE_EXC_RESULT_NOSIGN(occ_orb, virt_orb);
                 double exc_val = get_single_exc_value_a(&single_exc_a, occ_a, occ_b, 
                     config_info, h1e, eri_mo);
-                if (fabs(exc_val) >= entry_thresh) {
+                if (fabs(coeff*exc_val) >= thresh) {
                     size_t new_occ_a[nelec_a];
                     size_t *exc_list = SORTED(occ_orb, virt_orb);
                     get_changing_orbitals(exc_list, 1, occ_a, nelec_a, &single_exc_a, new_occ_a);
@@ -312,12 +315,13 @@ static size_t add_singles_a(const size_t *occ_a, const size_t *virt_a, const siz
  * @param[in] arank Rank of associated \f$\alpha\f$ string being left unchanged
  * @param[in] h1e Pointer to \ref HCore object storing locations of the core Hamiltonian matrix elements
  * @param[in] eri_mo Pointer to \ref ERITensor object storing locations of the electron repulsion integrals
- * @param[in] entry_thresh Selection threshold; value handed in from outer loop in \ref enlarge_space_singles
+ * @param[in] thresh Selection threshold
+ * @param[in] coeff Coefficient of configuration handed in from outer loop in \ref enlarge_space_singles
  * @param[out] add_list Pointer to \ref Rank list storing configurations to be added
  * @param[in] config_info Pointer to \ref ConfigInfo object needed to perform unranking, control loop structure, etc.
  */
 static size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const size_t *occ_a, size_t arank, 
-    const HCore *h1e, const ERITensor *eri_mo, double entry_thresh, Rank *add_list, const ConfigInfo *config_info) {
+    const HCore *h1e, const ERITensor *eri_mo, double thresh, double coeff,  Rank *add_list, const ConfigInfo *config_info) {
         size_t norb = config_info->norb;
         size_t nelec_b = config_info->nelec_b;
         size_t iadd = 0;
@@ -329,7 +333,7 @@ static size_t add_singles_b(const size_t *occ_b, const size_t *virt_b, const siz
                 ExcResult single_exc_b = SINGLE_EXC_RESULT_NOSIGN(occ_orb, virt_orb);
                 double exc_val = get_single_exc_value_b(&single_exc_b, occ_a, occ_b, 
                     config_info, h1e, eri_mo);
-                if (fabs(exc_val) >= entry_thresh) {
+                if (fabs(coeff*exc_val) >= thresh) {
                     size_t new_occ_b[nelec_b];
                     size_t *exc_list = SORTED(occ_orb, virt_orb);
                     get_changing_orbitals(exc_list, 1, occ_b, nelec_b, &single_exc_b, new_occ_b);
@@ -367,7 +371,6 @@ size_t enlarge_space_singles(const HCIVec *hcivec, Rank *add_list, double thresh
             double coeff = hcivec->coeffs[iconfig];
             uint64_t arank = hcivec->ranks[iconfig].arank;
             uint64_t brank = hcivec->ranks[iconfig].brank;
-            double entry_thresh = fabs(coeff*thresh);
             
             unrank_occ_a(arank, occ_a, config_info);
             unrank_virt_a(arank, virt_a, config_info);
@@ -375,12 +378,12 @@ size_t enlarge_space_singles(const HCIVec *hcivec, Rank *add_list, double thresh
             unrank_virt_b(brank, virt_b, config_info);
 
             // a excitations
-            size_t nadd_a = add_singles_a(occ_a, virt_a, occ_b, brank, h1e, eri_mo, entry_thresh,
+            size_t nadd_a = add_singles_a(occ_a, virt_a, occ_b, brank, h1e, eri_mo, thresh, coeff,
                 add_list+iadd, config_info);
             iadd += nadd_a;
 
             // b excitations
-            size_t nadd_b = add_singles_b(occ_b, virt_b, occ_a, arank, h1e, eri_mo, entry_thresh,
+            size_t nadd_b = add_singles_b(occ_b, virt_b, occ_a, arank, h1e, eri_mo, thresh, coeff,
                 add_list+iadd, config_info);
             iadd += nadd_b;
         }
